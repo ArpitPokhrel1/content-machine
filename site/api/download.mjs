@@ -4,6 +4,11 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { fileURLToPath } from "node:url";
+
+// Resolve from this file, not process.cwd(): with a Root Directory set, Vercel keeps the
+// repo-relative layout inside the function.
+const bundleDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "bundle");
 
 function codes() {
   return String(process.env.ACCESS_CODES || "").split(",").map(pair => pair.trim()).filter(Boolean).map(pair => {
@@ -29,7 +34,7 @@ export default function handler(req, res) {
     console.warn("download refused");
     return res.status(401).json({ error: "Invalid access code. Ask the studio for yours." });
   }
-  const dir = path.join(process.cwd(), "bundle");
+  const dir = bundleDir;
   const body = readFileSync(path.join(dir, "content-machine.tar.gz"));
   console.log(`download by ${user.name}`);
   res.setHeader("Content-Type", "application/gzip");
