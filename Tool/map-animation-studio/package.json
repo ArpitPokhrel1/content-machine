@@ -1,0 +1,26 @@
+{
+  "name": "map-animation-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local, non-generative pipeline for factual administrative-border map animations rendered from real geodata (Natural Earth / geoBoundaries) via MapLibre GL + Puppeteer + ffmpeg.",
+  "bin": {
+    "map-animation-studio": "./agent-map.mjs"
+  },
+  "scripts": {
+    "cli": "node agent-map.mjs",
+    "web": "node web/server.mjs",
+    "build:exe": "node build/build-exe.mjs"
+  },
+  "dependencies": {
+    "maplibre-gl": "^6.10.0",
+    "puppeteer-core": "^25.11.0",
+    "yauzl": "^3.4.0"
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.3.0",
+    "electron": "^44.4.2",
+    "esbuild": "^0.28.2",
+    "postject": "^1.0.0-alpha.6"
+  }
+}

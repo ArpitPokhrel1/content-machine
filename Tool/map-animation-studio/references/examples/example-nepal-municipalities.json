@@ -1,0 +1,26 @@
+{
+  "title": "Nepal — every municipality (ADM3)",
+  "purpose": "internal pipeline test: full administrative hierarchy",
+  "durationSec": 3,
+  "fps": 20,
+  "aspectRatio": "16:9",
+  "basemap": "satellite",
+  "disputedBorderPolicy": "flag-dashed",
+  "panes": [
+    {
+      "id": "main",
+      "projection": "mercator",
+      "shots": [
+        {
+          "id": "shot1",
+          "kind": "establishingZoom",
+          "startSec": 0,
+          "endSec": 3,
+          "title": "Nepal — every municipality (ADM3)",
+          "region": { "adminLevel": 3, "countries": ["Nepal"] },
+          "color": "#4f9fd8"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+node_modules/
+data/cache/
+output/
+dist/
+build/.bundle.cjs
+build/.sea-config.json
+build/.sea-blob.blob
+*.log

@@ -1,0 +1,26 @@
+{
+  "projectId": "test-nepal-zoom",
+  "title": "Nepal Establishing Shot Test",
+  "purpose": "internal pipeline test",
+  "durationSec": 4,
+  "fps": 24,
+  "aspectRatio": "16:9",
+  "disputedBorderPolicy": "flag-dashed",
+  "panes": [
+    {
+      "id": "main",
+      "projection": "mercator",
+      "shots": [
+        {
+          "id": "shot1",
+          "kind": "establishingZoom",
+          "startSec": 0,
+          "endSec": 4,
+          "title": "Nepal",
+          "region": { "adminLevel": 0, "countries": ["Nepal"] },
+          "labels": [{ "query": "Kathmandu", "text": "Kathmandu", "showAtSec": 2 }]
+        }
+      ]
+    }
+  ]
+}

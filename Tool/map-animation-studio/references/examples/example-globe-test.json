@@ -1,0 +1,25 @@
+{
+  "title": "China globe highlight test",
+  "purpose": "internal pipeline test",
+  "durationSec": 3,
+  "fps": 20,
+  "aspectRatio": "16:9",
+  "basemap": "satellite",
+  "disputedBorderPolicy": "flag-dashed",
+  "panes": [
+    {
+      "id": "main",
+      "projection": "globe",
+      "shots": [
+        {
+          "id": "shot1",
+          "kind": "globeHighlight",
+          "startSec": 0,
+          "endSec": 3,
+          "title": "China",
+          "region": { "adminLevel": 0, "countries": ["China"] }
+        }
+      ]
+    }
+  ]
+}

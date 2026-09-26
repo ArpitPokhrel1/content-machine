@@ -1,0 +1,28 @@
+{
+  "projectId": "nepal-province-highlight",
+  "title": "Nepal — the seven provinces",
+  "purpose": "regional highlighting: each province lit in turn on a satellite basemap",
+  "durationSec": 14,
+  "fps": 30,
+  "aspectRatio": "16:9",
+  "basemap": "satellite",
+  "disputedBorderPolicy": "flag-dashed",
+  "panes": [
+    {
+      "id": "main",
+      "projection": "mercator",
+      "shots": [
+        {
+          "id": "provinces",
+          "kind": "regionHighlight",
+          "startSec": 0,
+          "endSec": 14,
+          "title": "Nepal — Provinces",
+          "region": { "adminLevel": 1, "countries": ["Nepal"] },
+          "highlight": ["Koshi", "Madhesh", "Bagmati", "Gandaki", "Lumbini", "Karnali", "Sudurpashchim"],
+          "mode": "sequential"
+        }
+      ]
+    }
+  ]
+}

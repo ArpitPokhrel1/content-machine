@@ -1,0 +1,30 @@
+{
+  "projectId": "test-choropleth",
+  "title": "South Asia Population Test",
+  "purpose": "internal pipeline test",
+  "durationSec": 3,
+  "fps": 20,
+  "aspectRatio": "16:9",
+  "disputedBorderPolicy": "flag-dashed",
+  "panes": [
+    {
+      "id": "main",
+      "projection": "mercator",
+      "shots": [
+        {
+          "id": "shot1",
+          "kind": "choropleth",
+          "startSec": 0,
+          "endSec": 3,
+          "title": "South Asia — sample population (millions)",
+          "region": { "adminLevel": 0, "countries": ["Nepal", "India", "Pakistan", "Bangladesh", "Bhutan", "Sri Lanka"] },
+          "dataSourceRef": {
+            "values": { "NPL": 30, "IND": 1428, "PAK": 240, "BGD": 173, "BTN": 0.8, "LKA": 22 },
+            "unit": "millions"
+          },
+          "revealMode": "sequential"
+        }
+      ]
+    }
+  ]
+}

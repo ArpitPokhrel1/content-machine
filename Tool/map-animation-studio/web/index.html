@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nepal District Map Animations</title>
+<link rel="stylesheet" href="/node_modules/maplibre-gl/dist/maplibre-gl.css" />
+<style>
+  :root {
+    /* Semantic tokens — never reference raw hex outside this block. */
+    --bg: #08080b; --panel: #111116; --panel-2: #17171e; --border: #262631; --border-strong: #35354a;
+    --text: #f2f2f5; --text-muted: #a6a6b8; --text-faint: #6a6a7a;
+    --accent: #e0b354; --accent-ink: #241a04; --accent-2: #4f9fd8; --accent-2-ink: #061826;
+    --danger: #e0645a; --ok: #6fd08c;
+    --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px;
+    --ease-out: cubic-bezier(.16,1,.3,1);
+    --dur-fast: 150ms; --dur-base: 220ms;
+    --focus-ring: 0 0 0 3px rgba(224,179,84,.45);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: inherit; }
+  a { color: var(--accent-2); }
+  svg.icon { width: 1em; height: 1em; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+  :focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: var(--radius-sm); }
+  button, [role="button"] { font-family: inherit; }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: rgba(8,8,11,.92); backdrop-filter: blur(8px); z-index: 100;
+  }
+  .brand { display: flex; align-items: center; gap: var(--space-3); font-size: 16px; font-weight: 700; }
+  .brand .mark {
+    width: 32px; height: 32px; border-radius: var(--radius-sm); flex: none;
+    background: linear-gradient(135deg, var(--accent), #b8843a);
+    display: flex; align-items: center; justify-content: center; color: var(--accent-ink);
+  }
+  .brand .mark svg { width: 18px; height: 18px; stroke-width: 2.2; }
+  #health-pill {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500;
+    padding: 6px 12px; border-radius: 999px; background: var(--panel-2); color: var(--text-muted);
+    transition: background var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+  }
+  #health-pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  #health-pill.ok { background: rgba(111,208,140,.14); color: var(--ok); }
+  #health-pill.bad { background: rgba(224,100,90,.14); color: var(--danger); }
+
+  .hero { max-width: 780px; margin: var(--space-7) auto var(--space-2); padding: 0 var(--space-5); text-align: center; }
+  .hero h1 { font-size: clamp(26px, 4vw, 34px); font-weight: 700; margin: 0 0 var(--space-3); letter-spacing: -0.01em; line-height: 1.25; }
+  .hero p { color: var(--text-muted); font-size: 16px; line-height: 1.65; margin: 0; }
+  .hero .tags { display: flex; gap: var(--space-2); justify-content: center; margin-top: var(--space-5); flex-wrap: wrap; }
+  .tag { font-size: 12px; padding: 5px 12px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--border); color: var(--text-muted); }
+
+  main { max-width: 1200px; margin: 0 auto; padding: var(--space-6) var(--space-5) 96px; }
+  h2.section-title { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--text-faint); margin: var(--space-6) 0 var(--space-4); font-weight: 700; }
+
+  .template-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-4); }
+  .template-card {
+    display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3);
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-5);
+    cursor: pointer; text-align: left; color: var(--text); min-height: 44px;
+    transition: border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+  }
+  .template-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+  .template-card.active { border-color: var(--accent); background: rgba(224,179,84,.07); }
+  .template-card .icon-badge {
+    width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--panel-2);
+    display: flex; align-items: center; justify-content: center; color: var(--accent);
+  }
+  .template-card.active .icon-badge { background: rgba(224,179,84,.16); }
+  .template-card .icon-badge svg { width: 20px; height: 20px; }
+  .template-card h3 { font-size: 15px; font-weight: 600; margin: 0; }
+  .template-card p { font-size: 13px; color: var(--text-muted); margin: 0; line-height: 1.55; }
+
+  #workspace {
+    display: none; margin-top: var(--space-6); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    overflow: hidden; background: var(--panel);
+    opacity: 0; transform: translateY(8px); transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  }
+  #workspace.active { display: block; }
+  #workspace.shown { opacity: 1; transform: none; }
+  #workspace-header { padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+  #workspace-header h3 { margin: 0; font-size: 16px; font-weight: 600; }
+  #workspace-desc { font-size: 13px; color: var(--text-muted); }
+  #workspace-body { display: flex; flex-wrap: wrap; min-height: 480px; }
+
+  #controls { width: 360px; flex: 1 1 360px; padding: var(--space-5); border-right: 1px solid var(--border); overflow-y: auto; }
+  label.field-label {
+    display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: var(--space-4);
+    margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: .03em;
+  }
+  input[type=text], input[type=number], input[type=search], select, textarea {
+    width: 100%; padding: 10px 12px; background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; min-height: 44px;
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { border-color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+
+  .chip-list { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); max-height: 240px; overflow-y: auto; padding: var(--space-2); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+  .chip {
+    padding: 8px 12px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text-muted); font-size: 13px; cursor: pointer; min-height: 36px; display: inline-flex; align-items: center;
+    transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .chip:hover { border-color: var(--border-strong); color: var(--text); }
+  .chip.selected { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .chip small { opacity: .75; margin-left: 6px; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .pill {
+    padding: 9px 16px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text-muted); font-size: 13px; cursor: pointer; min-height: 40px;
+    transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .pill:hover { border-color: var(--border-strong); }
+  .pill.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+    width: 100%; min-height: 44px; padding: 11px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+    background: var(--panel-2); color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; margin-top: var(--space-2);
+    transition: filter var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+  }
+  .btn:hover:not(:disabled) { border-color: var(--border-strong); }
+  .btn:active:not(:disabled) { filter: brightness(.94); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn svg { width: 16px; height: 16px; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover:not(:disabled) { filter: brightness(1.06); }
+  .btn-accent { background: var(--accent-2); border-color: var(--accent-2); color: var(--accent-2-ink); }
+  .btn-accent:hover:not(:disabled) { filter: brightness(1.06); }
+  .btn-ghost { background: transparent; }
+  .btn-inline { width: auto; margin-top: 0; }
+
+  #stage { flex: 2 1 480px; display: flex; flex-direction: column; min-height: 0; }
+  #stage-tabs { display: flex; gap: var(--space-5); padding: var(--space-3) var(--space-4) 0; }
+  .tab { padding: 8px 2px 10px; background: none; border: none; color: var(--text-muted); font-size: 14px; cursor: pointer; border-bottom: 2px solid transparent; min-height: 44px; }
+  .tab.active { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+
+  /* Preview area: the box that must respect the video's true aspect ratio.
+     #preview-wrap centers a fixed-shape box (#map-card) whose exact pixel
+     size is computed in JS from the actual scene resolution + available
+     space (see fitPreviewBox in app.js) — the standard "letterboxed player"
+     technique, not a CSS-only aspect-ratio guess, because the box must fit
+     within *both* width and height constraints of an unpredictable panel. */
+  #preview-wrap { flex: 1; display: flex; align-items: center; justify-content: center; background: #000; min-height: 0; padding: var(--space-4); }
+  #map-card { position: relative; background: #000; border-radius: var(--radius-sm); overflow: hidden; box-shadow: 0 0 0 1px var(--border); }
+  #preview-frame { width: 100%; height: 100%; border: none; display: block; position: relative; z-index: 0; }
+  #placeholder {
+    position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center;
+    color: var(--text-faint); font-size: 13px; text-align: center; padding: var(--space-5); line-height: 1.6;
+    background: #000;
+  }
+  #preview-controls {
+    position: absolute; left: 0; right: 0; bottom: 0; display: none; align-items: center; gap: var(--space-3);
+    padding: var(--space-3) var(--space-4); background: linear-gradient(to top, rgba(0,0,0,.8), transparent);
+  }
+  #preview-controls.active { display: flex; }
+  #btn-play { width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 50%; flex: none; }
+  #btn-play svg { width: 16px; height: 16px; }
+  #preview-controls input[type=range] { flex: 1; }
+  #time-label { font-size: 12px; color: #ddd; min-width: 40px; font-variant-numeric: tabular-nums; }
+
+  #bottom { padding: var(--space-4) var(--space-5); border-top: 1px solid var(--border); }
+  #filmstrip { display: flex; gap: var(--space-2); overflow-x: auto; margin-bottom: var(--space-3); min-height: 64px; }
+  #filmstrip img { height: 64px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+  #actions { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+  #actions .btn { width: auto; flex: none; }
+  progress { flex: 1; min-width: 120px; height: 6px; accent-color: var(--accent-2); }
+  #progress-label { font-size: 12px; color: var(--text-muted); min-width: 160px; font-variant-numeric: tabular-nums; }
+  #video-wrap { margin-top: var(--space-3); display: none; gap: var(--space-4); align-items: center; flex-wrap: wrap; }
+  #video-wrap.active { display: flex; }
+  #video-wrap video { max-height: 260px; max-width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border); background: #000; }
+  #log { margin-top: var(--space-2); font-size: 12px; color: var(--text-faint); white-space: pre-wrap; line-height: 1.5; }
+  #log.error { color: var(--danger); }
+  .hint { font-size: 12px; color: var(--text-faint); margin-top: var(--space-2); line-height: 1.55; }
+
+  @media (max-width: 720px) {
+    #workspace-body { flex-direction: column; }
+    #controls { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="mark">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M3 20l6-11 4 6 3-4 5 9H3z"/><circle cx="17" cy="6" r="2"/></svg>
+    </span>
+    Nepal District Map Animations
+  </div>
+  <div id="health-pill">checking…</div>
+</header>
+
+<div class="hero">
+  <h1>Precise, factual map animations for every district of Nepal</h1>
+  <p>Real satellite imagery, official OCHA administrative boundaries (all 77 districts, 775 municipalities,
+     correctly named — not the outdated data most tools ship with), rendered deterministically. Pick a
+     template below, choose your districts, preview it live, then render the MP4.</p>
+  <div class="tags">
+    <span class="tag">77 districts</span>
+    <span class="tag">7 provinces</span>
+    <span class="tag">775 municipalities</span>
+    <span class="tag">Real satellite basemap</span>
+    <span class="tag">No invented data</span>
+  </div>
+</div>
+
+<main>
+  <h2 class="section-title">Choose a template</h2>
+  <div class="template-grid" id="template-grid"></div>
+
+  <div id="workspace">
+    <div id="workspace-header">
+      <h3 id="workspace-title">Template</h3>
+      <span class="hint" id="workspace-desc"></span>
+    </div>
+    <div id="workspace-body">
+      <div id="controls"></div>
+      <div id="stage">
+        <div id="stage-tabs">
+          <button class="tab active" data-tab="preview">Animated preview</button>
+        </div>
+        <div id="preview-wrap">
+          <div id="map-card">
+            <div id="placeholder">Configure the options on the left, then click "Build preview" to see a live, real satellite-imagery render of this exact scene.</div>
+            <iframe id="preview-frame" title="Animated map preview"></iframe>
+            <div id="preview-controls">
+              <button id="btn-play" class="btn" aria-label="Play preview">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <input id="scrub" type="range" min="0" max="1" step="0.01" value="0" aria-label="Seek preview" />
+              <span id="time-label">0.0s</span>
+            </div>
+          </div>
+        </div>
+        <div id="bottom">
+          <div id="filmstrip"></div>
+          <div id="actions">
+            <button id="btn-draft" class="btn btn-primary btn-inline">Build preview</button>
+            <button id="btn-render" class="btn btn-accent btn-inline" disabled>Approve &amp; render MP4</button>
+            <progress id="progress" value="0" max="1" style="display:none"></progress>
+            <span id="progress-label"></span>
+          </div>
+          <div id="video-wrap">
+            <video id="result-video" controls></video>
+            <a id="download-link" class="btn btn-inline" download>
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/></svg>
+              Download MP4
+            </a>
+          </div>
+          <div id="log" role="status" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="/web/app.js"></script>
+</body>
+</html>

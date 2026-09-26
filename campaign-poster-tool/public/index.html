@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campaign Poster Tool</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="intro">
+      <p class="eyebrow">CAMPAIGN ASSET MAKER</p>
+      <h1>One photo.<br><em>Your</em> candidate poster.</h1>
+      <p class="lede">The supplied PSD has been preserved as a fixed campaign layout. Replace the candidate image and update the two editable fields.</p>
+      <p class="privacy"><span></span> Background removal runs in this browser. Your photo is not uploaded to this tool.</p>
+    </section>
+
+    <section class="editor" aria-label="Campaign poster editor">
+      <aside class="controls">
+        <div class="control-heading">
+          <p class="eyebrow">EDIT TEMPLATE</p>
+          <h2>Make it yours.</h2>
+        </div>
+
+        <label class="upload-zone" for="photoInput">
+          <input id="photoInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+          <span class="upload-icon">↑</span>
+          <strong>Replace candidate image</strong>
+          <small>PNG, JPG, or WebP</small>
+        </label>
+
+        <label class="field">
+          <span>Candidate name</span>
+          <input id="nameInput" value="दिगन्त राज पन्त" autocomplete="off">
+        </label>
+
+        <label class="field">
+          <span>District label</span>
+          <input id="districtInput" value="प्रदेश २ (ख) चितवन" autocomplete="off">
+          <small>The district label updates inside the supplied PSD outline.</small>
+        </label>
+
+        <p id="status" class="status" aria-live="polite">Add a candidate photo to begin.</p>
+        <button id="downloadButton" class="download" type="button" disabled>Download poster <span>↓</span></button>
+      </aside>
+
+      <div class="poster-wrap">
+        <div class="poster-frame">
+          <canvas id="poster" width="4500" height="5625" aria-label="Poster preview"></canvas>
+          <div id="emptyState" class="empty-state"><span>+</span><p>Your cut-out<br>photo appears here</p></div>
+        </div>
+        <p class="caption"><b>Original PSD layout</b> · 4,500 × 5,625 px PNG export</p>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

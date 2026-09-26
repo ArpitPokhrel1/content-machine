@@ -1,0 +1,26 @@
+{
+  "title": "Nepal — Kaski district highlight",
+  "purpose": "internal pipeline test: OCHA district fix",
+  "durationSec": 4,
+  "fps": 24,
+  "aspectRatio": "16:9",
+  "basemap": "satellite",
+  "disputedBorderPolicy": "flag-dashed",
+  "panes": [
+    {
+      "id": "main",
+      "projection": "mercator",
+      "shots": [
+        {
+          "id": "shot1",
+          "kind": "regionHighlight",
+          "startSec": 0,
+          "endSec": 4,
+          "region": { "adminLevel": 2, "countries": ["Nepal"] },
+          "highlight": [{ "name": "Kaski" }],
+          "mode": "together"
+        }
+      ]
+    }
+  ]
+}

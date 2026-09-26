@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frame Foundry</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="grain"></div>
+  <main>
+    <header>
+      <a class="brand" href="/" aria-label="Frame Foundry home"><span>FF</span> Frame Foundry</a>
+      <div class="api-state" id="apiState"><i></i><span>Checking API</span></div>
+    </header>
+
+    <section class="intro">
+      <div>
+        <p class="eyebrow">LOCAL VIDEO PRODUCTION</p>
+        <h1>Script in.<br><em>Scenes out.</em></h1>
+      </div>
+      <p class="lede">Turn multilingual scripts into controlled Veo assets. Nothing chargeable runs until you review and approve it.</p>
+    </section>
+
+    <section class="workspace">
+      <nav class="steps" aria-label="Workflow">
+        <button class="step active" data-step="1"><b>01</b><span>Source</span></button>
+        <button class="step" data-step="2" disabled><b>02</b><span>Review</span></button>
+        <button class="step" data-step="3" disabled><b>03</b><span>Generate</span></button>
+      </nav>
+
+      <form id="sourceForm" class="panel">
+        <div class="section-head">
+          <div><span class="kicker">01 / SOURCE</span><h2>Tell the director what matters.</h2></div>
+          <p>Any language is accepted. Specific instructions reduce revisions and wasted credits.</p>
+        </div>
+        <div class="field-grid">
+          <label><span>Context <small>optional</small></span><textarea id="context" rows="5" placeholder="Audience, product, story background, cultural context..."></textarea><small>Use only what changes the visual interpretation.</small></label>
+          <label><span>Script <strong>required</strong></span><textarea id="script" rows="10" required placeholder="Paste the complete script in any language..."></textarea><small>The planner reads the full script before selecting scenes.</small></label>
+          <label class="wide"><span>Production instructions <strong>required</strong></span><textarea id="instructions" rows="4" required placeholder="Which lines need video? Desired mood, characters, locations, camera ideas, exclusions..."></textarea><small>Example: Create three scenes from lines 2–5. Keep the same woman throughout. No text on screen.</small></label>
+        </div>
+        <div class="controls">
+          <label><span>Format</span><select id="aspectRatio"><option value="16:9">16:9 Landscape</option><option value="9:16">9:16 Portrait</option></select></label>
+          <label><span>Clip length</span><select id="duration"><option value="4">4 seconds</option><option value="6" selected>6 seconds</option><option value="8">8 seconds</option></select></label>
+          <label><span>Maximum scenes</span><input id="maxScenes" type="number" value="4" min="1" max="12"></label>
+          <label class="check"><input id="audio" type="checkbox"><span><b>Generate audio</b><small>Off by default</small></span></label>
+        </div>
+        <div id="sourceError" class="error" hidden></div>
+        <div class="action-row"><p>Authorizes one compact text-model request. No video credits used.</p><button class="primary" type="submit">Draft video prompts <span>→</span></button></div>
+      </form>
+
+      <section id="reviewPanel" class="panel" hidden>
+        <div class="section-head"><div><span class="kicker">02 / REVIEW</span><h2>Approve the exact shots.</h2></div><p>Edit any prompt before spending video credits. Selected scenes run sequentially to control cost.</p></div>
+        <div id="bible" class="bible"></div>
+        <div id="sceneList" class="scene-list"></div>
+        <div id="reviewError" class="error" hidden></div>
+        <div class="action-row"><p id="approvalCount">0 scenes selected.</p><button id="generateButton" class="primary danger" type="button">Approve & generate <span>→</span></button></div>
+      </section>
+
+      <section id="progressPanel" class="panel" hidden>
+        <div class="section-head"><div><span class="kicker">03 / GENERATE</span><h2>Production is running locally.</h2></div><p>Keep this server running. Completed MP4 files are saved inside the project output folder.</p></div>
+        <div id="progressList" class="progress-list"></div>
+        <div id="outputPath" class="output-path"></div>
+      </section>
+    </section>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

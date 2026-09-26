@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Video Assets"
+  short_description: "Turn scripts into approved Veo asset batches"
+  default_prompt: "Use $create-video-assets to turn this script into consistent, approval-gated video assets."

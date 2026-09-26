@@ -1,0 +1,30 @@
+# Per-machine settings and secrets: never committed. Template: Tool/.env.example
+.env
+.env.*
+!.env.example
+*.pem
+*service-account*.json
+application_default_credentials.json
+
+# Dependencies (npm run setup reinstalls them)
+node_modules/
+
+# Generated media and working output (GBs, lives only on the machine that made it)
+Outputs/
+Tool/output/
+Tool/references/*
+!Tool/references/.gitkeep
+Tool/map-animation-studio/output/
+Tool/map-animation-studio/data/cache/
+Tool/map-animation-studio/dist/
+
+# Unrelated business documents
+Other/
+
+# Poster tool: the unused source PNGs are over GitHub's 100 MB limit; the app loads the .webp
+campaign-poster-tool/public/assets/*.png
+
+# Logs and local tool state
+*.log
+.claude/scheduled_tasks.lock
+.claude/settings.local.json

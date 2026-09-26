@@ -1,0 +1,97 @@
+{
+  "projectId": "dullu-dailekh-zoom-20260924",
+  "title": "Nepal to Dailekh to Dullu",
+  "purpose": "6s B-roll: satellite zoom from Nepal into Dailekh district, then Dullu Municipality",
+  "durationSec": 6,
+  "fps": 30,
+  "aspectRatio": "16:9",
+  "basemap": "satellite",
+  "disputedBorderPolicy": "flag-dashed",
+  "panes": [
+    {
+      "id": "main",
+      "projection": "mercator",
+      "shots": [
+        {
+          "id": "district",
+          "kind": "regionHighlight",
+          "startSec": 0,
+          "endSec": 3.2,
+          "region": {
+            "adminLevel": 2,
+            "countries": [
+              "Nepal"
+            ]
+          },
+          "highlight": [
+            "Dailekh"
+          ],
+          "mode": "sequential",
+          "introSec": 0.6,
+          "holdSec": 0.2,
+          "camera": {
+            "from": {
+              "center": [
+                84.13000853250009,
+                28.417314554260003
+              ],
+              "zoom": 7.025860644715057,
+              "pitch": 0,
+              "bearing": 0
+            },
+            "to": {
+              "center": [
+                81.66838993850013,
+                28.88490650278831
+              ],
+              "zoom": 9.310713985689112,
+              "pitch": 0,
+              "bearing": 0
+            },
+            "easing": "easeInOutCubic"
+          }
+        },
+        {
+          "id": "municipality",
+          "kind": "regionHighlight",
+          "startSec": 3.2,
+          "endSec": 6,
+          "region": {
+            "adminLevel": 3,
+            "countries": [
+              "Nepal"
+            ],
+            "parentName": "Dailekh"
+          },
+          "highlight": [
+            "Dullu"
+          ],
+          "mode": "sequential",
+          "introSec": 0.3,
+          "holdSec": 0.5,
+          "camera": {
+            "from": {
+              "center": [
+                81.66838993850013,
+                28.88490650278831
+              ],
+              "zoom": 9.310713985689112,
+              "pitch": 0,
+              "bearing": 0
+            },
+            "to": {
+              "center": [
+                81.60561154400011,
+                28.832967439819022
+              ],
+              "zoom": 11,
+              "pitch": 0,
+              "bearing": 0
+            },
+            "easing": "easeInOutCubic"
+          }
+        }
+      ]
+    }
+  ]
+}

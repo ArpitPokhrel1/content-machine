@@ -1,0 +1,27 @@
+{
+  "projectId": "nepal-country-highlight",
+  "title": "Nepal among its neighbours",
+  "purpose": "country highlighting: Nepal lit against India, China, Bhutan and Bangladesh",
+  "durationSec": 6,
+  "fps": 30,
+  "aspectRatio": "16:9",
+  "basemap": "satellite",
+  "disputedBorderPolicy": "flag-dashed",
+  "panes": [
+    {
+      "id": "main",
+      "projection": "mercator",
+      "shots": [
+        {
+          "id": "country",
+          "kind": "regionHighlight",
+          "startSec": 0,
+          "endSec": 6,
+          "region": { "adminLevel": 0, "countries": ["Nepal", "India", "China", "Bhutan", "Bangladesh"] },
+          "highlight": ["Nepal"],
+          "cameraMode": "fit"
+        }
+      ]
+    }
+  ]
+}
