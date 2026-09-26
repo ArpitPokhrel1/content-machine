@@ -8,13 +8,13 @@ and `../AGENTS.md`.
 | --- | --- | --- |
 | Video orchestrator | Script or keyframes → approval-gated Veo clips, run in parallel | `server.mjs` + `agent-video.mjs` |
 | Image packs | Script → story-coherent image pack, run in parallel | `image-pack/*.mjs` |
-| Map Animation Studio | Deterministic map video from real geodata (no generative AI) | `map-animation-studio/agent-map.mjs` |
+| Map Animation Studio | Deterministic map video from real geodata (no generative AI). Lives in `../map-animation/` | `../map-animation/agent-map.mjs` |
 
 ---
 
 ## 1. Configuration: one file per machine
 
-Everything machine-specific lives in `Tool/.env` (template: `.env.example`, writer:
+Everything machine-specific lives in `asset-generation/.env` (template: `.env.example`, writer:
 `npm run setup`). `lib/config.mjs` loads it for every script, whatever the working directory.
 Real environment variables override it. No project ID, bucket or path is hardcoded anywhere, and
 `npm test` enforces that.
@@ -136,9 +136,9 @@ Move finished folders into `../Outputs/`.
 
 `mcp/server.mjs` is a local **stdio** MCP server that exposes the whole pipeline to any MCP
 client. It runs on the user's machine, authenticates with their Google account through
-`Tool/.env` (same `lib/config.mjs`), and writes to `$CONTENT_MACHINE_OUTPUTS` or
+`asset-generation/.env` (same `lib/config.mjs`), and writes to `$CONTENT_MACHINE_OUTPUTS` or
 `<repo>/Outputs`. Setup registers it with Claude Code (`claude mcp add --scope user
-content-machine -- node <repo>/Tool/mcp/server.mjs`) and Codex (`~/.codex/config.toml`).
+content-machine -- node <repo>/asset-generation/mcp/server.mjs`) and Codex (`~/.codex/config.toml`).
 
 | Tool | Does |
 | --- | --- |
@@ -164,7 +164,7 @@ mints a code.
 
 ## 6. Map Animation Studio
 
-See `map-animation-studio/README.md` and `MEMORY.md`, plus `PROMPT_MAP_ANIMATION.md` for the
+Moved to its own folder, `../map-animation/`. See `../map-animation/README.md` and `MEMORY.md`, plus `PROMPT_MAP_ANIMATION.md` there for the
 one-batch questionnaire. Install with `node scripts/setup.mjs --maps`. It needs ffmpeg and Edge
 or Chrome (`MAP_STUDIO_CHROME_PATH` overrides the browser path). Boundary data is fetched once
 into `data/cache/`. The CLI is `node agent-map.mjs health | plan | draft | generate | status`,

@@ -16,7 +16,7 @@ paid generation is approved by the user and run by the lead agent.
    your clip must start where the previous one **ends on** and end where the next one begins.
 2. The start and end frames of your clips (open the images and look at them). Your prompt must
    never contradict them on light, framing, wardrobe or pose.
-3. `Tool/MASTER-VIDEO-GENERATION.md` sections 3–7.
+3. `asset-generation/MASTER-VIDEO-GENERATION.md` sections 3–7.
 
 ## Output: `<project>/clips/<clip-id>.json`, one per clip
 
@@ -31,7 +31,7 @@ paid generation is approved by the user and run by the lead agent.
 }
 ```
 
-Image paths are relative to the project folder (where `Tool/video/merge-clips.mjs` writes `clips.json`). Use `refs` (max 3) instead of
+Image paths are relative to the project folder (where `asset-generation/video/merge-clips.mjs` writes `clips.json`). Use `refs` (max 3) instead of
 `image` for subject-reference clips, and set `duration` to 8 for those.
 
 ## Hard rules

@@ -1,5 +1,5 @@
 // One place for every machine-specific value. Everything else in the repo is identical on every
-// laptop. Values come from Tool/.env (created by `npm run setup`), or from the real environment,
+// laptop. Values come from asset-generation/.env (created by `npm run setup`), or from the real environment,
 // which wins when both are set.
 //
 // Two ways to authenticate, pick one per machine:
@@ -54,7 +54,7 @@ export const config = {
 
 export function assertConfigured() {
   if (config.mode === "unconfigured") {
-    throw new Error(`No credentials configured. Run "npm run setup" in Tool/ (or fill ${envFile}): set GOOGLE_CLOUD_PROJECT for Vertex AI, or GEMINI_API_KEY for the Gemini API.`);
+    throw new Error(`No credentials configured. Run "npm run setup" in asset-generation/ (or fill ${envFile}): set GOOGLE_CLOUD_PROJECT for Vertex AI, or GEMINI_API_KEY for the Gemini API.`);
   }
 }
 

@@ -5,12 +5,12 @@ description: Turn a full script in any language into multiple consistent, cinema
 
 # Create Video Assets
 
-All commands run from `Tool/` (paths relative to the repo root). Read
-`Tool/orchestrator_memory.md` and `Tool/MASTER-VIDEO-GENERATION.md` before acting. Operate the
+All commands run from `asset-generation/` (paths relative to the repo root). Read
+`asset-generation/orchestrator_memory.md` and `asset-generation/MASTER-VIDEO-GENERATION.md` before acting. Operate the
 pipeline only through `node agent-video.mjs`. Never call a media API directly, approve on the
 user's behalf, or retry automatically.
 
-If the server isn't running, start it with `npm start` (from `Tool/`) in the background, then run
+If the server isn't running, start it with `npm start` (from `asset-generation/`) in the background, then run
 the free `node agent-video.mjs health`.
 
 ## Two routes
@@ -73,7 +73,7 @@ the free `node agent-video.mjs health`.
 - Watch every clip, check the edges for black bars, and check small secondary figures across the
   whole clip.
 - Return clickable local MP4 paths and the output folder. Ask for feedback and add reusable
-  lessons to `Tool/orchestrator_memory.md`.
+  lessons to `asset-generation/orchestrator_memory.md`.
 - A failed clip is reported with its error, likely cause, and whether it was billed. Never
   resubmit it without new explicit approval.
 

@@ -1,0 +1,1340 @@
+{
+ "_about": "Fonts offered by the Content Machine subtitle editor. Nepali list from anepali.com (Preeti-encoded and Unicode; AMS fonts excluded). web: google = previewed via Google Fonts, local = previewed only if installed on the viewer computer.",
+ "updated": "2026-09-26",
+ "nepali": [
+  {
+   "name": "0001 ARAP  BK",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/0001-arap-bk/",
+   "web": "local"
+  },
+  {
+   "name": "001  Arap Graphic",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/001-arap-graphic/",
+   "web": "local"
+  },
+  {
+   "name": "0012  ARAP",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/0012-arap/",
+   "web": "local"
+  },
+  {
+   "name": "0012  ARAP  BI",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/0012-arap-bi/",
+   "web": "local"
+  },
+  {
+   "name": "0017  ARAP",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/0017-arap/",
+   "web": "local"
+  },
+  {
+   "name": "003 ARAP",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/003-arap/",
+   "web": "local"
+  },
+  {
+   "name": "Aakriti",
+   "encoding": "preeti",
+   "designer": "Ashok man singh",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/aakriti/",
+   "web": "local"
+  },
+  {
+   "name": "Abhinav",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/abhinav/",
+   "web": "local"
+  },
+  {
+   "name": "Akshar",
+   "encoding": "unicode",
+   "designer": "Tall Chai",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/akshar/",
+   "web": "google"
+  },
+  {
+   "name": "Alkatra",
+   "encoding": "unicode",
+   "designer": "Suman Bhandary",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/alkatra/",
+   "web": "google"
+  },
+  {
+   "name": "Amiko",
+   "encoding": "unicode",
+   "designer": "Impallari Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/amiko/",
+   "web": "google"
+  },
+  {
+   "name": "Amita",
+   "encoding": "unicode",
+   "designer": "Eduardo Tunni, Brian Bonislawsky",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/amita/",
+   "web": "google"
+  },
+  {
+   "name": "Ananda Devanagari KTM",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-devanagari-ktm/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda Devanagari NP",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-devanagari-np/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda Fanko 2",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-fanko-2/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda Lipi Bold Bt",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-lipi-bold-bt/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda Lipi Bold Cn Bt",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-lipi-bold-cn-bt/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda Lipi Bt",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-lipi-bt/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda Lipi Cn Bt",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-lipi-cn-bt/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda Lipi Lt Bt",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-lipi-lt-bt/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda Thopla",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-thopla/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda ukaliorali",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-ukaliorali/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda Ukaliorali 2",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-ukaliorali-2/",
+   "web": "local"
+  },
+  {
+   "name": "Ananda Ukaliorali 3",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ananda-ukaliorali-3/",
+   "web": "local"
+  },
+  {
+   "name": "Anandaround",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/anandaround/",
+   "web": "local"
+  },
+  {
+   "name": "AnandaSansar",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/anandasansar/",
+   "web": "local"
+  },
+  {
+   "name": "Anandazz Hv",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/anandazz-hv/",
+   "web": "local"
+  },
+  {
+   "name": "Anandazz Lt",
+   "encoding": "preeti",
+   "designer": "Ananda Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/anandazz-lt/",
+   "web": "local"
+  },
+  {
+   "name": "Anek Devanagari",
+   "encoding": "unicode",
+   "designer": "Ek Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/anek-devanagari/",
+   "web": "google"
+  },
+  {
+   "name": "Annapurna SIL",
+   "encoding": "unicode",
+   "designer": "SIL International",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/annapurna-sil/",
+   "web": "google"
+  },
+  {
+   "name": "ARAP  003",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/arap-003/",
+   "web": "local"
+  },
+  {
+   "name": "ARAP  006",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/arap-006/",
+   "web": "local"
+  },
+  {
+   "name": "ARAP 002",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/arap-002/",
+   "web": "local"
+  },
+  {
+   "name": "ARAP 004",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/arap-004/",
+   "web": "local"
+  },
+  {
+   "name": "ARAP 008",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/arap-008/",
+   "web": "local"
+  },
+  {
+   "name": "ARAP 009",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/arap-009/",
+   "web": "local"
+  },
+  {
+   "name": "ARAP 010",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/arap-010/",
+   "web": "local"
+  },
+  {
+   "name": "ARAP 1111",
+   "encoding": "preeti",
+   "designer": "GrafoTech",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/arap-1111/",
+   "web": "local"
+  },
+  {
+   "name": "ARAP007",
+   "encoding": "preeti",
+   "designer": "Agni Raj Poudel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/arap007/",
+   "web": "local"
+  },
+  {
+   "name": "Arya",
+   "encoding": "unicode",
+   "designer": "Eduardo Tunni",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/arya/",
+   "web": "google"
+  },
+  {
+   "name": "Asar",
+   "encoding": "unicode",
+   "designer": "Sorkin Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/asar/",
+   "web": "google"
+  },
+  {
+   "name": "Bahunbad",
+   "encoding": "preeti",
+   "designer": "Chandra Khaki",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/bahunbad/",
+   "web": "local"
+  },
+  {
+   "name": "Bakbak One",
+   "encoding": "unicode",
+   "designer": "Saumya Kishore, Sanchit Sawaria",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/bakbak-one/",
+   "web": "google"
+  },
+  {
+   "name": "Baloo 2",
+   "encoding": "unicode",
+   "designer": "Ek Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/baloo-2/",
+   "web": "google"
+  },
+  {
+   "name": "Banban",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/banban/",
+   "web": "local"
+  },
+  {
+   "name": "Bantawa",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/bantawa/",
+   "web": "local"
+  },
+  {
+   "name": "Bhaktapur",
+   "encoding": "preeti",
+   "designer": "Janardan Ghimire",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/bhaktapur/",
+   "web": "local"
+  },
+  {
+   "name": "Bikrant Bold",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/bikrant-bold/",
+   "web": "local"
+  },
+  {
+   "name": "Bina",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/bina/",
+   "web": "local"
+  },
+  {
+   "name": "Biryani",
+   "encoding": "unicode",
+   "designer": "Dan Reynolds, Mathieu RÃ©guer",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/biryani/",
+   "web": "google"
+  },
+  {
+   "name": "Bishwa Calligraphy",
+   "encoding": "preeti",
+   "designer": "Bishwa Adhikari",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/bishwa-calligraphy/",
+   "web": "local"
+  },
+  {
+   "name": "Cambay",
+   "encoding": "unicode",
+   "designer": "Pooja Saxena",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/cambay/",
+   "web": "google"
+  },
+  {
+   "name": "CV Bihani",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/cv-bihani/",
+   "web": "local"
+  },
+  {
+   "name": "CV Gadah",
+   "encoding": "preeti",
+   "designer": "Sahadev Khaki",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/cv-gadah/",
+   "web": "local"
+  },
+  {
+   "name": "CV Haha",
+   "encoding": "preeti",
+   "designer": "Graphics Edge",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/cv-haha/",
+   "web": "local"
+  },
+  {
+   "name": "CV Rabinbold",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/cv-rabinbold/",
+   "web": "local"
+  },
+  {
+   "name": "Deepankar",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/deepankar/",
+   "web": "local"
+  },
+  {
+   "name": "Dekko",
+   "encoding": "unicode",
+   "designer": "Sorkin Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/dekko/",
+   "web": "google"
+  },
+  {
+   "name": "Dev Nep",
+   "encoding": "preeti",
+   "designer": "meghna pradhan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/dev-nep/",
+   "web": "local"
+  },
+  {
+   "name": "Eczar",
+   "encoding": "unicode",
+   "designer": "Rosetta, Vaibhav Singh",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/eczar/",
+   "web": "google"
+  },
+  {
+   "name": "Gadha",
+   "encoding": "preeti",
+   "designer": "Sahadev Khaki",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/gadha/",
+   "web": "local"
+  },
+  {
+   "name": "Gajraj One",
+   "encoding": "unicode",
+   "designer": "Saurabh Sharma",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/gajraj-one/",
+   "web": "google"
+  },
+  {
+   "name": "Ganess",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ganess/",
+   "web": "local"
+  },
+  {
+   "name": "Ganga 1",
+   "encoding": "preeti",
+   "designer": "Manish Shrestha",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ganga-1/",
+   "web": "local"
+  },
+  {
+   "name": "Glegoo",
+   "encoding": "unicode",
+   "designer": "Eduardo Tunni",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/glegoo/",
+   "web": "google"
+  },
+  {
+   "name": "Gotu",
+   "encoding": "unicode",
+   "designer": "Ek Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/gotu/",
+   "web": "google"
+  },
+  {
+   "name": "Halant",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/halant/",
+   "web": "google"
+  },
+  {
+   "name": "Himalayabold",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/himalayabold/",
+   "web": "local"
+  },
+  {
+   "name": "Himalli",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/himalli/",
+   "web": "local"
+  },
+  {
+   "name": "Hind",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/hind/",
+   "web": "google"
+  },
+  {
+   "name": "IBM Plex Sans Devanagari",
+   "encoding": "unicode",
+   "designer": "Mike Abbink, Bold Monday",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ibm-plex-sans-devnagari/",
+   "web": "google"
+  },
+  {
+   "name": "Inknut Antiqua",
+   "encoding": "unicode",
+   "designer": "Claus Eggers SÃ¸rensen",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/inknut-antiqua/",
+   "web": "google"
+  },
+  {
+   "name": "Jaini",
+   "encoding": "unicode",
+   "designer": "Ek Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/jaini/",
+   "web": "google"
+  },
+  {
+   "name": "Jaini Purva",
+   "encoding": "unicode",
+   "designer": "Ek Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/jaini-purva/",
+   "web": "google"
+  },
+  {
+   "name": "Jaldi",
+   "encoding": "unicode",
+   "designer": "Omnibus-Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/jaldi/",
+   "web": "google"
+  },
+  {
+   "name": "Kadwa",
+   "encoding": "unicode",
+   "designer": "Sol Matas",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/kadwa/",
+   "web": "google"
+  },
+  {
+   "name": "Kalam",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/kalam/",
+   "web": "google"
+  },
+  {
+   "name": "KalpanaUttam i",
+   "encoding": "preeti",
+   "designer": "Uttam Ranjitkar",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/kalpanauttam-i/",
+   "web": "local"
+  },
+  {
+   "name": "Kam",
+   "encoding": "preeti",
+   "designer": "Creative Touch",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/kam/",
+   "web": "local"
+  },
+  {
+   "name": "Kanchan",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/kanchan/",
+   "web": "local"
+  },
+  {
+   "name": "Karma",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/karma/",
+   "web": "google"
+  },
+  {
+   "name": "Katmandu",
+   "encoding": "preeti",
+   "designer": "John P. Yangos",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/katmandu/",
+   "web": "local"
+  },
+  {
+   "name": "Khand",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/khand/",
+   "web": "google"
+  },
+  {
+   "name": "khelkud",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/khelkud/",
+   "web": "local"
+  },
+  {
+   "name": "Khula",
+   "encoding": "unicode",
+   "designer": "Erin McLaughlin",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/khula/",
+   "web": "google"
+  },
+  {
+   "name": "Kirti",
+   "encoding": "preeti",
+   "designer": "Creative Touch",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/kirti/",
+   "web": "local"
+  },
+  {
+   "name": "Kurale",
+   "encoding": "unicode",
+   "designer": "Eduardo Tunni",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/kurale/",
+   "web": "google"
+  },
+  {
+   "name": "Laila",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/laila/",
+   "web": "google"
+  },
+  {
+   "name": "Maiya",
+   "encoding": "preeti",
+   "designer": "Meghna Pradhan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/maiya/",
+   "web": "local"
+  },
+  {
+   "name": "Martel",
+   "encoding": "unicode",
+   "designer": "Dan Reynolds",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/martel/",
+   "web": "google"
+  },
+  {
+   "name": "Martel Sans",
+   "encoding": "unicode",
+   "designer": "Dan Reynolds, Mathieu Reguer",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/martel-sans/",
+   "web": "google"
+  },
+  {
+   "name": "Matangi",
+   "encoding": "unicode",
+   "designer": "Prashant Pant",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/matangi/",
+   "web": "google"
+  },
+  {
+   "name": "Meghana",
+   "encoding": "preeti",
+   "designer": "Graphics Edge",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/meghana/",
+   "web": "local"
+  },
+  {
+   "name": "Meghubold",
+   "encoding": "preeti",
+   "designer": "Meghna Kali, MCCS, Kathmandu",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/meghubold/",
+   "web": "local"
+  },
+  {
+   "name": "MKali",
+   "encoding": "preeti",
+   "designer": "meghna pradhan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/mkali/",
+   "web": "local"
+  },
+  {
+   "name": "Modak",
+   "encoding": "unicode",
+   "designer": "Ek Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/modak/",
+   "web": "google"
+  },
+  {
+   "name": "Mukta",
+   "encoding": "unicode",
+   "designer": "Ek Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/mukta/",
+   "web": "google"
+  },
+  {
+   "name": "MulChand",
+   "encoding": "preeti",
+   "designer": "MCCS, Kathmandu",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/mulchand/",
+   "web": "local"
+  },
+  {
+   "name": "MulRam",
+   "encoding": "preeti",
+   "designer": "MCCS, Kathmandu",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/mulram/",
+   "web": "local"
+  },
+  {
+   "name": "Noto Sans Devanagari",
+   "encoding": "unicode",
+   "designer": "Google",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/noto-sans-devanagari/",
+   "web": "google"
+  },
+  {
+   "name": "Noto Serif Devanagari",
+   "encoding": "unicode",
+   "designer": "Google",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/noto-serif-devanagari/",
+   "web": "google"
+  },
+  {
+   "name": "Old Nepali",
+   "encoding": "preeti",
+   "designer": "Rakesh Maharjan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/old-nepali/",
+   "web": "local"
+  },
+  {
+   "name": "Pagal",
+   "encoding": "preeti",
+   "designer": "Sahadev Khaki (Pradhan)",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/pagal/",
+   "web": "local"
+  },
+  {
+   "name": "Pagali",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/pagali/",
+   "web": "local"
+  },
+  {
+   "name": "Palanquin",
+   "encoding": "unicode",
+   "designer": "Pria Ravichandran",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/palanquin/",
+   "web": "google"
+  },
+  {
+   "name": "Palanquin Dark",
+   "encoding": "unicode",
+   "designer": "Pria Ravichandran",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/palanquin-dark/",
+   "web": "google"
+  },
+  {
+   "name": "Parvati",
+   "encoding": "preeti",
+   "designer": "Manish",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/parvati/",
+   "web": "local"
+  },
+  {
+   "name": "PawanG",
+   "encoding": "preeti",
+   "designer": "SpaceTime Publication",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/pawang/",
+   "web": "local"
+  },
+  {
+   "name": "Pragati Narrow",
+   "encoding": "unicode",
+   "designer": "Omnibus-Type",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/pragati-narrow/",
+   "web": "google"
+  },
+  {
+   "name": "Preeti",
+   "encoding": "preeti",
+   "designer": "Ajay Mishra",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/preeti/",
+   "web": "local"
+  },
+  {
+   "name": "Rajdhani",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/rajdhani/",
+   "web": "google"
+  },
+  {
+   "name": "Ranga",
+   "encoding": "unicode",
+   "designer": "TipTopTyp",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ranga/",
+   "web": "google"
+  },
+  {
+   "name": "Rhodium Libre",
+   "encoding": "unicode",
+   "designer": "James Puckett",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/rhodium-libre/",
+   "web": "google"
+  },
+  {
+   "name": "Ritu",
+   "encoding": "preeti",
+   "designer": "RAMESH JOSHI",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/ritu/",
+   "web": "local"
+  },
+  {
+   "name": "Rozha One",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/rozha-one/",
+   "web": "google"
+  },
+  {
+   "name": "Rukmini",
+   "encoding": "preeti",
+   "designer": "Unknown",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/rukmini/",
+   "web": "local"
+  },
+  {
+   "name": "Sahitya",
+   "encoding": "unicode",
+   "designer": "Juan Pable del Peral",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/sahitya/",
+   "web": "google"
+  },
+  {
+   "name": "Sapana",
+   "encoding": "preeti",
+   "designer": "Graphics Illustrator",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/sapana/",
+   "web": "local"
+  },
+  {
+   "name": "Sarala",
+   "encoding": "unicode",
+   "designer": "Andres Torresi",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/sarala/",
+   "web": "google"
+  },
+  {
+   "name": "Sarpanch",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/sarpanch/",
+   "web": "google"
+  },
+  {
+   "name": "Shangrila Textual",
+   "encoding": "preeti",
+   "designer": "Raghunath Dhungel",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/shangrila-textual/",
+   "web": "local"
+  },
+  {
+   "name": "Shreenath Bold",
+   "encoding": "preeti",
+   "designer": "meghna pradhan",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/shreenath-bold/",
+   "web": "local"
+  },
+  {
+   "name": "Sumana",
+   "encoding": "unicode",
+   "designer": "Cyreal",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/sumana/",
+   "web": "google"
+  },
+  {
+   "name": "Sura",
+   "encoding": "unicode",
+   "designer": "Carolina Giovagnoli",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/sura/",
+   "web": "google"
+  },
+  {
+   "name": "Suvadin",
+   "encoding": "preeti",
+   "designer": "Inert nebula",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/suvadin/",
+   "web": "local"
+  },
+  {
+   "name": "Teko",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/teko/",
+   "web": "google"
+  },
+  {
+   "name": "Tillana",
+   "encoding": "unicode",
+   "designer": "Indian Type Foundry",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/tillana/",
+   "web": "google"
+  },
+  {
+   "name": "Timila",
+   "encoding": "preeti",
+   "designer": "sunita",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/timila/",
+   "web": "local"
+  },
+  {
+   "name": "Tiro Devanagari Hindi",
+   "encoding": "unicode",
+   "designer": "Tiro Typeworks, John Hudson, Fiona Ross, Paul Hanslow",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/tiro-devanagari-hindi/",
+   "web": "google"
+  },
+  {
+   "name": "Tiro Devanagari Marathi",
+   "encoding": "unicode",
+   "designer": "Tiro Typeworks, John Hudson, Fiona Ross, Paul Hanslow",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/tiro-devanagari-marathi/",
+   "web": "google"
+  },
+  {
+   "name": "Tiro Devanagari Sanskrit",
+   "encoding": "unicode",
+   "designer": "Tiro Typeworks, John Hudson, Fiona Ross, Paul Hanslow",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/tiro-devanagari-sanskrit/",
+   "web": "google"
+  },
+  {
+   "name": "Unnisha",
+   "encoding": "preeti",
+   "designer": "chandra Khaki",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/unnisha/",
+   "web": "local"
+  },
+  {
+   "name": "Vesper Libre",
+   "encoding": "unicode",
+   "designer": "Mota Italic",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/vesper-libre/",
+   "web": "google"
+  },
+  {
+   "name": "Yantramanav",
+   "encoding": "unicode",
+   "designer": "Erin McLaughlin",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/yantramanav/",
+   "web": "google"
+  },
+  {
+   "name": "Yatra One",
+   "encoding": "unicode",
+   "designer": "Catherine Leigh Schmidt",
+   "source": "anepali",
+   "url": "https://www.anepali.com/font/yatra-one/",
+   "web": "google"
+  },
+  {
+   "name": "Kalimati",
+   "encoding": "unicode",
+   "source": "windows",
+   "web": "local",
+   "note": "Installed with Windows"
+  },
+  {
+   "name": "Mangal",
+   "encoding": "unicode",
+   "source": "windows",
+   "web": "local",
+   "note": "Installed with Windows"
+  },
+  {
+   "name": "Nirmala UI",
+   "encoding": "unicode",
+   "source": "windows",
+   "web": "local",
+   "note": "Installed with Windows"
+  },
+  {
+   "name": "Kokila",
+   "encoding": "unicode",
+   "source": "windows",
+   "web": "local",
+   "note": "Installed with Windows"
+  },
+  {
+   "name": "Aparajita",
+   "encoding": "unicode",
+   "source": "windows",
+   "web": "local",
+   "note": "Installed with Windows"
+  },
+  {
+   "name": "Utsaah",
+   "encoding": "unicode",
+   "source": "windows",
+   "web": "local",
+   "note": "Installed with Windows"
+  }
+ ],
+ "english": [
+  {
+   "name": "Anton",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Archivo Black",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Arial",
+   "encoding": "latin",
+   "source": "system",
+   "web": "local"
+  },
+  {
+   "name": "Barlow",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Bebas Neue",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Calibri",
+   "encoding": "latin",
+   "source": "system",
+   "web": "local"
+  },
+  {
+   "name": "DM Sans",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Fira Sans",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Georgia",
+   "encoding": "latin",
+   "source": "system",
+   "web": "local"
+  },
+  {
+   "name": "Helvetica",
+   "encoding": "latin",
+   "source": "system",
+   "web": "local"
+  },
+  {
+   "name": "Impact",
+   "encoding": "latin",
+   "source": "system",
+   "web": "local"
+  },
+  {
+   "name": "Inter",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Lato",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Lora",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Manrope",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Merriweather",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Montserrat",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Noto Sans",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Nunito",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Open Sans",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Oswald",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Playfair Display",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Poppins",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "PT Sans",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Raleway",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Roboto",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Rubik",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Segoe UI",
+   "encoding": "latin",
+   "source": "system",
+   "web": "local"
+  },
+  {
+   "name": "Source Sans 3",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Tahoma",
+   "encoding": "latin",
+   "source": "system",
+   "web": "local"
+  },
+  {
+   "name": "Times New Roman",
+   "encoding": "latin",
+   "source": "system",
+   "web": "local"
+  },
+  {
+   "name": "Trebuchet MS",
+   "encoding": "latin",
+   "source": "system",
+   "web": "local"
+  },
+  {
+   "name": "Ubuntu",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  },
+  {
+   "name": "Verdana",
+   "encoding": "latin",
+   "source": "system",
+   "web": "local"
+  },
+  {
+   "name": "Work Sans",
+   "encoding": "latin",
+   "source": "google",
+   "web": "google"
+  }
+ ]
+}

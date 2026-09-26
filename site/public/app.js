@@ -20,14 +20,41 @@ function caption(item, tag = "figcaption") {
   ]);
 }
 
+// Each page has only some sections; every renderer runs only if its element is on the page.
 async function main() {
   const m = await fetch("media/manifest.json").then(r => r.json());
-  hero(m.clips);
-  drift(m.stills);
-  ticker(m);
-  walkthrough(m.walkthrough);
-  marquees(m.stills);
-  reel(m.clips);
+  if ($("#hero-video")) hero(m.clips);
+  if ($(".drift-col")) drift(m.stills);
+  if ($("#ticker")) ticker(m);
+  if ($("#walk-script")) walkthrough(m.walkthrough);
+  if ($("#row-a")) marquees(m.stills);
+  if ($("#reel-grid")) reel(m.clips);
+  if ($("#map-grid")) maps(m.maps || []);
+  autoplayInView();
+}
+
+// Maps page: every render, each in its own shape.
+function maps(list) {
+  const grid = $("#map-grid");
+  for (const mp of list) {
+    const video = el("video", { muted: true, playsinline: true, loop: true, preload: "none", poster: mp.poster, "data-autoplay": mp.video, "aria-label": `Map render: ${mp.title}`, controls: reduced ? true : null });
+    video.muted = true;
+    grid.append(el("figure", { class: `map-card shape-${mp.shape.replace(":", "x")}` }, [video, el("figcaption", {}, [el("h3", { text: mp.title }), el("p", { text: mp.en })])]));
+  }
+}
+
+// Any <video data-autoplay="src"> (hub cards, map gallery) loads and plays only while visible.
+function autoplayInView() {
+  const io = new IntersectionObserver(entries => {
+    for (const e of entries) {
+      const v = e.target;
+      if (e.isIntersecting) {
+        if (!v.src) v.src = v.dataset.autoplay;
+        if (!reduced && !document.body.classList.contains("paused")) v.play().catch(() => {});
+      } else v.pause();
+    }
+  }, { threshold: 0.3 });
+  document.querySelectorAll("video[data-autoplay]").forEach(v => { v.muted = true; io.observe(v); });
 }
 
 // Hero: one clip at a time, the subtitle is the script line it was generated from.
@@ -148,7 +175,7 @@ function reel(clips) {
 }
 
 // Pause all motion (marquees, ticker, drift, videos).
-$("#pause").addEventListener("click", e => {
+$("#pause")?.addEventListener("click", e => {
   const paused = document.body.classList.toggle("paused");
   e.currentTarget.setAttribute("aria-pressed", String(paused));
   e.currentTarget.textContent = paused ? "Play motion" : "Pause motion";
@@ -171,7 +198,7 @@ tabs.forEach((t, k) => {
     select(next); next.focus();
   });
 });
-if (/Mac|Linux/i.test(navigator.userAgentData?.platform || navigator.platform)) select($("#tab-mac"));
+if ($("#tab-mac") && /Mac|Linux/i.test(navigator.userAgentData?.platform || navigator.platform)) select($("#tab-mac"));
 document.querySelectorAll(".copy").forEach(btn => btn.addEventListener("click", async () => {
   try { await navigator.clipboard.writeText(btn.previousElementSibling.textContent); btn.textContent = "Copied ✓"; }
   catch { btn.textContent = "Select & copy"; }

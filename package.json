@@ -1,0 +1,15 @@
+{
+  "name": "content-machine",
+  "private": true,
+  "type": "module",
+  "description": "Content Machine: script-to-asset generation, factual map animation, and script-to-subtitle (SRT) tools, driven by AI agents from one folder.",
+  "engines": { "node": ">=20.12" },
+  "scripts": {
+    "setup": "node asset-generation/scripts/setup.mjs",
+    "doctor": "node asset-generation/scripts/doctor.mjs",
+    "mcp": "node asset-generation/mcp/server.mjs",
+    "maps": "node map-animation/agent-map.mjs",
+    "srt": "node subtitles/cli.mjs",
+    "test": "cd asset-generation && npm test && cd ../subtitles && node --test"
+  }
+}

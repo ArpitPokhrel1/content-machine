@@ -39,11 +39,11 @@ try {
 }
 
 New-Item -ItemType Directory -Force -Path $Dir | Out-Null
-# Extracting over an existing install updates the tool; Tool\.env and Outputs are never in the bundle, so they're kept.
+# Extracting over an existing install updates the tool; asset-generation\.env and Outputs are never in the bundle, so they're kept.
 tar -xzf $tmp -C $Dir
 Remove-Item $tmp -Force
 Write-Host "  ok  files in $Dir"
 
 Set-Location $Dir
-node Tool/scripts/setup.mjs
+node asset-generation/scripts/setup.mjs
 Write-Host "`nAll set. Open Claude Code (or Codex) and ask: 'Use content-machine to make an image pack from this script: ...'" -ForegroundColor Green

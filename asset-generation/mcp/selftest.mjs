@@ -28,7 +28,10 @@ await call("write_pack_file", { pack, file: "canon.mjs", content: readFileSync(p
 await call("write_pack_file", { pack, file: "shots/c01.json", content: JSON.stringify([1, 2, 3].map(n => ({ id: `c01-${n}`, chars: ["K"], env: "court", scene: "medium shot of King Pratap Malla crossing the courtyard at mid-morning, guards bowing at the edges" }))) });
 console.log("check:", await call("build_prompts", { pack, stage: "frames", check: true }));
 console.log("refs:", await call("build_prompts", { pack, stage: "refs" }));
-for (const bad of [["write_pack_file", { pack, file: "../evil.txt", content: "x" }], ["read_pack_file", { pack, file: "../../x" }], ["generate_videos", { pack, confirm_paid_generation: false }]]) {
+const subs = JSON.parse(await call("make_subtitles", { pack, duration_seconds: 9.5, encoding: "preeti", name: "selftest" }));
+console.log("subtitles:", subs.cues, "cues →", subs.file);
+console.log("map health:", JSON.stringify(JSON.parse(await call("map_health"))).slice(0, 120));
+for (const bad of [["write_pack_file", { pack, file: "../evil.txt", content: "x" }], ["read_pack_file", { pack, file: "../../x" }], ["generate_videos", { pack, confirm_paid_generation: false }], ["map_render", { project: "x", approval: {}, confirm_render: false }]]) {
   const r = await client.callTool({ name: bad[0], arguments: bad[1] });
   console.log(`refused ${bad[0]}:`, Boolean(r.isError));
 }

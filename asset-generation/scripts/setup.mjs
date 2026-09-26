@@ -1,6 +1,6 @@
-// One-time setup on a new machine. Safe to re-run: it never overwrites an existing Tool/.env
+// One-time setup on a new machine. Safe to re-run: it never overwrites an existing asset-generation/.env
 // value unless you type a new one, and it only installs what is missing.
-// Usage (from the repo root or Tool/):  node Tool/scripts/setup.mjs [--yes] [--maps] [--project ID] [--no-mcp]
+// Usage (from the repo root or asset-generation/):  node asset-generation/scripts/setup.mjs [--yes] [--maps] [--project ID] [--no-mcp]
 //   --yes        accept defaults without asking (uses values already in the environment)
 //   --maps       also install the Map Animation Studio dependencies (~500 MB, includes Electron)
 //   --project    Google Cloud project ID to use (skips the question)
@@ -40,18 +40,24 @@ if (major < 20 || (major === 20 && minor < 12)) {
 console.log(`Content Machine setup — repo at ${repoRoot}`);
 
 // 2. Dependencies.
-step("Installing pipeline dependencies (Tool/)");
+step("Installing pipeline dependencies (asset-generation/)");
 run("npm install --no-audit --no-fund", toolRoot);
-const mapsDir = path.join(toolRoot, "map-animation-studio");
+const mapsDir = path.join(repoRoot, "map-animation");
 const wantMaps = args.includes("--maps") || (!yes && /^y/i.test(await ask("Also install Map Animation Studio? (~500 MB) y/N", "N")));
 if (wantMaps) {
   step("Installing Map Animation Studio dependencies");
   run("npm install --no-audit --no-fund", mapsDir);
 }
 
-// 3. Tool/.env: the only per-machine file.
-step("Machine settings (Tool/.env)");
+// 3. asset-generation/.env: the only per-machine file.
+step("Machine settings (asset-generation/.env)");
 const envPath = path.join(toolRoot, ".env");
+// Installs from before the three-folder split kept settings in Tool/.env: carry them over.
+const legacyEnv = path.join(repoRoot, "Tool", ".env");
+if (!existsSync(envPath) && existsSync(legacyEnv)) {
+  cpSync(legacyEnv, envPath);
+  console.log(`Moved your settings from ${legacyEnv}. The old Tool folder is no longer used and can be deleted.`);
+}
 if (!existsSync(envPath)) writeFileSync(envPath, readFileSync(path.join(toolRoot, ".env.example"), "utf8"));
 let envText = readFileSync(envPath, "utf8");
 const current = key => (envText.match(new RegExp(`^${key}=(.*)$`, "m")) || [])[1]?.trim() || process.env[key] || "";
@@ -65,7 +71,7 @@ const mode = await ask("Authenticate with (A) Google Cloud project / Vertex AI, 
 if (/^b/i.test(mode)) {
   set("GEMINI_API_KEY", await ask("Gemini API key (https://aistudio.google.com/apikey)", current("GEMINI_API_KEY")));
   set("GOOGLE_CLOUD_PROJECT", "");
-  console.log("Note: Gemini-API model names differ from Vertex. Check VIDEO_MODEL in Tool/.env (e.g. veo-3.1-fast-generate-preview).");
+  console.log("Note: Gemini-API model names differ from Vertex. Check VIDEO_MODEL in asset-generation/.env (e.g. veo-3.1-fast-generate-preview).");
 } else {
   // Sign in with the person's own Google account (opens the browser), then pick their project.
   if (hasGcloud && !existsSync(adcFile) && (yes || /^y/i.test(await ask("Sign in with your Google account now? (opens the browser) Y/n", "Y")))) {
@@ -157,7 +163,7 @@ rl?.close();
 console.log(`
 Done. Next:
   1. ${/^b/i.test(mode) || existsSync(adcFile) ? "Google sign-in: done." : "Sign in with Google once:  gcloud auth application-default login"}
-  2. Check everything:            npm run doctor          (from Tool/)
+  2. Check everything:            npm run doctor          (from asset-generation/)
   3. Open Claude Code (or Codex) anywhere and ask for an image pack: the 'content-machine'
      MCP tools are available. Files are saved to ${path.join(repoRoot, "Outputs")}.
 `);

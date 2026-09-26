@@ -18,7 +18,7 @@ const src = p => { const f = path.join(outputs, p); if (!existsSync(f)) throw ne
 // Veo 9:16 output can carry thin black bars top and bottom; trim 10 px each side before scaling.
 const FRAME = "crop=iw:ih-20:0:10,scale=360:640:force_original_aspect_ratio=increase,crop=360:640";
 
-const manifest = { clips: [], stills: [], walkthrough: null };
+const manifest = { clips: [], stills: [], maps: [], walkthrough: null };
 
 for (const c of sel.clips) {
   const mp4 = path.join(media, "clips", `${c.id}.mp4`), poster = path.join(media, "clips", `${c.id}.webp`);
@@ -32,6 +32,16 @@ sel.stills.forEach((s, i) => {
   ff(["-i", src(s.src), "-vf", "scale=432:768:force_original_aspect_ratio=increase,crop=432:768", "-q:v", "70", path.join(media, "stills", name)]);
   manifest.stills.push({ project: s.project, ne: s.ne, en: s.en, image: `media/stills/${name}` });
 });
+
+// Map renders keep their own shape (9:16, 1:1 or 16:9): width 640, 6 s, silent.
+for (const mp of sel.maps || []) {
+  const mp4 = path.join(media, "maps", `${mp.id}.mp4`), poster = path.join(media, "maps", `${mp.id}.webp`);
+  mkdirSync(path.join(media, "maps"), { recursive: true });
+  const scale = "scale='if(gt(iw,ih),960,-2)':'if(gt(iw,ih),-2,960)'";
+  ff(["-i", src(mp.src), "-t", "6", "-an", "-vf", scale, "-c:v", "libx264", "-preset", "slow", "-crf", "26", "-pix_fmt", "yuv420p", "-movflags", "+faststart", mp4]);
+  ff(["-sseof", "-0.5", "-i", src(mp.src), "-frames:v", "1", "-vf", scale, "-q:v", "74", poster]);
+  (manifest.maps ??= []).push({ id: mp.id, title: mp.title, en: mp.en, shape: mp.shape, video: `media/maps/${mp.id}.mp4`, poster: `media/maps/${mp.id}.webp` });
+}
 
 const w = sel.walkthrough;
 const words = readFileSync(src(w.script), "utf8").split(/\s+/).filter(Boolean).slice(0, w.frames.length * 4);

@@ -20,15 +20,15 @@ const [major, minor] = process.versions.node.split(".").map(Number);
 major > 20 || (major === 20 && minor >= 12) ? ok("Node", process.versions.node) : bad(`Node ${process.versions.node}`, "install Node 22 LTS or newer");
 
 if (!existsSync(path.join(toolRoot, "node_modules", "@google", "genai"))) {
-  bad("Dependencies", "run `npm run setup` (or `npm install`) in Tool/");
+  bad("Dependencies", "run `npm run setup` (or `npm install`) in asset-generation/");
   process.exit(1);
 }
 ok("Dependencies installed");
 
 const { config, envFile, describeConfig } = await import("../lib/config.mjs");
-existsSync(envFile) ? ok("Tool/.env present") : bad("Tool/.env missing", "run `npm run setup`");
+existsSync(envFile) ? ok("asset-generation/.env present") : bad("asset-generation/.env missing", "run `npm run setup`");
 
-if (config.mode === "unconfigured") bad("Credentials", "set GOOGLE_CLOUD_PROJECT or GEMINI_API_KEY in Tool/.env (npm run setup)");
+if (config.mode === "unconfigured") bad("Credentials", "set GOOGLE_CLOUD_PROJECT or GEMINI_API_KEY in asset-generation/.env (npm run setup)");
 else ok("Auth mode", config.mode === "vertex" ? `Vertex AI, project ${config.project}, ${config.location}` : "Gemini API key");
 
 if (config.mode === "vertex") {
@@ -36,7 +36,7 @@ if (config.mode === "vertex") {
   const adc = process.platform === "win32"
     ? path.join(process.env.APPDATA || "", "gcloud", "application_default_credentials.json")
     : path.join(os.homedir(), ".config", "gcloud", "application_default_credentials.json");
-  if (sa) existsSync(sa) ? ok("Service-account key", sa) : bad(`GOOGLE_APPLICATION_CREDENTIALS points to a missing file`, "fix the path in Tool/.env");
+  if (sa) existsSync(sa) ? ok("Service-account key", sa) : bad(`GOOGLE_APPLICATION_CREDENTIALS points to a missing file`, "fix the path in asset-generation/.env");
   else existsSync(adc) ? ok("Application Default Credentials") : bad("No Google login found", "run `gcloud auth application-default login`");
   const gcloud = has(config.gcloud);
   if (config.bucket) gcloud ? ok("gcloud CLI", `downloads from gs://${config.bucket}`) : bad("gcloud CLI missing (needed for the bucket download)", "install the Google Cloud CLI, or empty VIDEO_OUTPUT_BUCKET");
@@ -44,7 +44,7 @@ if (config.mode === "vertex") {
 }
 
 has("ffmpeg", "-version") ? ok("ffmpeg") : bad("ffmpeg missing (contact sheets, letterbox fixes, map renders)", "winget install Gyan.FFmpeg  (or https://ffmpeg.org)");
-existsSync(path.join(toolRoot, "map-animation-studio", "node_modules"))
+existsSync(path.join(repoRoot, "map-animation", "node_modules"))
   ? ok("Map Animation Studio dependencies")
   : warn("Map Animation Studio not installed", "optional: `node scripts/setup.mjs --maps`");
 existsSync(path.join(repoRoot, "Outputs")) ? ok("Outputs/ folder") : warn("Outputs/ missing", "created by setup; finished packs go there");

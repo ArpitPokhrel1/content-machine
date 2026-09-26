@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subtitles · Content Machine</title>
+<meta name="description" content="Free script-to-subtitle editor. Paste a Nepali or English script, set the audio or video length, edit the timings, and export an .srt for Premiere Pro or DaVinci Resolve, in Unicode or Preeti.">
+<meta property="og:title" content="Script to Subtitles · Content Machine">
+<meta property="og:description" content="Paste a script, get an .srt for Premiere Pro or DaVinci Resolve. Nepali Unicode and Preeti. Free, runs in your browser.">
+<meta name="theme-color" content="#120e0b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23120e0b'/><rect x='7' y='6' width='18' height='20' rx='3' fill='none' stroke='%23e3a857' stroke-width='2.2'/><circle cx='16' cy='16' r='3.4' fill='%23e3a857'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Noto+Sans+Devanagari:wght@400;600&family=Mukta:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="subtitles.css">
+</head>
+<body class="srt-app">
+<a class="skip" href="#editor">Skip to the editor</a>
+<header class="nav nav-solid" id="top">
+  <a class="brand" href="/" aria-label="Content Machine home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="7" y="6" width="18" height="20" rx="3"/><circle cx="16" cy="16" r="3.4"/></svg>
+    Content Machine
+  </a>
+  <nav aria-label="Content Machine">
+    <a href="/assets">Assets</a>
+    <a href="/maps">Maps</a>
+    <a href="/subtitles" aria-current="page">Subtitles</a>
+    <a href="#help" class="nav-cta">How to import</a>
+  </nav>
+</header>
+
+<main id="editor" class="app">
+  <div class="app-head">
+    <div>
+      <p class="eyebrow">03 · Subtitles</p>
+      <h1>Script to subtitles</h1>
+    </div>
+    <p class="privacy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.5 8 11 4.6-1.5 8-6 8-11V5l-8-3Z"/></svg> Free. Runs in your browser; your script and video never leave your computer.</p>
+  </div>
+
+  <!-- 1. SCRIPT + LENGTH -->
+  <section class="panel p-script" aria-labelledby="h-script">
+    <h2 id="h-script"><span class="step">1</span> Your script</h2>
+    <div class="seg" role="radiogroup" aria-label="The script is typed in">
+      <span class="seg-label">Typed in</span>
+      <label><input type="radio" name="inEnc" value="unicode" checked> Unicode</label>
+      <label><input type="radio" name="inEnc" value="preeti"> Preeti</label>
+    </div>
+    <label class="sr-only" for="script">Script</label>
+    <textarea id="script" rows="10" lang="ne" spellcheck="false" placeholder="Paste your script here: Nepali (Unicode or Preeti) or English.&#10;&#10;यो कथा ३०० वर्ष पुरानो हो। तत्कालिन कान्तिपुर राज्यका सेनापति भीम मल्ल…"></textarea>
+    <p class="hint" id="script-stats">0 words</p>
+
+    <h2><span class="step">2</span> Length of your audio or video</h2>
+    <div class="media-pick">
+      <label class="btn btn-ghost btn-sm file-btn">
+        <input type="file" id="media" accept="audio/*,video/*">
+        Load audio or video
+      </label>
+      <span class="or">or type it</span>
+      <label class="sr-only" for="duration">Total length</label>
+      <input id="duration" class="time-in" inputmode="decimal" placeholder="1:35.2" aria-describedby="dur-help">
+    </div>
+    <p class="hint" id="dur-help">Loading the file reads its exact length and lets you preview on it. Nothing is uploaded.</p>
+
+    <details class="more">
+      <summary>Line settings</summary>
+      <div class="field">
+        <label for="maxChars">Characters per line <output id="maxCharsOut">42</output></label>
+        <input type="range" id="maxChars" min="20" max="60" value="42">
+        <p class="hint">About 42 for 16:9 video, 30–32 for vertical 9:16.</p>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="Lines per subtitle">
+        <span class="seg-label">Lines</span>
+        <label><input type="radio" name="lines" value="1"> 1</label>
+        <label><input type="radio" name="lines" value="2" checked> 2</label>
+      </div>
+      <div class="field">
+        <label for="startAt">First subtitle starts at</label>
+        <input id="startAt" class="time-in" value="0:00" inputmode="decimal">
+      </div>
+    </details>
+
+    <button class="btn btn-primary btn-block" id="make">Make subtitles</button>
+    <p class="hint" id="make-msg" role="status"></p>
+  </section>
+
+  <!-- PREVIEW + CUES -->
+  <section class="panel p-main" aria-labelledby="h-preview">
+    <h2 id="h-preview" class="sr-only">Preview and edit</h2>
+    <div class="stage-wrap">
+      <div class="stage" id="stage" data-aspect="16:9">
+        <video id="player" playsinline preload="metadata" aria-label="Your video"></video>
+        <div class="stage-empty" id="stage-empty">Load a video to preview on it, or just press play.</div>
+        <p class="caption" id="caption" aria-live="off"></p>
+      </div>
+      <div class="transport">
+        <button class="icon-btn" id="play" aria-label="Play">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="i-play"><path d="M8 5v14l11-7z"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="i-pause"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <span class="mono clock" id="clock">00:00.0 / 00:00.0</span>
+        <div class="seg seg-sm" role="radiogroup" aria-label="Preview shape">
+          <label><input type="radio" name="aspect" value="16:9" checked> 16:9</label>
+          <label><input type="radio" name="aspect" value="9:16"> 9:16</label>
+        </div>
+      </div>
+      <div class="timeline" id="timeline" role="group" aria-label="Timeline: click a subtitle to jump to it">
+        <div class="tl-cues" id="tl-cues"></div>
+        <div class="tl-head" id="tl-head"></div>
+      </div>
+    </div>
+
+    <div class="cue-tools">
+      <h2><span class="step">3</span> Check and edit <span class="count" id="cue-count"></span></h2>
+      <div class="cue-tools-actions">
+        <button class="btn btn-ghost btn-sm" id="retime" title="Keep the text, spread the timings over the full length again">Re-time all</button>
+        <label class="shift"><span>Shift all</span>
+          <input id="shiftBy" class="time-in" value="0.0" inputmode="decimal" aria-label="Seconds to shift all subtitles by">
+          <button class="btn btn-ghost btn-sm" id="shiftGo">Apply</button>
+        </label>
+        <label class="btn btn-ghost btn-sm file-btn">
+          <input type="file" id="importSrt" accept=".srt,.vtt,text/plain">
+          Open .srt
+        </label>
+      </div>
+    </div>
+    <ol class="cues" id="cues" aria-label="Subtitles"></ol>
+    <p class="empty-cues" id="empty-cues">Your subtitles will appear here. Paste a script and press <b>Make subtitles</b>.</p>
+    <button class="btn btn-ghost btn-sm" id="addCue" hidden>+ Add a subtitle at the end</button>
+  </section>
+
+  <!-- 4. STYLE + EXPORT -->
+  <section class="panel p-export" aria-labelledby="h-export">
+    <h2 id="h-export"><span class="step">4</span> Font and export</h2>
+
+    <fieldset class="enc">
+      <legend>Text in the file</legend>
+      <label class="enc-opt"><input type="radio" name="outEnc" value="unicode" checked>
+        <span><b>Unicode</b><small>For Mukta, Kalimati, Noto, Mangal… and English fonts</small></span></label>
+      <label class="enc-opt"><input type="radio" name="outEnc" value="preeti">
+        <span><b>Preeti</b><small>For Preeti, Kantipur, Himalb… (77 fonts)</small></span></label>
+    </fieldset>
+
+    <div class="field">
+      <label for="font">Font</label>
+      <select id="font"></select>
+      <button class="link-btn" id="manageFonts" type="button">Turn fonts on or off</button>
+      <p class="hint" id="font-note"></p>
+    </div>
+
+    <div class="field-row">
+      <div class="field"><label for="size">Size</label><input type="range" id="size" min="24" max="80" value="46"></div>
+      <div class="field"><label for="color">Colour</label><input type="color" id="color" value="#ffffff"></div>
+    </div>
+    <div class="seg" role="radiogroup" aria-label="Background">
+      <span class="seg-label">Style</span>
+      <label><input type="radio" name="look" value="outline" checked> Outline</label>
+      <label><input type="radio" name="look" value="box"> Box</label>
+      <label><input type="radio" name="look" value="plain"> Plain</label>
+    </div>
+    <p class="hint">Style is for the preview. Set the same font, size and colour in your editor after importing.</p>
+
+    <div class="export">
+      <button class="btn btn-primary btn-block" id="exPremiere" disabled>Export for Premiere Pro <small>.srt</small></button>
+      <button class="btn btn-primary btn-block" id="exResolve" disabled>Export for DaVinci Resolve <small>.srt</small></button>
+      <button class="btn btn-ghost btn-block btn-sm" id="exVtt" disabled>WebVTT (.vtt) for web players</button>
+      <p class="hint" id="export-msg" role="status"></p>
+    </div>
+  </section>
+
+  <!-- HELP -->
+  <section class="panel p-help" id="help" aria-labelledby="h-help">
+    <h2 id="h-help">Importing into your editor</h2>
+    <div class="help-grid">
+      <div>
+        <h3>Premiere Pro</h3>
+        <ol>
+          <li><b>File › Import</b> the .srt and drag it onto the timeline above your video.</li>
+          <li>Select the captions track. In <b>Essential Graphics</b> (or Properties), set the font to <b class="font-name">Mukta</b>.</li>
+          <li>Set size and colour, then <b>Push to track style</b> so every subtitle matches.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>DaVinci Resolve</h3>
+        <ol>
+          <li><b>File › Import › Subtitle</b>, then drag it from the Media Pool onto the timeline.</li>
+          <li>Click the subtitle track header, open the <b>Inspector › Track</b> tab.</li>
+          <li>Set the font to <b class="font-name">Mukta</b>, then size, colour and outline.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Unicode or Preeti?</h3>
+        <p>A subtitle file can't carry a font; your editor applies it. Unicode files read as Nepali with any Unicode font. Preeti files look like <code>g]kfn</code> until you pick a Preeti-type font, and then they read नेपाल. That's normal. Preeti fonts can't show English letters.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="fontDialog" aria-labelledby="fd-title">
+  <form method="dialog" class="fd">
+    <header class="fd-head">
+      <h2 id="fd-title">Fonts</h2>
+      <p>Turn on the fonts you use. They'll show in the font list. Nepali fonts are from <a href="https://www.anepali.com/" target="_blank" rel="noopener">anepali.com</a>.</p>
+      <div class="fd-bar">
+        <div class="tabs" role="tablist" aria-label="Font groups">
+          <button type="button" role="tab" class="tab" data-group="unicode" aria-selected="true">Nepali Unicode</button>
+          <button type="button" role="tab" class="tab" data-group="preeti" aria-selected="false" tabindex="-1">Nepali Preeti</button>
+          <button type="button" role="tab" class="tab" data-group="english" aria-selected="false" tabindex="-1">English</button>
+        </div>
+        <label class="sr-only" for="fontSearch">Search fonts</label>
+        <input id="fontSearch" type="search" placeholder="Search fonts">
+      </div>
+    </header>
+    <ul class="fd-list" id="fontList"></ul>
+    <footer class="fd-foot"><span class="hint" id="fd-count"></span><button class="btn btn-primary btn-sm" value="done">Done</button></footer>
+  </form>
+</dialog>
+
+<script type="module" src="subtitles.js"></script>
+</body>
+</html>

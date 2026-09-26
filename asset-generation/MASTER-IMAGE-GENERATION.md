@@ -151,7 +151,7 @@ text instead.
 ## 3. Shot budget: 20-word chunks of five 4-word frames
 
 - **One frame per 4 words.** 4 words is about 1.8 s of narration at 2.2 words/s, roughly the
-  natural hold of a still. `Tool/image-pack/chunk-script.mjs` cuts the script into 20-word
+  natural hold of a still. `asset-generation/image-pack/chunk-script.mjs` cuts the script into 20-word
   chunks of five 4-word frames (`cNN-1` … `cNN-5`).
 - For compounding languages (Nepali, German), 3 words per frame is closer. For scripts with no
   word spaces (Chinese, Japanese, Thai), budget by read time: 1 frame per 1.8 s. State which basis
@@ -274,7 +274,7 @@ and add every new lesson there.
 
 1. References first → view the contact sheet → fix drift.
 2. Story frames, **one chunk (5 frames) per parallel batch**, or with the pooled runner (see
-   `Tool/README.md`). Run it in the background.
+   `asset-generation/README.md`). Run it in the background.
 3. **Verify by looking** at the per-chunk contact sheets (`check-frames.mjs`), in this order:
    culture and period drift (modern buildings, water tanks, flags, wrong hats) → identity and
    duplicated characters → hands and crowd faces → text leakage → letterboxing and composition →
@@ -304,7 +304,7 @@ Frame ledger: shot | file(s) | pair role | change vector | hold | beat fn | soun
 ## 10. Copy-paste operating prompt
 
 ```
-Operate under Tool/MASTER-IMAGE-GENERATION.md and read Tool/orchestrator_memory.md first.
+Operate under asset-generation/MASTER-IMAGE-GENERATION.md and read asset-generation/orchestrator_memory.md first.
 
 SCRIPT (any language):
 <full script>

@@ -16,7 +16,7 @@ guaranteed by the builder, not by you, **as long as you stay inside these rules.
 2. `<pack>/canon.mjs`: the character keys, environment keys, anchors and motifs you may use.
    **Read-only. Never edit it.**
 3. `<pack>/chunks.md`: the exact 4-word window of every frame.
-4. `Tool/MASTER-IMAGE-GENERATION.md` sections 3–5 and 7 (frame card, prompt rules, proven fixes).
+4. `asset-generation/MASTER-IMAGE-GENERATION.md` sections 3–5 and 7 (frame card, prompt rules, proven fixes).
 
 ## Output: one file per chunk, exactly five entries
 
@@ -52,7 +52,7 @@ guaranteed by the builder, not by you, **as long as you stay inside these rules.
 
 ## Before you finish
 
-Run `node Tool/image-pack/build-frames.mjs <pack> --check --chunks <your chunk ids>` and fix
+Run `node asset-generation/image-pack/build-frames.mjs <pack> --check --chunks <your chunk ids>` and fix
 every problem it reports. Then reply with the files you wrote and, in one line each, any beat
 where the script was ambiguous or where you had to make a staging choice the lead should review.
 Don't generate images. The lead agent runs generation for the whole pack.

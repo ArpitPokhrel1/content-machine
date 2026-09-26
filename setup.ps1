@@ -29,4 +29,4 @@ Need "gcloud" "Google.CloudSDK" "Google Cloud login; skip if you use a Gemini AP
 
 $argsList = @()
 if ($Maps) { $argsList += "--maps" }
-node Tool/scripts/setup.mjs @argsList
+node asset-generation/scripts/setup.mjs @argsList

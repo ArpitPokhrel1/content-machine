@@ -12,7 +12,7 @@ export const ORIENTATION = {
 
 export async function loadCanon(pack) {
   const file = path.join(path.resolve(pack), "canon.mjs");
-  if (!existsSync(file)) throw new Error(`${file} not found. Copy Tool/image-pack/templates/canon.template.mjs there first.`);
+  if (!existsSync(file)) throw new Error(`${file} not found. Copy asset-generation/image-pack/templates/canon.template.mjs there first.`);
   const c = await import(pathToFileURL(file).href);
   for (const key of ["GRADE", "NEG", "ANCHORS", "CHARS", "ENVS"]) {
     if (!c[key]) throw new Error(`canon.mjs must export ${key}.`);

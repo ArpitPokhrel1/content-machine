@@ -9,12 +9,12 @@ import { fileURLToPath } from "node:url";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.resolve(siteRoot, "..");
-const include = ["README.md", "docs", "CLAUDE.md", "AGENTS.md", "setup.ps1", "setup.sh", ".gitignore", ".gitattributes", ".claude/skills", ".claude/agents", "codex-skills", "examples", "Tool"];
+const include = ["README.md", "docs", "CLAUDE.md", "AGENTS.md", "setup.ps1", "setup.sh", ".gitignore", ".gitattributes", ".claude/skills", ".claude/agents", "codex-skills", "examples", "asset-generation", "map-animation", "subtitles", "package.json"];
 const exclude = [
-  "node_modules", ".env", ".env.bak", "*.log", "Tool/output", "Tool/map-animation-studio/output",
-  "Tool/map-animation-studio/data/cache", "Tool/map-animation-studio/dist",
+  "node_modules", ".env", ".env.bak", "*.log", "asset-generation/output", "map-animation/output",
+  "map-animation/data/cache", "map-animation/dist",
   // Studio session log: names the studio Cloud project and bucket; not needed by anyone else.
-  "Tool/archive/MASTER_PROMPT_VIDEO_PIPELINE.md"
+  "asset-generation/archive/MASTER_PROMPT_VIDEO_PIPELINE.md"
 ];
 
 const missing = include.filter(p => !existsSync(path.join(repoRoot, p)));

@@ -5,10 +5,10 @@ description: Produce factual, data-accurate animated map videos — Vox/NYT/BBC-
 
 # Create Map Animations
 
-Use the local pipeline at `Tool/map-animation-studio/` (paths relative to the repo root). Read
-`Tool/map-animation-studio/MEMORY.md` and `Tool/PROMPT_MAP_ANIMATION.md` before acting. Use
+Use the local pipeline at `map-animation/` (paths relative to the repo root). Read
+`map-animation/MEMORY.md` and `map-animation/PROMPT_MAP_ANIMATION.md` before acting. Use
 `node agent-map.mjs` from that directory for every pipeline operation. First-time setup on a
-machine: `node Tool/scripts/setup.mjs --maps` (installs its dependencies; needs ffmpeg and
+machine: `node asset-generation/scripts/setup.mjs --maps` (installs its dependencies; needs ffmpeg and
 Edge or Chrome).
 
 This pipeline contains **no generative AI**. MapLibre GL JS draws real boundary vectors,
@@ -49,7 +49,7 @@ a factual error shipped to an audience.
 9. Poll with `node agent-map.mjs status --project <project-id>`. Never submit an automatic
    retry.
 10. Return clickable local MP4 paths and the project folder. Ask for feedback and add generic
-    reusable lessons to `map-animation-studio/MEMORY.md` (not `Tool/orchestrator_memory.md` — that
+    reusable lessons to `map-animation-studio/MEMORY.md` (not `asset-generation/orchestrator_memory.md` — that
     file is specific to the Veo/Gemini generative pipeline and does not apply here).
 
 ## Guardrails

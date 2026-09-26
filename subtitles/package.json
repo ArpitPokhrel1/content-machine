@@ -1,0 +1,8 @@
+{
+  "name": "content-machine-subtitles",
+  "private": true,
+  "type": "module",
+  "description": "Script to SRT/VTT subtitles with Unicode and Preeti Nepali output.",
+  "bin": { "content-srt": "./cli.mjs" },
+  "scripts": { "test": "node --test" }
+}

@@ -1,12 +1,20 @@
 # Folder Structure
 
-This repo is split into `Tool/` (the reusable pipeline — scripts, servers, skill docs, master prompt references) and `Outputs/` (every generated image/video pack, organized by project; not committed to git). New generations land in `Tool/output/` by default; move finished packs into `Outputs/` to keep the split intact. `Other/` holds unrelated business documents (not committed). See `README.md` for the plain-language guide and `Tool/README.md` for the technical walkthrough.
+Content Machine has three parts, run from this one folder (all paths below are relative to it):
 
-All paths in this file are relative to the repo root. The only machine-specific file is `Tool/.env` (credentials, Cloud project, bucket), created by `npm run setup` in `Tool/`. If a command fails with a credentials error, run `npm run doctor` in `Tool/` before anything else.
+| Part | Folder | What it does |
+| --- | --- | --- |
+| Assets | `asset-generation/` | Script → story-coherent image packs and approval-gated Veo video. Prompts, image-pack tools, MCP server, setup/doctor. |
+| Maps | `map-animation/` | Deterministic animated maps from real boundary data (no generative model). |
+| Subtitles | `subtitles/` | Script + audio/video length → SRT/VTT for Premiere Pro / DaVinci Resolve, Unicode or Preeti. |
+
+Also: `site/` (content.tarjun.com), `Outputs/` (every generated pack, per project; not committed to git), `Other/` (unrelated business documents, not committed). New asset generations land in `asset-generation/output/`; move finished packs into `Outputs/`. Root `package.json` has shortcuts: `npm run setup | doctor | maps -- <cmd> | srt -- <args> | test`. See `README.md` (plain language), `docs/STUDIO-GUIDE.md` (running the studio) and each part's own README.
+
+The only machine-specific file is `asset-generation/.env` (credentials, Cloud project, bucket), created by `npm run setup`. If a command fails with a credentials error, run `npm run doctor` before anything else.
 
 # MCP and content.tarjun.com
 
-`Tool/mcp/server.mjs` exposes this pipeline as the `content-machine` MCP server (registered by setup). When its tools are available, prefer them; they enforce the same gates (`generate_videos` needs `confirm_paid_generation: true`, set only after explicit approval). `site/` is the Vercel site at content.tarjun.com that hands out the installer to holders of an access code (`ACCESS_CODES` env var); outsiders run everything locally with their own Google account and Cloud project.
+`asset-generation/mcp/server.mjs` exposes all three parts as the `content-machine` MCP server (registered by setup): asset tools, `map_*` tools and `make_subtitles`. When its tools are available, prefer them; they enforce the same gates (`generate_videos` needs `confirm_paid_generation: true`, `map_render` needs `confirm_render: true`, each set only after explicit approval). `site/` is the Vercel site at content.tarjun.com that hands out the installer to holders of an access code (`ACCESS_CODES` env var); outsiders run everything locally with their own Google account and Cloud project.
 
 # Parallel Processing
 
@@ -20,7 +28,7 @@ Split work so everything that must look identical is decided once, then fan out:
 
 When the user asks to create video assets, B-roll, cinematic clips, or script-based scenes, use the shared local orchestrator instead of calling a media API directly.
 
-Read `Tool/orchestrator_memory.md`, `Tool/MASTER-VIDEO-GENERATION.md` and the `create-video-assets` skill (`.claude/skills/create-video-assets/SKILL.md`, mirrored for Codex in `codex-skills/`). Operate the pipeline through `node agent-video.mjs` from the `Tool/` directory.
+Read `asset-generation/orchestrator_memory.md`, `asset-generation/MASTER-VIDEO-GENERATION.md` and the `create-video-assets` skill (`.claude/skills/create-video-assets/SKILL.md`, mirrored for Codex in `codex-skills/`). Operate the pipeline through `node agent-video.mjs` from the `asset-generation/` directory.
 
 Mandatory rules:
 
@@ -39,7 +47,7 @@ Mandatory rules:
 
 # Local Image Pack Production
 
-When the user asks for images, stills, frames or an image pack from a script, follow the `create-image-packs` skill (`.claude/skills/create-image-packs/SKILL.md`, mirrored for Codex in `codex-skills/`). Use the tools in `Tool/image-pack/` and the rules in `Tool/MASTER-IMAGE-GENERATION.md`.
+When the user asks for images, stills, frames or an image pack from a script, follow the `create-image-packs` skill (`.claude/skills/create-image-packs/SKILL.md`, mirrored for Codex in `codex-skills/`). Use the tools in `asset-generation/image-pack/` and the rules in `asset-generation/MASTER-IMAGE-GENERATION.md`.
 
 - Chunk the script into 20-word chunks of five 4-word frames. Analyse the script, then the characters, then the environments; lock them in `canon.mjs`; fan scene writing out to `chunk-writer` subagents; assemble with `build-frames.mjs`; generate in parallel.
 - Image generation needs no approval, unless the user asks to verify the characters and environments first.
@@ -49,7 +57,7 @@ When the user asks for images, stills, frames or an image pack from a script, fo
 
 When the user asks for animated map graphics, administrative-border maps, choropleths, migration/flow maps, globe zooms, route animations, or any Vox/NYT/BBC-explainer-style map video, use the local Map Animation Studio pipeline instead of a generative video/image model. This pipeline draws real geographic vector data — it is deterministic, not generative — because borders and coordinates must be factually accurate.
 
-Read `Tool/PROMPT_MAP_ANIMATION.md` and the `create-map-animations` skill (`.claude/skills/create-map-animations/SKILL.md`, mirrored for Codex in `codex-skills/`). Operate the pipeline through `node agent-map.mjs` from `Tool/map-animation-studio/`.
+Read `map-animation/PROMPT_MAP_ANIMATION.md` and the `create-map-animations` skill (`.claude/skills/create-map-animations/SKILL.md`, mirrored for Codex in `codex-skills/`). Operate the pipeline through `node agent-map.mjs` from `map-animation/`.
 
 Mandatory rules:
 
@@ -63,3 +71,12 @@ Mandatory rules:
 - Treat requested timestamps/beats as approximate storytelling guidance.
 - Never retry a failed render automatically.
 - Return the local output folder and individual MP4 paths.
+
+# Subtitles (Script to SRT)
+
+When the user asks for subtitles, captions or an SRT from a script, follow the `create-subtitles` skill (`.claude/skills/create-subtitles/SKILL.md`). Use the `make_subtitles` MCP tool or `node subtitles/cli.mjs`.
+
+- Never change the script's words; only split and time them.
+- Timing is proportional to reading length across the given audio/video length, not speech recognition. Point the user to content.tarjun.com/subtitles for fine-tuning.
+- `unicode` output is for Unicode fonts (Mukta, Kalimati, Noto…); `preeti` output converts the text for Preeti-type fonts (Preeti, Kantipur, Himalb…). Preeti can't show English letters.
+- An .srt can't carry a font: tell the user to set it in Premiere Pro or DaVinci Resolve after importing.

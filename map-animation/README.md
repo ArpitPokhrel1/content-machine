@@ -91,10 +91,10 @@ zoom and a multi-country choropleth).
 
 ## For an AI agent operating this tool
 
-Read `../PROMPT_MAP_ANIMATION.md` (the one-shot scoping questionnaire — ask it in a single batch,
-never drip-fed) and the `create-map-animations` skill in `../../.claude/skills/` (the workflow
+Read `PROMPT_MAP_ANIMATION.md` (the one-shot scoping questionnaire — ask it in a single batch,
+never drip-fed) and the `create-map-animations` skill in `../.claude/skills/` (the workflow
 and guardrails, including the disputed-territory default policy and the render approval gate).
-`../../CLAUDE.md` points here for any map-animation request in this repo.
+`../CLAUDE.md` points here for any map-animation request in this repo.
 
 ## Architecture
 

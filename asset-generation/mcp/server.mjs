@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Content Machine MCP server (local, stdio). Runs on the user's own machine, generates with their
-// own Google account (Tool/.env → Vertex AI via `gcloud auth application-default login`, or a
+// own Google account (asset-generation/.env → Vertex AI via `gcloud auth application-default login`, or a
 // Gemini API key) and saves every image and video to their local Outputs folder.
-// Register:  claude mcp add --scope user content-machine -- node "<repo>/Tool/mcp/server.mjs"
+// Register:  claude mcp add --scope user content-machine -- node "<repo>/asset-generation/mcp/server.mjs"
 //
 // The tools wrap the same scripts the CLI workflow uses (image-pack/*.mjs, video/merge-clips.mjs,
 // lib/generate.mjs), so both routes produce identical prompts and files.
@@ -15,6 +15,7 @@ import { readFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
+import { pathToFileURL } from "node:url";
 import { config, describeConfig, toolRoot, repoRoot } from "../lib/config.mjs";
 import { generateVideoFile } from "../lib/generate.mjs";
 import { runPool } from "../lib/pool.mjs";
@@ -30,8 +31,12 @@ const GUIDES = {
   "model-lessons": "orchestrator_memory.md",
   "canon-template": "image-pack/templates/canon.template.mjs",
   "image-workflow": "../.claude/skills/create-image-packs/SKILL.md",
-  "video-workflow": "../.claude/skills/create-video-assets/SKILL.md"
+  "video-workflow": "../.claude/skills/create-video-assets/SKILL.md",
+  "map-questions": "../map-animation/PROMPT_MAP_ANIMATION.md",
+  "map-workflow": "../.claude/skills/create-map-animations/SKILL.md",
+  "subtitles-guide": "../subtitles/README.md"
 };
+const mapsRoot = path.join(repoRoot, "map-animation");
 
 const text = value => ({ content: [{ type: "text", text: typeof value === "string" ? value : JSON.stringify(value, null, 2) }] });
 const fail = message => ({ isError: true, content: [{ type: "text", text: message }] });
@@ -58,9 +63,8 @@ const slug = s => String(s).normalize("NFKD").replace(/[^\w\s-]/g, "").trim().re
 
 // Long-running work (image batches, video clips) runs in the background; poll with job_status.
 const jobs = new Map();
-function startJob(kind, pack, work) {
+function startJob(kind, pack, work, dir = packDir(pack)) {
   const id = `${kind}-${Date.now().toString(36)}`;
-  const dir = packDir(pack);
   mkdirSync(path.join(dir, "logs"), { recursive: true });
   const logFile = path.join(dir, "logs", `${id}.log`);
   const log = createWriteStream(logFile, { flags: "a" });
@@ -76,14 +80,14 @@ function startJob(kind, pack, work) {
 const server = new McpServer(
   { name: "content-machine", version: "1.0.0" },
   {
-    instructions: "Content Machine turns a script into a story-coherent image pack and approval-gated video clips, generated with the user's own Google account and saved on their disk. Before any job, call read_guide('mcp-workflow'), then read_guide('image-method') or read_guide('video-method') and read_guide('model-lessons'). Never call generate_videos without the user's explicit approval of the exact clips, seconds and cost."
+    instructions: "Content Machine has three parts. (1) Assets: a script becomes a story-coherent image pack and approval-gated video clips, generated with the user's own Google account and saved on their disk. Before any job, call read_guide('mcp-workflow'), then read_guide('image-method') or read_guide('video-method') and read_guide('model-lessons'). Never call generate_videos without the user's explicit approval of the exact clips, seconds and cost. (2) Maps: factual map animations drawn from real boundary data, never from a generative model. Read read_guide('map-workflow') and ask every question in read_guide('map-questions') in one batch; map_render needs explicit approval. (3) Subtitles: make_subtitles turns a script plus its audio/video length into an .srt or .vtt for Premiere Pro or DaVinci Resolve, in Unicode or Preeti."
   }
 );
 
 server.registerTool("health", {
   description: "Check the machine setup: Google auth mode, Cloud project, models, and where outputs are saved. Free, generates nothing.",
   inputSchema: {}
-}, async () => text({ ...describeConfig(), outputsFolder: outputsRoot, note: config.mode === "unconfigured" ? "Not signed in. Ask the user to run the installer again, or `npm run setup` in Tool/." : "Ready." }));
+}, async () => text({ ...describeConfig(), outputsFolder: outputsRoot, note: config.mode === "unconfigured" ? "Not signed in. Ask the user to run the installer again, or `npm run setup` in asset-generation/." : "Ready." }));
 
 server.registerTool("read_guide", {
   description: "Read one of the method guides. Start with 'mcp-workflow'. Others: image-method, video-method, model-lessons (proven fixes from real runs), canon-template, image-workflow, video-workflow.",
@@ -260,6 +264,74 @@ server.registerTool("list_outputs", {
   }
   return text({ folder: dir, ...out });
 });
+
+// ---------------------------------------------------------------------------------------------
+// Part 3: subtitles (script -> SRT/VTT for Premiere Pro and DaVinci Resolve)
+const subtitlesLib = import(pathToFileURL(path.join(repoRoot, "subtitles", "lib", "subtitles.mjs")).href);
+
+server.registerTool("make_subtitles", {
+  description: "Turn a script into a subtitle file (.srt or .vtt) timed across the total audio/video length, saved on the user's disk. encoding 'unicode' works with Unicode fonts (Mukta, Kalimati, Noto...); 'preeti' converts the text to Preeti keys for Preeti/Kantipur/Himalb-type fonts. Give the script text, or a pack name to use its script.txt. Give duration_seconds, or media_path to read the length with ffprobe. Premiere Pro: File > Import, drag onto the timeline, then set the font. DaVinci Resolve: File > Import > Subtitle, then set the font in the subtitle track style.",
+  inputSchema: {
+    script: z.string().optional(), pack: z.string().optional(),
+    duration_seconds: z.number().positive().optional(), media_path: z.string().optional(),
+    encoding: z.enum(["unicode", "preeti"]).optional(), format: z.enum(["srt", "vtt"]).optional(),
+    max_chars: z.number().int().min(12).max(80).optional(), lines: z.number().int().min(1).max(2).optional(),
+    name: z.string().optional()
+  }
+}, async ({ script: body, pack, duration_seconds, media_path, encoding = "unicode", format = "srt", max_chars = 42, lines = 2, name }) => {
+  const { makeCues, buildFile } = await subtitlesLib;
+  let dir = path.join(outputsRoot, "subtitles");
+  if (pack) { dir = path.join(packDir(pack), "subtitles"); body ??= readFileSync(path.join(packDir(pack), "script.txt"), "utf8"); }
+  if (!body) return fail("Give script text or a pack name.");
+  let total = duration_seconds;
+  if (!total && media_path) {
+    try { total = Number((await run("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", media_path])).stdout.trim()); }
+    catch { return fail(`Could not read the length of ${media_path}. Is ffmpeg installed?`); }
+  }
+  if (!total) return fail("Give duration_seconds (total audio/video length) or media_path.");
+  const cues = makeCues(body, total, { maxChars: max_chars, maxLines: lines });
+  mkdirSync(dir, { recursive: true });
+  const file = path.join(dir, `${slug(name || pack || "subtitles")}-${encoding}.${format}`);
+  writeFileSync(file, "\uFEFF" + buildFile(cues, { format, encoding }), "utf8");
+  return text({ file, cues: cues.length, seconds: total, encoding, preview: cues.slice(0, 3), editor: "Open https://content.tarjun.com/subtitles to fine-tune timings and preview fonts." });
+});
+
+// ---------------------------------------------------------------------------------------------
+// Part 2: maps (deterministic, real boundary data; wraps map-animation/agent-map.mjs)
+async function agentMap(args) {
+  if (!existsSync(path.join(mapsRoot, "node_modules"))) throw new Error("Map Animation Studio isn't installed on this machine. Run setup again with --maps (Windows: setup.ps1 -Maps).");
+  try {
+    const { stdout } = await run(process.execPath, [path.join(mapsRoot, "agent-map.mjs"), ...args], { cwd: mapsRoot, maxBuffer: 20 * 1024 * 1024 });
+    return JSON.parse(stdout);
+  } catch (error) {
+    throw new Error(String(error.stderr || error.message).slice(0, 1500));
+  }
+}
+const tmpJson = (prefix, value) => { const f = path.join(os.tmpdir(), `${prefix}-${Date.now()}.json`); writeFileSync(f, JSON.stringify(value, null, 2)); return f; };
+const mapTool = fn => async input => { try { return text(await fn(input)); } catch (e) { return fail(e.message); } };
+
+server.registerTool("map_health", { description: "Check the map render stack (Chromium, ffmpeg, boundary data access). Free.", inputSchema: {} },
+  mapTool(() => agentMap(["health"])));
+server.registerTool("map_plan", { description: "Show what a map manifest needs, or check a draft manifest. Read read_guide('map-questions') and ask the user all its questions in ONE message first.", inputSchema: { manifest: z.record(z.string(), z.any()).optional() } },
+  mapTool(({ manifest }) => agentMap(["plan", ...(manifest ? ["--manifest", tmpJson("map-manifest", manifest)] : [])])));
+server.registerTool("map_draft", { description: "Build the scene script and a few preview stills from a manifest. Local and free, no approval needed. Show the user every preview, the data sources and licences, and any disputed-border treatment.", inputSchema: { manifest: z.record(z.string(), z.any()), previews: z.number().int().min(1).max(12).optional() } },
+  mapTool(({ manifest, previews }) => agentMap(["draft", "--manifest", tmpJson("map-manifest", manifest), ...(previews ? ["--previews", String(previews)] : [])])));
+server.registerTool("map_render", {
+  description: "Render the approved map project to MP4 in the background. Only after the user explicitly approved these exact scenes, regions, admin levels, data sources and render time. Approval of a plan or preview stills is NOT approval to render. Never re-render a failure automatically.",
+  inputSchema: { project: z.string(), approval: z.record(z.string(), z.any()), confirm_render: z.literal(true) }
+}, async ({ project, approval }) => {
+  const file = tmpJson("map-approval", approval);
+  const logDir = path.join(mapsRoot, "output");
+  mkdirSync(logDir, { recursive: true });
+  const job = startJob("map-render", project, async log => {
+    const result = await agentMap(["generate", "--project", project, "--approval", file]);
+    log.write(JSON.stringify(result, null, 2));
+    return result;
+  }, logDir);
+  return text({ job: job.id, note: "Rendering. Poll job_status or map_status." });
+});
+server.registerTool("map_status", { description: "Status and output files of a map project.", inputSchema: { project: z.string() } },
+  mapTool(({ project }) => agentMap(["status", "--project", project])));
 
 await server.connect(new StdioServerTransport());
 console.error(`content-machine MCP ready (${config.mode}; outputs → ${outputsRoot}; ${os.hostname()})`);

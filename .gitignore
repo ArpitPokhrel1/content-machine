@@ -1,4 +1,4 @@
-# Per-machine settings and secrets: never committed. Template: Tool/.env.example
+# Per-machine settings and secrets: never committed. Template: asset-generation/.env.example
 .env
 .env.*
 !.env.example
@@ -11,12 +11,12 @@ node_modules/
 
 # Generated media and working output (GBs, lives only on the machine that made it)
 Outputs/
-Tool/output/
-Tool/references/*
-!Tool/references/.gitkeep
-Tool/map-animation-studio/output/
-Tool/map-animation-studio/data/cache/
-Tool/map-animation-studio/dist/
+asset-generation/output/
+asset-generation/references/*
+!asset-generation/references/.gitkeep
+map-animation/output/
+map-animation/data/cache/
+map-animation/dist/
 
 # Unrelated business documents
 Other/

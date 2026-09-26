@@ -10,4 +10,4 @@ fi
 command -v ffmpeg >/dev/null 2>&1 || echo "Note: ffmpeg is missing (brew install ffmpeg / apt install ffmpeg). Needed for contact sheets and map renders."
 command -v gcloud >/dev/null 2>&1 || echo "Note: gcloud is missing (https://cloud.google.com/sdk). Needed for Google Cloud login unless you use a Gemini API key."
 
-node Tool/scripts/setup.mjs "$@"
+node asset-generation/scripts/setup.mjs "$@"

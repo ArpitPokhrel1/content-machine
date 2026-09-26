@@ -13,24 +13,27 @@ Content Machine/
 ├── README.md                ← the plain-language guide
 ├── docs/STUDIO-GUIDE.md     ← you are here
 ├── CLAUDE.md, AGENTS.md     ← the rules the AI agents follow (Claude Code / Codex)
+├── package.json             ← shortcuts: npm run setup | doctor | maps | srt | test
 ├── setup.ps1 / setup.sh     ← first-time setup on a studio laptop
-├── Tool/                    ← the machine itself
-│   ├── MASTER-IMAGE-GENERATION.md   ← how to write great image prompts
-│   ├── MASTER-VIDEO-GENERATION.md   ← how to direct great video clips
+│
+├── asset-generation/        ← PART 1: images and video from a script
+│   ├── MASTER-IMAGE-GENERATION.md, MASTER-VIDEO-GENERATION.md   ← the craft
 │   ├── orchestrator_memory.md       ← every lesson learned the hard way (keep adding to it)
-│   ├── mcp/                         ← the "content-machine" MCP server the agents connect to
-│   ├── image-pack/                  ← image tools
-│   ├── map-animation-studio/        ← the map tool (no AI, real map data)
+│   ├── mcp/                         ← the "content-machine" MCP server (drives all three parts)
+│   ├── image-pack/, video/          ← tools
 │   ├── .env                         ← THIS laptop's Google settings (never committed)
 │   └── README.md                    ← every command and file format
-├── site/                    ← the website content.tarjun.com (Vercel)
+├── map-animation/           ← PART 2: factual map animation (no AI, real map data)
+├── subtitles/               ← PART 3: script → SRT/VTT, Unicode ⇄ Preeti, font catalogue
+│
+├── site/                    ← content.tarjun.com: / hub, /assets, /maps, /subtitles (Vercel)
 ├── .claude/, codex-skills/  ← skills and helper agents for Claude Code and Codex
 ├── knowledge/               ← Claude's saved memory about past projects
 ├── examples/                ← a finished project's recipe files
-└── Outputs/                 ← finished images and videos (stays on each laptop, not in git)
+└── Outputs/                 ← finished images, videos, maps, subtitles (not in git)
 ```
 
-**The only thing that changes between laptops is `Tool/.env`.** Everything else is identical.
+**The only thing that changes between laptops is `asset-generation/.env`.** Everything else is identical.
 
 ---
 
@@ -106,9 +109,15 @@ On another studio laptop, run `git pull`.
 
 - **Finished images and videos don't travel through git** (they're gigabytes). Copy `Outputs/`
   yourself if you need old work.
-- **Never put `Tool/.env` on GitHub.** It's blocked already. Don't work around the block.
-- **After editing a Claude skill** in `.claude/skills/`, run `node Tool/scripts/sync-codex-skills.mjs` so Codex gets the
+- **Never put `asset-generation/.env` on GitHub.** It's blocked already. Don't work around the block.
+- **After editing a Claude skill** in `.claude/skills/`, run `node asset-generation/scripts/sync-codex-skills.mjs` so Codex gets the
   same change.
+
+### The website's pages
+
+`site/public/`: `index.html` (hub), `assets.html`, `maps.html`, `subtitles.html` (the editor;
+`subtitles.js` loads the engine the build copies from `subtitles/lib` into `public/sub/`). The
+build (`site/scripts/build.mjs`) runs on Vercel at every push.
 
 ### Changing the showcase on the website
 
@@ -120,11 +129,11 @@ file and run:
 node site/scripts/prepare-media.mjs
 ```
 
-This makes small web copies in `site/public/media/`. Commit and push.
+This makes small web copies in `site/public/media/` (clips, stills, walkthrough frames and map renders). Commit and push.
 
 ---
 
-## Speed settings (in `Tool/.env`)
+## Speed settings (in `asset-generation/.env`)
 
 - `IMAGE_LOCATIONS=us-central1,us-east4,europe-west4`: Google limits images per minute *per
   region*, so listing three regions gives about three times the speed.
@@ -137,12 +146,12 @@ This makes small web copies in `site/public/media/`. Commit and push.
 
 | You see | Do this |
 | --- | --- |
-| "No credentials configured" | Run setup again, or `npm run setup` inside `Tool/` |
+| "No credentials configured" | Run setup again, or `npm run setup` inside `asset-generation/` |
 | Login, permission, 401 or 403 errors | `gcloud auth application-default login`, then `npm run doctor -- --online` |
 | `429 RESOURCE_EXHAUSTED` | Google's per-minute limit. Nothing was charged. Wait a minute and ask the agent to fill in the missing frames |
-| The agent can't find the `content-machine` tools | Re-run setup, or `claude mcp add --scope user content-machine -- node "<repo>/Tool/mcp/server.mjs"` |
-| "fetch failed" from `agent-video.mjs` | That older command route needs the local server. Run `npm start` in `Tool/` (the MCP route doesn't need it) |
-| Black bars on images or videos | A known model habit. The fix is in `Tool/orchestrator_memory.md` |
+| The agent can't find the `content-machine` tools | Re-run setup, or `claude mcp add --scope user content-machine -- node "<repo>/asset-generation/mcp/server.mjs"` |
+| "fetch failed" from `agent-video.mjs` | That older command route needs the local server. Run `npm start` in `asset-generation/` (the MCP route doesn't need it) |
+| Black bars on images or videos | A known model habit. The fix is in `asset-generation/orchestrator_memory.md` |
 | Modern things in a historical scene | Tell the agent. It tightens that place's "not this" list |
 | `ffmpeg` not found | `winget install Gyan.FFmpeg`, then open a new terminal |
 
@@ -152,7 +161,7 @@ Still stuck? Run `npm run doctor` and paste the output to Claude Code.
 
 ## Going deeper
 
-- `Tool/README.md`: every command, file format and MCP tool.
-- `Tool/MASTER-IMAGE-GENERATION.md`, `Tool/MASTER-VIDEO-GENERATION.md`: the craft.
-- `Tool/orchestrator_memory.md`: the lab notebook. Every new lesson goes here. It's how the
+- `asset-generation/README.md`: every command, file format and MCP tool.
+- `asset-generation/MASTER-IMAGE-GENERATION.md`, `asset-generation/MASTER-VIDEO-GENERATION.md`: the craft.
+- `asset-generation/orchestrator_memory.md`: the lab notebook. Every new lesson goes here. It's how the
   machine gets smarter.

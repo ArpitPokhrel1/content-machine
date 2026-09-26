@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maps · Content Machine</title>
+<meta name="description" content="Explainer-style animated maps drawn from real open map data: district highlights, zooms, borders and routes, ready as B-roll.">
+<meta name="theme-color" content="#120e0b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23120e0b'/><rect x='7' y='6' width='18' height='20' rx='3' fill='none' stroke='%23e3a857' stroke-width='2.2'/><circle cx='16' cy='16' r='3.4' fill='%23e3a857'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="top">
+  <a class="brand" href="/" aria-label="Content Machine home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="7" y="6" width="18" height="20" rx="3"/><circle cx="16" cy="16" r="3.4"/></svg>
+    Content Machine
+  </a>
+  <nav aria-label="Content Machine">
+    <a href="/assets">Assets</a>
+    <a href="/maps" aria-current="page">Maps</a>
+    <a href="/subtitles">Subtitles</a>
+    <a href="#get" class="nav-cta">Get started</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="page-hero map-hero" aria-labelledby="maps-title">
+    <div>
+      <p class="eyebrow">02 · Maps</p>
+      <h1 id="maps-title">Maps that are <em>true</em>.</h1>
+      <p class="lede">Animated map shots for your story: a district lighting up, a zoom from the globe to a village, a border drawn in. Every line comes from <strong>real open map data</strong>, never from an AI guess, because a made-up border is a factual error.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#get">Get started</a>
+        <a class="btn btn-ghost" href="#gallery">See the renders</a>
+      </div>
+    </div>
+    <div class="map-hero-media">
+      <video muted playsinline loop preload="none" poster="media/maps/dailekh.webp" data-autoplay="media/maps/dailekh.mp4" aria-label="Map render: zoom from Nepal to Dailekh district"></video>
+    </div>
+  </section>
+
+  <section class="map-gallery" id="gallery" aria-labelledby="gallery-title">
+    <div class="section-head">
+      <p class="eyebrow">Real renders</p>
+      <h2 id="gallery-title">Any shape your edit needs.</h2>
+      <p>Vertical for reels, square for posts, wide for YouTube. Same data, same look.</p>
+    </div>
+    <div class="map-grid" id="map-grid"></div>
+  </section>
+
+  <section class="promises" aria-labelledby="map-rules">
+    <h2 id="map-rules" class="sr-only">What makes these maps trustworthy</h2>
+    <article><span class="num">01</span><h3>Real boundaries</h3><p>Countries, provinces, districts and local units come from Natural Earth and geoBoundaries, open datasets used by newsrooms, with credit kept.</p></article>
+    <article><span class="num">02</span><h3>Fair on disputes</h3><p>Where a border is genuinely disputed, it's drawn as a dashed line with a neutral note, never quietly settled in one side's favour.</p></article>
+    <article><span class="num">03</span><h3>No invented numbers</h3><p>Every value shown on a map traces back to your data file or a named public source. Regions without data say "no data", not zero.</p></article>
+    <article><span class="num">04</span><h3>You approve the render</h3><p>You see preview stills and the data sources first. The final video is made only after you say yes.</p></article>
+  </section>
+
+  <section class="install" id="get" aria-labelledby="get-title">
+    <div class="section-head">
+      <p class="eyebrow">Get started</p>
+      <h2 id="get-title">Part of Content Machine.</h2>
+      <p>Maps come with the same install as Assets. You need an access code from the studio.</p>
+    </div>
+    <ol class="needs">
+      <li><h3>Install Content Machine</h3><p>Follow the one-line install on the <a href="/assets#install">Assets page</a>. When it asks <em>"Also install Map Animation Studio?"</em>, answer <b>y</b>. Already installed? Run the same line again and say yes this time.</p></li>
+      <li><h3>Have Microsoft Edge or Google Chrome</h3><p>The maps are drawn in your browser engine and turned into video with ffmpeg. The installer sets up ffmpeg for you.</p></li>
+      <li><h3>Ask your AI assistant</h3><p>For example: <em>"Use content-machine to animate a map zooming from Nepal into Dailekh district, 6 seconds, vertical."</em> It asks all its map questions in one go, shows you previews, and renders after you approve.</p></li>
+    </ol>
+  </section>
+</main>
+
+<footer class="foot">
+  <p><b>Content Machine</b> · Maps. Boundary data: Natural Earth (public domain) and geoBoundaries (CC BY 4.0).</p>
+</footer>
+<script src="app.js" defer></script>
+</body>
+</html>

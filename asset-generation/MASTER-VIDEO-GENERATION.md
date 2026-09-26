@@ -227,7 +227,7 @@ safe subset (`Ambient noise: distant wind across terraced fields`). Dialogue is 
 ## 10. Copy-paste operating prompt
 
 ```
-Operate under Tool/MASTER-VIDEO-GENERATION.md and read Tool/orchestrator_memory.md first.
+Operate under asset-generation/MASTER-VIDEO-GENERATION.md and read asset-generation/orchestrator_memory.md first.
 
 HANDOFF BLOCK: <paste, or "none — run image stages 1–2 first">
 SCRIPT: <full script>

@@ -26,8 +26,8 @@ if ! curl -fsSL -H "x-access-code: $CODE" "$SITE/api/download" -o "$TMP"; then
   echo "Download refused. Check your access code (it is case-sensitive)."; exit 1
 fi
 mkdir -p "$DIR"
-# Extracting over an existing install updates the tool; Tool/.env and Outputs are kept.
+# Extracting over an existing install updates the tool; asset-generation/.env and Outputs are kept.
 tar -xzf "$TMP" -C "$DIR" && rm -f "$TMP"
 cd "$DIR"
-node Tool/scripts/setup.mjs < /dev/tty
+node asset-generation/scripts/setup.mjs < /dev/tty
 echo; echo "All set. Open Claude Code (or Codex) and ask: 'Use content-machine to make an image pack from this script: ...'"

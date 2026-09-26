@@ -38,7 +38,7 @@ Inherited from `CLAUDE.md`, `AGENTS.md`, and `map-animation-studio/MEMORY.md`. N
 | Boundary data | Natural Earth (public domain), geoBoundaries.org (CC-BY) |
 | Forbidden data | **GADM** — not licensed for redistribution. Never ship a GADM-derived frame |
 | Output | MP4 (H.264), frame-by-frame deterministic — same input, same output |
-| Working directory | `Tool/map-animation-studio/` (relative to the repo root) |
+| Working directory | `map-animation/` (relative to the repo root) |
 | Cost | Zero. Everything is local and open-data. Time is the only budget |
 
 ```

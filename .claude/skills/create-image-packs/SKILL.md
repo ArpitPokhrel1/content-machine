@@ -6,8 +6,8 @@ description: Turn a script in any language (Nepali history, mythology, heritage 
 # Create Image Packs
 
 All paths below are relative to the repo root (the folder holding `CLAUDE.md`). The prompt-writing
-rules live in `Tool/MASTER-IMAGE-GENERATION.md` and the model lessons in
-`Tool/orchestrator_memory.md`. Read both before planning. The tools are in `Tool/image-pack/`.
+rules live in `asset-generation/MASTER-IMAGE-GENERATION.md` and the model lessons in
+`asset-generation/orchestrator_memory.md`. Read both before planning. The tools are in `asset-generation/image-pack/`.
 
 ## Approval
 
@@ -35,8 +35,8 @@ lead: build-frames.mjs → gen-parallel.mjs (parallel per chunk/region) → veri
 
 ## Workflow
 
-1. **Set up the pack.** Create `Tool/output/<slug>-image-pack-<YYYYMMDD>/`. Save the script
-   verbatim to `script.txt`, then run `node Tool/image-pack/chunk-script.mjs <pack>/script.txt`.
+1. **Set up the pack.** Create `asset-generation/output/<slug>-image-pack-<YYYYMMDD>/`. Save the script
+   verbatim to `script.txt`, then run `node asset-generation/image-pack/chunk-script.mjs <pack>/script.txt`.
    This writes `words.txt` and `chunks.md`: 20-word chunks → 5 frames of 4 words each
    (`cNN-1` … `cNN-5`). The last chunk may be short.
 2. **Analyse, in this order (you, never delegated), and write it to `<pack>/story.md`:**
@@ -54,11 +54,11 @@ lead: build-frames.mjs → gen-parallel.mjs (parallel per chunk/region) → veri
    Present the analysis and **ask all questions in one batch**: aspect ratio, how to stage
    sensitive beats, whether "today" lines stay in period, and whether scenes outside the main
    setting are wanted.
-3. **Lock the Canon in code.** Copy `Tool/image-pack/templates/canon.template.mjs` to
+3. **Lock the Canon in code.** Copy `asset-generation/image-pack/templates/canon.template.mjs` to
    `<pack>/canon.mjs` and fill in ASPECT, GRADE, NEG, ANCHORS, CHARS, GROUPS, ENVS and MOTIFS from
    story.md. Everything visual that repeats lives here, once.
-4. **References:** `node Tool/image-pack/build-refs.mjs <pack>`, then
-   `node Tool/image-pack/gen-parallel.mjs <pack>/jobs-refs.json <pack>/refs 5 90`. View them on
+4. **References:** `node asset-generation/image-pack/build-refs.mjs <pack>`, then
+   `node asset-generation/image-pack/gen-parallel.mjs <pack>/jobs-refs.json <pack>/refs 5 90`. View them on
    a contact sheet (`check-frames.mjs <pack>/refs`) and fix drift before any story frame. Crop
    stray background people out (and point `ref:` at the crop). For three or more characters who
    appear together, build a lineup strip with ffmpeg `hstack` and register it in `GROUPS`. If a
@@ -68,18 +68,18 @@ lead: build-frames.mjs → gen-parallel.mjs (parallel per chunk/region) → veri
    chunk ids. Each writer reads story.md, canon.mjs and chunks.md, writes `shots/cNN.json`, and
    validates its chunks with `build-frames.mjs --check --chunks`. For a pack of 8 chunks or
    fewer, write the shots yourself.
-6. **Merge and assemble:** `node Tool/image-pack/build-frames.mjs <pack>`. It fails on any
+6. **Merge and assemble:** `node asset-generation/image-pack/build-frames.mjs <pack>`. It fails on any
    missing frame, unknown key, missing reference, "watermark" or over-long prompt. Fix and
    re-run. Skim the writers' flagged beats and the chunk seams (last frame of one chunk, first
    of the next) for story continuity.
 7. **Generate in parallel:**
-   `node Tool/image-pack/gen-parallel.mjs <pack>/jobs-frames.json <pack>/frames 5 90`, run in the
-   background. With `IMAGE_LOCATIONS` set in `Tool/.env`, jobs spread across regions, each with
+   `node asset-generation/image-pack/gen-parallel.mjs <pack>/jobs-frames.json <pack>/frames 5 90`, run in the
+   background. With `IMAGE_LOCATIONS` set in `asset-generation/.env`, jobs spread across regions, each with
    its own quota. Re-running the same command only fills missing ids. Expect 429s under this
    quota: a 429 generates and bills nothing, so re-run at a slower pace (`2 45`, then `1 60`). A
    missing image with `promptFeedback.blockReason` is a prompt block: fix the wording, don't
    retry it blindly.
-8. **Verify every frame by looking:** `node Tool/image-pack/check-frames.mjs <pack>/frames`
+8. **Verify every frame by looking:** `node asset-generation/image-pack/check-frames.mjs <pack>/frames`
    builds one contact sheet per chunk and lists letterboxed frames. Check culture and period
    drift first (modern buildings, water tanks, flags, wrong hats), then duplicated characters,
    then text, then composition.
@@ -88,7 +88,7 @@ lead: build-frames.mjs → gen-parallel.mjs (parallel per chunk/region) → veri
    bottom). Once a frame is replaced, move the old version to `superseded/`.
 10. **Deliver.** Move the pack to `Outputs/`. Keep `frames/` holding exactly one final file per
     frame, named `cNN-F.png`. Write `prompt-pack.md` with the status, the re-roll log and open
-    risks. Add new model lessons to `Tool/orchestrator_memory.md`. Return the folder path and the
+    risks. Add new model lessons to `asset-generation/orchestrator_memory.md`. Return the folder path and the
     frame count.
 
 ## Fixed rules
