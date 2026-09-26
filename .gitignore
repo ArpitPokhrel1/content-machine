@@ -28,3 +28,8 @@ campaign-poster-tool/public/assets/*.png
 *.log
 .claude/scheduled_tasks.lock
 .claude/settings.local.json
+
+# Vercel CLI link state
+.vercel/
+
+.vercel
