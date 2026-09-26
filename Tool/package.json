@@ -9,11 +9,15 @@
     "start": "node server.mjs",
     "dev": "node --watch server.mjs",
     "test": "node --test",
-    "agent": "node agent-video.mjs"
+    "agent": "node agent-video.mjs",
+    "mcp": "node mcp/server.mjs",
+    "mcp:selftest": "node mcp/selftest.mjs"
   },
   "dependencies": {
     "@google/genai": "^1.30.0",
-    "express": "^5.1.0"
+    "@modelcontextprotocol/sdk": "^1.30.1",
+    "express": "^5.1.0",
+    "zod": "^4.6.5"
   },
   "description": "Script-to-image/video asset pipeline: approval-gated Veo video, parallel Gemini image packs, factual map animations.",
   "engines": {

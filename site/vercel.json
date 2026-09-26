@@ -1,0 +1,18 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "node scripts/build-bundle.mjs",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "functions": {
+    "api/download.mjs": { "includeFiles": "bundle/**", "maxDuration": 30 }
+  },
+  "headers": [
+    {
+      "source": "/install.(ps1|sh)",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
+        { "key": "Cache-Control", "value": "no-cache" }
+      ]
+    }
+  ]
+}

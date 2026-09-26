@@ -1,8 +1,10 @@
 // One-time setup on a new machine. Safe to re-run: it never overwrites an existing Tool/.env
 // value unless you type a new one, and it only installs what is missing.
-// Usage (from the repo root or Tool/):  node Tool/scripts/setup.mjs [--yes] [--maps]
-//   --yes   accept defaults without asking (uses values already in the environment)
-//   --maps  also install the Map Animation Studio dependencies (~500 MB, includes Electron)
+// Usage (from the repo root or Tool/):  node Tool/scripts/setup.mjs [--yes] [--maps] [--project ID] [--no-mcp]
+//   --yes        accept defaults without asking (uses values already in the environment)
+//   --maps       also install the Map Animation Studio dependencies (~500 MB, includes Electron)
+//   --project    Google Cloud project ID to use (skips the question)
+//   --no-mcp     don't register the Content Machine MCP server with Claude Code / Codex
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, cpSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { createInterface } from "node:readline/promises";
@@ -22,6 +24,12 @@ const ask = async (question, fallback = "") => {
 };
 const step = text => console.log(`\n▸ ${text}`);
 const run = (cmd, cwd) => execSync(cmd, { cwd, stdio: "inherit", shell: true });
+const quiet = cmd => { try { return execSync(cmd, { stdio: ["ignore", "pipe", "ignore"], shell: true, encoding: "utf8" }).trim(); } catch { return null; } };
+const flag = name => args.includes(`--${name}`) ? args[args.indexOf(`--${name}`) + 1] : undefined;
+const hasGcloud = quiet("gcloud --version") !== null;
+const adcFile = process.platform === "win32"
+  ? path.join(process.env.APPDATA || "", "gcloud", "application_default_credentials.json")
+  : path.join(os.homedir(), ".config", "gcloud", "application_default_credentials.json");
 
 // 1. Node version: process.loadEnvFile needs Node 20.12+.
 const [major, minor] = process.versions.node.split(".").map(Number);
@@ -59,7 +67,26 @@ if (/^b/i.test(mode)) {
   set("GOOGLE_CLOUD_PROJECT", "");
   console.log("Note: Gemini-API model names differ from Vertex. Check VIDEO_MODEL in Tool/.env (e.g. veo-3.1-fast-generate-preview).");
 } else {
-  set("GOOGLE_CLOUD_PROJECT", await ask("Google Cloud project ID", current("GOOGLE_CLOUD_PROJECT")));
+  // Sign in with the person's own Google account (opens the browser), then pick their project.
+  if (hasGcloud && !existsSync(adcFile) && (yes || /^y/i.test(await ask("Sign in with your Google account now? (opens the browser) Y/n", "Y")))) {
+    step("Google sign-in (browser)");
+    run("gcloud auth login");
+    run("gcloud auth application-default login");
+  }
+  let projectId = flag("project") || current("GOOGLE_CLOUD_PROJECT");
+  if (!projectId && hasGcloud) {
+    const projects = (quiet('gcloud projects list --format="value(projectId)"') || "").split(/\r?\n/).filter(Boolean);
+    if (projects.length) console.log(`Your Google Cloud projects:\n${projects.map(p => `  - ${p}`).join("\n")}`);
+  }
+  projectId = await ask("Google Cloud project ID (billing must be enabled)", projectId);
+  set("GOOGLE_CLOUD_PROJECT", projectId);
+  if (hasGcloud && projectId) {
+    step(`Enabling Vertex AI in ${projectId}`);
+    quiet(`gcloud services enable aiplatform.googleapis.com --project ${projectId}`) === null
+      ? console.log("  Could not enable it automatically. Enable 'Vertex AI API' in the Cloud Console for this project.")
+      : console.log("  Vertex AI API enabled.");
+    quiet(`gcloud auth application-default set-quota-project ${projectId}`);
+  }
   set("GOOGLE_CLOUD_LOCATION", await ask("Region", current("GOOGLE_CLOUD_LOCATION") || "us-central1"));
   set("VIDEO_OUTPUT_BUCKET", await ask("Cloud Storage bucket for Veo output (name only; blank = inline download)", current("VIDEO_OUTPUT_BUCKET")));
   const key = await ask("Service-account JSON key path (blank = use `gcloud auth application-default login`)", current("GOOGLE_APPLICATION_CREDENTIALS"));
@@ -103,10 +130,34 @@ if (existsSync(memorySrc)) {
   step(`Claude Code memory: ${copied} file(s) seeded into ${memoryDir}`);
 }
 
+// 7. Register the MCP server so any agent on this machine can drive the pipeline.
+const mcpServer = path.join(toolRoot, "mcp", "server.mjs").replace(/\\/g, "/");
+if (!args.includes("--no-mcp")) {
+  step("Registering the Content Machine MCP server");
+  if (quiet("claude --version") !== null) {
+    quiet("claude mcp remove content-machine --scope user");
+    quiet(`claude mcp add --scope user content-machine -- node "${mcpServer}"`) !== null
+      ? console.log("  Claude Code: added (user scope) as 'content-machine'")
+      : console.log(`  Claude Code: add it yourself:  claude mcp add --scope user content-machine -- node "${mcpServer}"`);
+  } else console.log(`  Claude Code not found. Later:  claude mcp add --scope user content-machine -- node "${mcpServer}"`);
+  const codexConfig = path.join(process.env.CODEX_HOME || path.join(os.homedir(), ".codex"), "config.toml");
+  if (existsSync(path.dirname(codexConfig))) {
+    const toml = existsSync(codexConfig) ? readFileSync(codexConfig, "utf8") : "";
+    const block = `[mcp_servers.content-machine]\ncommand = "node"\nargs = ["${mcpServer}"]\n`;
+    const existing = /\[mcp_servers\.content-machine\][^[]*/;
+    const updated = existing.test(toml)
+      ? toml.replace(existing, `${block}\n`)
+      : `${toml.trimEnd()}${toml ? "\n\n" : ""}${block}`;
+    writeFileSync(codexConfig, updated);
+    console.log(`  Codex: registered in ${codexConfig}`);
+  }
+}
+
 rl?.close();
 console.log(`
 Done. Next:
-  1. ${/^b/i.test(mode) ? "Nothing else to log in to (API key mode)." : "Log in to Google Cloud once:  gcloud auth application-default login"}
+  1. ${/^b/i.test(mode) || existsSync(adcFile) ? "Google sign-in: done." : "Sign in with Google once:  gcloud auth application-default login"}
   2. Check everything:            npm run doctor          (from Tool/)
-  3. Start the local server:      npm start               (from Tool/)  → http://127.0.0.1:${current("PORT") || 4317}
+  3. Open Claude Code (or Codex) anywhere and ask for an image pack: the 'content-machine'
+     MCP tools are available. Files are saved to ${path.join(repoRoot, "Outputs")}.
 `);

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Content Machine</title>
+<meta name="description" content="Turn a script into a consistent image pack and video clips, generated with your own Google account and saved on your own computer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf7f2; --surface: #ffffff; --ink: #1d1a16; --muted: #6b645a; --line: #e7e0d5;
+    --accent: #8a3b26; --accent-soft: #f3e6df; --code-bg: #1f1b17; --code-ink: #f4ede3; --ok: #2f6f4e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151210; --surface: #1d1916; --ink: #f1ebe2; --muted: #a79e92; --line: #332d27;
+      --accent: #e0896b; --accent-soft: #2d201a; --code-bg: #0e0c0a; --code-ink: #f4ede3; --ok: #7cc39c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151210; --surface: #1d1916; --ink: #f1ebe2; --muted: #a79e92; --line: #332d27;
+    --accent: #e0896b; --accent-soft: #2d201a; --code-bg: #0e0c0a; --code-ink: #f4ede3; --ok: #7cc39c;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 Inter, system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 56px 16px 80px; }
+  h1 { font: 600 clamp(2.2rem, 6vw, 3.2rem)/1.1 Fraunces, Georgia, serif; margin: 0 0 16px; letter-spacing: -0.01em; }
+  h2 { font: 600 1.5rem/1.25 Fraunces, Georgia, serif; margin: 56px 0 12px; }
+  h3 { font-size: 1rem; margin: 0 0 4px; }
+  p { margin: 0 0 14px; }
+  .lede { font-size: 1.15rem; color: var(--muted); max-width: 36em; }
+  .eyebrow { font: 500 .8rem/1 "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin-top: 20px; }
+  .grid .card p { color: var(--muted); font-size: .95rem; margin: 0; }
+  .tabs { display: flex; gap: 6px; margin: 18px 0 0; }
+  .tab { font: inherit; font-size: .9rem; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
+  .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .cmd { position: relative; margin-top: 10px; background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 16px 92px 16px 16px; font: 14px/1.5 "JetBrains Mono", monospace; overflow-x: auto; white-space: pre; }
+  .copy { position: absolute; top: 10px; right: 10px; font: 500 .8rem Inter, sans-serif; padding: 6px 12px; border-radius: 8px; border: 1px solid #4a4038; background: #2c2520; color: var(--code-ink); cursor: pointer; }
+  ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 16px 0 0; }
+  ol.steps li { counter-increment: s; position: relative; padding: 0 0 18px 44px; }
+  ol.steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font: 600 .85rem/28px Inter, sans-serif; text-align: center; }
+  ol.steps li p { color: var(--muted); margin: 0; }
+  code { font: .9em "JetBrains Mono", monospace; background: var(--accent-soft); padding: 1px 6px; border-radius: 6px; }
+  .prompt { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; margin: 10px 0; color: var(--ink); font-style: italic; }
+  .note { color: var(--muted); font-size: .92rem; }
+  .ok { color: var(--ok); font-weight: 600; }
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">content.tarjun.com</div>
+  <h1>Content Machine</h1>
+  <p class="lede">Give your AI agent a script. Get back a folder of images and video clips that look like they came from the same film, made with your own Google account and saved on your own computer.</p>
+
+  <div class="grid">
+    <div class="card"><h3>Reads the whole story first</h3><p>It works out every character, place and period before it draws anything.</p></div>
+    <div class="card"><h3>Consistent by design</h3><p>One locked "look book" is pasted word for word into every prompt, so faces don't drift.</p></div>
+    <div class="card"><h3>Yours, locally</h3><p>It runs on your machine, bills your Cloud project, and saves files to your disk. Nothing is stored here.</p></div>
+  </div>
+
+  <h2>Before you start</h2>
+  <ol class="steps">
+    <li><h3>An access code</h3><p>Ask the studio. It unlocks the download.</p></li>
+    <li><h3>A Google Cloud project with billing on</h3><p>Create one at <a href="https://console.cloud.google.com/projectcreate">console.cloud.google.com</a> and link a billing account. The installer turns on Vertex AI for you. Images cost a few cents each; you're charged by Google, directly.</p></li>
+    <li><h3>An AI agent</h3><p><a href="https://claude.com/claude-code">Claude Code</a> (recommended) or Codex. The installer connects it automatically.</p></li>
+  </ol>
+
+  <h2>Install</h2>
+  <p>Open a terminal, paste one line, and follow the prompts. It asks for your access code, signs you in with Google in your browser, and asks which Cloud project to use.</p>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-os="win">Windows</button>
+    <button class="tab" role="tab" aria-selected="false" data-os="mac">macOS / Linux</button>
+  </div>
+  <div class="cmd" data-os="win"><span>irm https://content.tarjun.com/install.ps1 | iex</span><button class="copy">Copy</button></div>
+  <div class="cmd" data-os="mac" hidden><span>curl -fsSL https://content.tarjun.com/install.sh | bash</span><button class="copy">Copy</button></div>
+  <p class="note">Windows: use PowerShell. It installs Node.js, Google Cloud CLI and ffmpeg if they're missing (you may need to open a new window and run it again once). Mac: install <a href="https://nodejs.org">Node.js</a> and the <a href="https://cloud.google.com/sdk/docs/install">Google Cloud CLI</a> first.</p>
+
+  <h2>Use it</h2>
+  <p>Open Claude Code and just ask. The agent reads the method, asks its questions in one batch, then gets to work.</p>
+  <div class="prompt">"Use content-machine to make a 9:16 image pack from this script: …"</div>
+  <div class="prompt">"Turn frames c03 and c07 of that pack into 6-second silent clips."</div>
+  <p>Images are generated without extra questions. <span class="ok">Video always stops first</span> and shows you the exact clips and estimated cost, and nothing is generated until you say yes. Everything lands in <code>ContentMachine/Outputs</code> in your home folder.</p>
+
+  <h2>Updating</h2>
+  <p>Run the same install line again. Your settings and your Outputs folder are kept.</p>
+
+  <h2>If something's off</h2>
+  <p>In a terminal: <code>cd ~/ContentMachine/Tool</code> then <code>npm run doctor -- --online</code>. Each ✘ line says exactly what to fix. Paste the output to Claude Code if you're stuck.</p>
+
+  <footer>Content Machine · Your Google login, files and billing stay on your side. This site only hands out the installer.</footer>
+</main>
+<script>
+  document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t === tab)));
+    document.querySelectorAll(".cmd").forEach(c => { c.hidden = c.dataset.os !== tab.dataset.os; });
+  }));
+  if (/Mac|Linux/.test(navigator.platform)) document.querySelector('.tab[data-os="mac"]').click();
+  document.querySelectorAll(".copy").forEach(btn => btn.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(btn.previousElementSibling.textContent); btn.textContent = "Copied"; }
+    catch { btn.textContent = "Select & copy"; }
+    setTimeout(() => { btn.textContent = "Copy"; }, 1800);
+  }));
+</script>
+</body>
+</html>
