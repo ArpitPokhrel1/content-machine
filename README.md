@@ -97,7 +97,7 @@ You'll also want **Claude Code** (or Codex) installed, since that's what you act
 
 ```powershell
 cd $HOME\Documents
-git clone https://github.com/ArpitPokhrel7/content-machine.git
+git clone https://github.com/ArpitPokhrel1/content-machine.git
 cd content-machine
 ```
 
