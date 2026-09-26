@@ -132,7 +132,37 @@ Move finished folders into `../Outputs/`.
 
 ---
 
-## 5. Map Animation Studio
+## 5. MCP server (`mcp/`) and content.tarjun.com
+
+`mcp/server.mjs` is a local **stdio** MCP server that exposes the whole pipeline to any MCP
+client. It runs on the user's machine, authenticates with their Google account through
+`Tool/.env` (same `lib/config.mjs`), and writes to `$CONTENT_MACHINE_OUTPUTS` or
+`<repo>/Outputs`. Setup registers it with Claude Code (`claude mcp add --scope user
+content-machine -- node <repo>/Tool/mcp/server.mjs`) and Codex (`~/.codex/config.toml`).
+
+| Tool | Does |
+| --- | --- |
+| `health`, `read_guide`, `list_packs` | Setup check; the method guides (`mcp-workflow` first); list packs |
+| `create_pack`, `write_pack_file`, `read_pack_file` | Pack folder, script → chunks; canon.mjs / story.md / shots / clips files (whitelisted) |
+| `build_prompts` | `build-refs.mjs` / `build-frames.mjs` (`check`, `chunks`) |
+| `generate_images`, `job_status` | Background `gen-parallel.mjs` job; poll its log |
+| `contact_sheets`, `view_image`, `list_outputs` | Returns sheets and frames as images so the agent can look |
+| `prepare_clips`, `generate_videos` | `merge-clips.mjs`; paid Veo batch (`confirm_paid_generation: true` literal, pilot `only`, rest `except`) |
+
+`npm run mcp:selftest` exercises every free tool over real stdio against a temp folder.
+`mcp/WORKFLOW.md` is the agent-facing guide.
+
+**The site** (`../site/`, Vercel project `content-machine`, Root Directory `site`, domain
+`content.tarjun.com`, auto-deploys on push to `main`):
+`public/index.html` (landing), `public/install.ps1` / `install.sh` (one-line installers), and
+`api/download.mjs`, which serves `bundle/content-machine.tar.gz` (built from this repo by
+`scripts/build-bundle.mjs`, never including `.env`, Outputs, Other, knowledge or the poster tool)
+only for an `x-access-code` listed in the `ACCESS_CODES` env var. `npm run new-code -- <name>`
+mints a code.
+
+---
+
+## 6. Map Animation Studio
 
 See `map-animation-studio/README.md` and `MEMORY.md`, plus `PROMPT_MAP_ANIMATION.md` for the
 one-batch questionnaire. Install with `node scripts/setup.mjs --maps`. It needs ffmpeg and Edge
@@ -142,7 +172,7 @@ and render always waits for explicit approval.
 
 ---
 
-## 6. Files
+## 7. Files
 
 | Path | What |
 | --- | --- |
@@ -153,6 +183,7 @@ and render always waits for explicit approval.
 | `image-pack/` | Chunker, canon builders, parallel runner, contact sheets, canon template |
 | `video/merge-clips.mjs` | Merges clip-writer output for the approval gate |
 | `scripts/` | `setup.mjs`, `doctor.mjs`, `sync-codex-skills.mjs` |
+| `mcp/` | Local MCP server, its workflow guide, and a free self-test |
 | `public/` | Browser UI served by `server.mjs` |
 | `archive/` | Older and full-length references (see `archive/README.md`) |
 

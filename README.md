@@ -188,6 +188,34 @@ exist:
 
 ---
 
+## Sharing it with other people (content.tarjun.com)
+
+Teammates and clients don't need GitHub access. Send them to **<https://content.tarjun.com>**.
+They paste one install line, type the access code you gave them, sign in with **their own**
+Google account, and pick **their own** Cloud project. From then on:
+
+- The machine runs on **their** computer, as an MCP server called `content-machine` that the
+  installer connects to their Claude Code or Codex.
+- Google bills **their** project, not yours.
+- Every image and video is saved on **their** disk, in `ContentMachine/Outputs`.
+
+**Giving someone access:**
+
+```powershell
+cd site
+npm run new-code -- ram          # prints a code, plus the "ram:<code>" entry
+```
+
+Add that entry to the `ACCESS_CODES` variable in the Vercel project `content-machine`
+(Settings → Environment Variables, comma-separated), then redeploy. To take access away, delete
+their entry and redeploy. People who already installed keep their copy, but can't download
+updates.
+
+The website rebuilds itself whenever you `git push`, so the next time anyone re-runs the install
+line, they get your latest prompts and lessons.
+
+---
+
 ## What it costs
 
 Maps are free: everything runs on your computer. Images and video are billed by Google to

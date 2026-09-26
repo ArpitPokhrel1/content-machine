@@ -4,6 +4,10 @@ This repo is split into `Tool/` (the reusable pipeline — scripts, servers, ski
 
 All paths in this file are relative to the repo root. The only machine-specific file is `Tool/.env` (credentials, Cloud project, bucket), created by `npm run setup` in `Tool/`. If a command fails with a credentials error, run `npm run doctor` in `Tool/` before anything else.
 
+# MCP and content.tarjun.com
+
+`Tool/mcp/server.mjs` exposes this pipeline as the `content-machine` MCP server (registered by setup). When its tools are available, prefer them; they enforce the same gates (`generate_videos` needs `confirm_paid_generation: true`, set only after explicit approval). `site/` is the Vercel site at content.tarjun.com that hands out the installer to holders of an access code (`ACCESS_CODES` env var); outsiders run everything locally with their own Google account and Cloud project.
+
 # Parallel Processing
 
 Split work so everything that must look identical is decided once, then fan out:
