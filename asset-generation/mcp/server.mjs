@@ -270,7 +270,7 @@ server.registerTool("list_outputs", {
 const subtitlesLib = import(pathToFileURL(path.join(repoRoot, "subtitles", "lib", "subtitles.mjs")).href);
 
 server.registerTool("make_subtitles", {
-  description: "Turn a script into a subtitle file (.srt or .vtt) timed across the total audio/video length, saved on the user's disk. encoding 'unicode' works with Unicode fonts (Mukta, Kalimati, Noto...); 'preeti' converts the text to Preeti keys for Preeti/Kantipur/Himalb-type fonts. Give the script text, or a pack name to use its script.txt. Give duration_seconds, or media_path to read the length with ffprobe. Premiere Pro: File > Import, drag onto the timeline, then set the font. DaVinci Resolve: File > Import > Subtitle, then set the font in the subtitle track style.",
+  description: "Turn a script into a subtitle file (.srt or .vtt) timed across the total audio/video length, saved on the user's disk. encoding 'unicode' works with Unicode fonts (Mukta, Kalimati, Noto...); 'preeti' converts the text to Preeti keys for Preeti and the Preeti-encoded fonts on anepali.com (Ganess, Aakriti, Kanchan...). Give the script text, or a pack name to use its script.txt. Give duration_seconds, or media_path to read the length with ffprobe. Premiere Pro: File > Import, drag onto the timeline, then set the font. DaVinci Resolve: File > Import > Subtitle, then set the font in the subtitle track style.",
   inputSchema: {
     script: z.string().optional(), pack: z.string().optional(),
     duration_seconds: z.number().positive().optional(), media_path: z.string().optional(),

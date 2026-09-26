@@ -78,5 +78,5 @@ When the user asks for subtitles, captions or an SRT from a script, follow the `
 
 - Never change the script's words; only split and time them.
 - Timing is proportional to reading length across the given audio/video length, not speech recognition. Point the user to content.tarjun.com/subtitles for fine-tuning.
-- `unicode` output is for Unicode fonts (Mukta, Kalimati, Noto…); `preeti` output converts the text for Preeti-type fonts (Preeti, Kantipur, Himalb…). Preeti can't show English letters.
+- `unicode` output is for Unicode fonts (Mukta, Kalimati, Noto…); `preeti` output converts the text for the 77 Preeti-encoded fonts on anepali.com (Preeti, Ganess, Aakriti, Kanchan…); Kantipur, Sagarmatha and Fontasy Himali use their own slightly different encodings and are not guaranteed. Preeti can't show English letters.
 - An .srt can't carry a font: tell the user to set it in Premiere Pro or DaVinci Resolve after importing.

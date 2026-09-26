@@ -1,5 +1,5 @@
-// Unicode Devanagari ⇄ Preeti (the legacy Nepali keyboard encoding shared by Preeti, Kantipur,
-// Himalb and ~75 other "Preeti-type" fonts). Preeti text is plain Latin characters; it only looks
+// Unicode Devanagari ⇄ Preeti (the legacy Nepali keyboard encoding shared by Preeti and the
+// other Preeti-encoded fonts on anepali.com, 77 in all). Preeti text is plain Latin characters; it only looks
 // like Nepali once a Preeti-type font is applied.
 //
 // Written for Content Machine. The character table was checked against the open mappings in

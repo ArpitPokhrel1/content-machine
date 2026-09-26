@@ -22,8 +22,8 @@ Content Machine.
 2. Paste your script, and load your voice-over or video (so it knows the length), or just type
    the length, like `1:35`.
 3. Press **Make subtitles**. Check them over the video, and fix any text or timing.
-4. Choose **Unicode** (for fonts like Mukta, Kalimati, Noto) or **Preeti** (for Preeti, Kantipur,
-   Himalb…) and pick your font.
+4. Choose **Unicode** (for fonts like Mukta, Kalimati, Noto) or **Preeti** (for Preeti and
+   Preeti-type fonts like Ganess, Aakriti, Kanchan) and pick your font.
 5. Press **Export for Premiere Pro** or **Export for DaVinci Resolve**. Import the file there, and
    set the same font.
 

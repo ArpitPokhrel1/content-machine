@@ -147,7 +147,7 @@ export function parseTime(value) {
  * Build the subtitle file text.
  * @param {{start:number,end:number,text:string}[]} cues  Unicode text
  * @param {{format?: "srt"|"vtt", encoding?: "unicode"|"preeti"}} opts
- *   encoding "preeti" converts every cue to Preeti keys, for Preeti / Kantipur / Himalb… fonts.
+ *   encoding "preeti" converts every cue to Preeti keys, for Preeti and the Preeti-encoded fonts listed on anepali.com.
  */
 export function buildFile(cues, { format = "srt", encoding = "unicode" } = {}) {
   const conv = encoding === "preeti" ? unicodeToPreeti : t => t;

@@ -25,10 +25,13 @@ importing. What the file *can* carry is the right kind of text for that font:
 | Your font | Export as | Examples |
 | --- | --- | --- |
 | A **Unicode** Nepali font | **Unicode** | Mukta, Kalimati, Noto Sans Devanagari, Hind, Yatra One, Mangal, Nirmala UI |
-| A **Preeti-type** font | **Preeti** | Preeti, Kantipur, Himalb, Sagarmatha, Fontasy Himali (77 fonts) |
+| A **Preeti-type** font | **Preeti** | Preeti, Ganess, Aakriti, Kanchan, Himalli, Bhaktapur… (the 77 Preeti-encoded fonts on anepali.com) |
 
 Preeti text looks like random English letters (`g]kfn`) until the Preeti font is applied, and
 then it reads नेपाल. That's normal.
+
+Kantipur, Sagarmatha and Fontasy Himali look like Preeti fonts but use slightly different
+encodings, so a few letters can come out wrong. Use Unicode with them, or check the result.
 
 The editor lists the 58 Unicode and 77 Preeti-type fonts from anepali.com, the Nepali fonts built
 into Windows, and 35 widely used English fonts. Turn on the ones you use, and preview them live.

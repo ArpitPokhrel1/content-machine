@@ -18,7 +18,7 @@ let active = -1;
 let fonts = { unicode: [], preeti: [], english: [] };
 const DEFAULT_ON = {
   unicode: ["Mukta", "Noto Sans Devanagari", "Hind", "Kalimati", "Mangal", "Nirmala UI", "Yatra One", "Rozha One", "Tiro Devanagari Hindi", "Kalam", "Baloo 2"],
-  preeti: ["Preeti", "Kantipur", "Himalb", "Sagarmatha", "Fontasy Himali", "Ganess"],
+  preeti: ["Preeti", "Ganess", "Aakriti", "Kanchan", "Himalli", "Bhaktapur"],
   english: ["Inter", "Montserrat", "Poppins", "Roboto", "Open Sans", "Bebas Neue", "Arial", "Calibri"]
 };
 let enabled = structuredClone(DEFAULT_ON);

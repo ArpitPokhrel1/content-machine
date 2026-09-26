@@ -15,7 +15,8 @@ All paths are relative to the repo root. The engine is in `subtitles/`; the guid
    or m:ss.
 2. Ask, in one message, anything that's unclear:
    - **Font family in the editor.** A Unicode font (Mukta, Kalimati…) means `unicode`; a
-     Preeti-type font (Preeti, Kantipur, Himalb…) means `preeti`.
+     Preeti-encoded font (Preeti, Ganess, Aakriti, Kanchan…, the 77 listed on anepali.com) means `preeti`.
+     Kantipur, Sagarmatha and Fontasy Himali use slightly different encodings: prefer Unicode for them.
    - **Lines per subtitle** (1 or 2, default 2) and **line width** (default 42; use about 32 for
      9:16 vertical video).
    - **SRT** (default) or **VTT**.
