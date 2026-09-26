@@ -1,0 +1,231 @@
+{
+  "_about": "Real Content Machine outputs shown on content.tarjun.com. `src` is relative to Outputs/. `ne` is the exact script line the asset was generated from; `en` is a short English gloss. Rebuild the web copies with: node site/scripts/prepare-media.mjs",
+  "clips": [
+    {
+      "id": "atri-eclipse",
+      "src": "maharshi-atri-and-the-chandravamsha-lineage-aefaeefb/videos/scene_01.mp4",
+      "project": "Maharshi Atri",
+      "ne": "",
+      "en": "Maharshi Atri restores the sun during an eclipse caused by Swarbhanu."
+    },
+    {
+      "id": "atri-trimurti",
+      "src": "maharshi-atri-and-the-chandravamsha-lineage-aefaeefb/videos/scene_02.mp4",
+      "project": "Maharshi Atri",
+      "ne": "",
+      "en": "Brahma, Vishnu and Shiva appear before Atri and Anasuya."
+    },
+    {
+      "id": "janai-thread",
+      "src": "the-sacred-thread-of-janai-purnima-d641341b/videos/scene_03.mp4",
+      "project": "Janai Purnima",
+      "ne": "",
+      "en": "Brihaspati performed a protection ritual and wove a sacred thread."
+    },
+    {
+      "id": "janai-bound",
+      "src": "the-sacred-thread-of-janai-purnima-d641341b/videos/scene_05.mp4",
+      "project": "Janai Purnima",
+      "ne": "",
+      "en": "Once bound, Bali and his demon army turned sanctified."
+    },
+    {
+      "id": "krishna-river",
+      "src": "the-secret-naming-of-krishna-and-balarama-ad9aad02/videos/scene_01.mp4",
+      "project": "Naming of Krishna",
+      "ne": "देवकी पुत्र कृष्णलाई वासुदेवले आफ्ना मित्र नन्दको घरमा…",
+      "en": "Vasudeva carries Devaki's son Krishna to his friend Nanda's home."
+    },
+    {
+      "id": "balarama",
+      "src": "the-secret-naming-of-krishna-and-balarama-ad9aad02/videos/scene_04.mp4",
+      "project": "Naming of Krishna",
+      "ne": "सबैभन्दा पहिले रोहिणीका पुत्र… उहालाई बलराम भनेर चिनिनेछ।",
+      "en": "First, Rohini's son… he will be known as Balarama."
+    },
+    {
+      "id": "krishna-named",
+      "src": "the-secret-naming-of-krishna-and-balarama-ad9aad02/videos/scene_05.mp4",
+      "project": "Naming of Krishna",
+      "ne": "अहिले श्यामवर्णमा आएको छ। त्यसैले उहाँलाई कृष्ण भनेर चिनिनेछ।",
+      "en": "Now he has come dark-hued, so he will be known as Krishna."
+    },
+    {
+      "id": "pushpak",
+      "src": "vishwakarma-puja-mythology-c5aebba4/videos/scene_02_fullframe.mp4",
+      "project": "Vishwakarma Puja",
+      "ne": "पुष्पक विमान देखि…",
+      "en": "From the Pushpak Vimana…"
+    }
+  ],
+  "stills": [
+    {
+      "src": "sherpa-history-image-pack-20260916/images/01-sherpa-identity-hook.png",
+      "project": "Sherpa History",
+      "ne": "शेर्पा",
+      "en": "Sherpa"
+    },
+    {
+      "src": "sherpa-history-image-pack-20260916/images/03-mountaineering-courage.png",
+      "project": "Sherpa History",
+      "ne": "साहसी पर्वतारोही",
+      "en": "brave mountaineers"
+    },
+    {
+      "src": "sherpa-history-image-pack-20260916/images/07-kham-household-life.png",
+      "project": "Sherpa History",
+      "ne": "सानो समुदाय बस्दथ्यो",
+      "en": "a small community lived"
+    },
+    {
+      "src": "sherpa-history-image-pack-20260916/images/11-families-pack-to-leave.png",
+      "project": "Sherpa History",
+      "ne": "त्यहाँबाट ठुलो संख्यामा मानिस",
+      "en": "from there, people in great numbers"
+    },
+    {
+      "src": "sherpa-history-image-pack-20260916/images/18-southward-himalayan-route.png",
+      "project": "Sherpa History",
+      "ne": "नाङ्पा ला तर्फ",
+      "en": "toward Nangpa La"
+    },
+    {
+      "src": "sherpa-history-image-pack-20260916/images/19-nangpa-la-establishing.png",
+      "project": "Sherpa History",
+      "ne": "सन् १५३३ तिर नाङ्पा ला",
+      "en": "Nangpa La, around 1533"
+    },
+    {
+      "src": "sherpa-history-image-pack-20260916/images/29-chakpa-solu.png",
+      "project": "Sherpa History",
+      "ne": "चाक्पा",
+      "en": "the Chakpa clan"
+    },
+    {
+      "src": "sherpa-history-image-pack-20260916/images/33-documents-found-in-solu.png",
+      "project": "Sherpa History",
+      "ne": "सन् १९६५ मा सोलुमा भेटिएका दस्तावेज",
+      "en": "records found in Solu in 1965"
+    },
+    {
+      "src": "haritalika-teej-image-pack/images/02-katha-thaha-cha.png",
+      "project": "Haritalika Teej",
+      "ne": "पौराणिक कथा अनुसार, माता पार्वती…",
+      "en": "According to Puranic legend, Mother Parvati…"
+    },
+    {
+      "src": "haritalika-teej-image-pack/images/06-panchagni-tapa.png",
+      "project": "Haritalika Teej",
+      "ne": "प्रार्थनाबाट प्रसन्न भएर…",
+      "en": "Pleased by the prayer…"
+    },
+    {
+      "src": "haritalika-teej-image-pack/images/12-vrata-vidhi-sikaune.png",
+      "project": "Haritalika Teej",
+      "ne": "राम्रा पक्षलाई जोगाउने…",
+      "en": "to preserve what is good…"
+    },
+    {
+      "src": "guthi-newar-community-image-pack-20260916/images/02-who-lights-temple-diya.png",
+      "project": "Guthi",
+      "ne": "जात्रा सकिएपछि मन्दिरको दियो कसले बाल्छ?",
+      "en": "After the jatra ends, who lights the temple lamp?"
+    },
+    {
+      "src": "guthi-newar-community-image-pack-20260916/images/06-old-tradition-guthi.png",
+      "project": "Guthi",
+      "ne": "नेवार समुदायको एउटा पुरानो परम्परा…",
+      "en": "an old tradition of the Newar community…"
+    },
+    {
+      "src": "guthi-newar-community-image-pack-20260916/images/10-malla-period-bhaktapur-tole.png",
+      "project": "Guthi",
+      "ne": "गुठी केवल एउटा संस्था होइन",
+      "en": "Guthi is not only an institution"
+    },
+    {
+      "src": "guthi-newar-community-image-pack-20260916/images/20-ask-an-elder-final.png",
+      "project": "Guthi",
+      "ne": "जग्गा वा त्यसबाट प्राप्त आम्दानी…",
+      "en": "the land, or the income from it…"
+    },
+    {
+      "src": "okhaldhunga-name-image-pack-20260924/frames/c01-1.png",
+      "project": "Okhaldhunga",
+      "ne": "यो कथा ३०० वर्ष",
+      "en": "this story, 300 years"
+    },
+    {
+      "src": "okhaldhunga-name-image-pack-20260924/frames/c01-3.png",
+      "project": "Okhaldhunga",
+      "ne": "राज्यका सेनापति भीम मल्ल",
+      "en": "the kingdom's general, Bhim Malla"
+    },
+    {
+      "src": "okhaldhunga-name-image-pack-20260924/frames/c01-5.png",
+      "project": "Okhaldhunga",
+      "ne": "पूर्वको यात्रामा निस्किएका थिए।",
+      "en": "had set out on a journey east."
+    },
+    {
+      "src": "okhaldhunga-name-image-pack-20260924/frames/c04-2.png",
+      "project": "Okhaldhunga",
+      "ne": "खाद्य सामाग्री कसरी कुट्ने",
+      "en": "how to pound the grain"
+    },
+    {
+      "src": "okhaldhunga-name-image-pack-20260924/frames/c05-2.png",
+      "project": "Okhaldhunga",
+      "ne": "धान राखे र अर्को",
+      "en": "they put in the rice, and another"
+    },
+    {
+      "src": "okhaldhunga-name-image-pack-20260924/frames/c07-4.png",
+      "project": "Okhaldhunga",
+      "ne": "आज पनि त्यो ढुंगा",
+      "en": "even today, that stone"
+    },
+    {
+      "src": "sati-sarapeko-desh-image-pack-20260924/frames/c02-4.png",
+      "project": "Sati le Sarapeko Desh",
+      "ne": "अन्यायको कथा। १६औं शताब्दीतिर",
+      "en": "a story of injustice. Around the 16th century"
+    },
+    {
+      "src": "sati-sarapeko-desh-image-pack-20260924/frames/c06-4.png",
+      "project": "Sati le Sarapeko Desh",
+      "ne": "त्यो सुन्न साथ प्रताप",
+      "en": "hearing that, Pratap"
+    },
+    {
+      "src": "sati-sarapeko-desh-image-pack-20260924/frames/c08-5.png",
+      "project": "Sati le Sarapeko Desh",
+      "ne": "खुसी हुदैं फर्किन्छन र",
+      "en": "he returns, rejoicing, and"
+    },
+    {
+      "src": "sati-sarapeko-desh-image-pack-20260924/frames/c09-1.png",
+      "project": "Sati le Sarapeko Desh",
+      "ne": "कान्तिपुर आउँनसाथ उनी आफ्नो",
+      "en": "the moment he reaches Kantipur"
+    },
+    {
+      "src": "sati-sarapeko-desh-image-pack-20260924/frames/c09-4.png",
+      "project": "Sati le Sarapeko Desh",
+      "ne": "राजा प्रताप मल्ल केहि",
+      "en": "King Pratap Malla, without a word"
+    }
+  ],
+  "walkthrough": {
+    "project": "Okhaldhunga",
+    "script": "okhaldhunga-name-image-pack-20260924/script.txt",
+    "frames": [
+      "c01-1",
+      "c01-2",
+      "c01-3",
+      "c01-4",
+      "c01-5"
+    ],
+    "framesDir": "okhaldhunga-name-image-pack-20260924/frames"
+  }
+}

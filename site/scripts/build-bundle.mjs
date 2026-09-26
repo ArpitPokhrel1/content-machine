@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.resolve(siteRoot, "..");
-const include = ["README.md", "CLAUDE.md", "AGENTS.md", "setup.ps1", "setup.sh", ".gitignore", ".gitattributes", ".claude/skills", ".claude/agents", "codex-skills", "examples", "Tool"];
+const include = ["README.md", "docs", "CLAUDE.md", "AGENTS.md", "setup.ps1", "setup.sh", ".gitignore", ".gitattributes", ".claude/skills", ".claude/agents", "codex-skills", "examples", "Tool"];
 const exclude = [
   "node_modules", ".env", ".env.bak", "*.log", "Tool/output", "Tool/map-animation-studio/output",
   "Tool/map-animation-studio/data/cache", "Tool/map-animation-studio/dist",

@@ -1,0 +1,256 @@
+{
+  "clips": [
+    {
+      "id": "atri-eclipse",
+      "project": "Maharshi Atri",
+      "ne": "",
+      "en": "Maharshi Atri restores the sun during an eclipse caused by Swarbhanu.",
+      "video": "media/clips/atri-eclipse.mp4",
+      "poster": "media/clips/atri-eclipse.webp"
+    },
+    {
+      "id": "atri-trimurti",
+      "project": "Maharshi Atri",
+      "ne": "",
+      "en": "Brahma, Vishnu and Shiva appear before Atri and Anasuya.",
+      "video": "media/clips/atri-trimurti.mp4",
+      "poster": "media/clips/atri-trimurti.webp"
+    },
+    {
+      "id": "janai-thread",
+      "project": "Janai Purnima",
+      "ne": "",
+      "en": "Brihaspati performed a protection ritual and wove a sacred thread.",
+      "video": "media/clips/janai-thread.mp4",
+      "poster": "media/clips/janai-thread.webp"
+    },
+    {
+      "id": "janai-bound",
+      "project": "Janai Purnima",
+      "ne": "",
+      "en": "Once bound, Bali and his demon army turned sanctified.",
+      "video": "media/clips/janai-bound.mp4",
+      "poster": "media/clips/janai-bound.webp"
+    },
+    {
+      "id": "krishna-river",
+      "project": "Naming of Krishna",
+      "ne": "देवकी पुत्र कृष्णलाई वासुदेवले आफ्ना मित्र नन्दको घरमा…",
+      "en": "Vasudeva carries Devaki's son Krishna to his friend Nanda's home.",
+      "video": "media/clips/krishna-river.mp4",
+      "poster": "media/clips/krishna-river.webp"
+    },
+    {
+      "id": "balarama",
+      "project": "Naming of Krishna",
+      "ne": "सबैभन्दा पहिले रोहिणीका पुत्र… उहालाई बलराम भनेर चिनिनेछ।",
+      "en": "First, Rohini's son… he will be known as Balarama.",
+      "video": "media/clips/balarama.mp4",
+      "poster": "media/clips/balarama.webp"
+    },
+    {
+      "id": "krishna-named",
+      "project": "Naming of Krishna",
+      "ne": "अहिले श्यामवर्णमा आएको छ। त्यसैले उहाँलाई कृष्ण भनेर चिनिनेछ।",
+      "en": "Now he has come dark-hued, so he will be known as Krishna.",
+      "video": "media/clips/krishna-named.mp4",
+      "poster": "media/clips/krishna-named.webp"
+    },
+    {
+      "id": "pushpak",
+      "project": "Vishwakarma Puja",
+      "ne": "पुष्पक विमान देखि…",
+      "en": "From the Pushpak Vimana…",
+      "video": "media/clips/pushpak.mp4",
+      "poster": "media/clips/pushpak.webp"
+    }
+  ],
+  "stills": [
+    {
+      "project": "Sherpa History",
+      "ne": "शेर्पा",
+      "en": "Sherpa",
+      "image": "media/stills/01.webp"
+    },
+    {
+      "project": "Sherpa History",
+      "ne": "साहसी पर्वतारोही",
+      "en": "brave mountaineers",
+      "image": "media/stills/02.webp"
+    },
+    {
+      "project": "Sherpa History",
+      "ne": "सानो समुदाय बस्दथ्यो",
+      "en": "a small community lived",
+      "image": "media/stills/03.webp"
+    },
+    {
+      "project": "Sherpa History",
+      "ne": "त्यहाँबाट ठुलो संख्यामा मानिस",
+      "en": "from there, people in great numbers",
+      "image": "media/stills/04.webp"
+    },
+    {
+      "project": "Sherpa History",
+      "ne": "नाङ्पा ला तर्फ",
+      "en": "toward Nangpa La",
+      "image": "media/stills/05.webp"
+    },
+    {
+      "project": "Sherpa History",
+      "ne": "सन् १५३३ तिर नाङ्पा ला",
+      "en": "Nangpa La, around 1533",
+      "image": "media/stills/06.webp"
+    },
+    {
+      "project": "Sherpa History",
+      "ne": "चाक्पा",
+      "en": "the Chakpa clan",
+      "image": "media/stills/07.webp"
+    },
+    {
+      "project": "Sherpa History",
+      "ne": "सन् १९६५ मा सोलुमा भेटिएका दस्तावेज",
+      "en": "records found in Solu in 1965",
+      "image": "media/stills/08.webp"
+    },
+    {
+      "project": "Haritalika Teej",
+      "ne": "पौराणिक कथा अनुसार, माता पार्वती…",
+      "en": "According to Puranic legend, Mother Parvati…",
+      "image": "media/stills/09.webp"
+    },
+    {
+      "project": "Haritalika Teej",
+      "ne": "प्रार्थनाबाट प्रसन्न भएर…",
+      "en": "Pleased by the prayer…",
+      "image": "media/stills/10.webp"
+    },
+    {
+      "project": "Haritalika Teej",
+      "ne": "राम्रा पक्षलाई जोगाउने…",
+      "en": "to preserve what is good…",
+      "image": "media/stills/11.webp"
+    },
+    {
+      "project": "Guthi",
+      "ne": "जात्रा सकिएपछि मन्दिरको दियो कसले बाल्छ?",
+      "en": "After the jatra ends, who lights the temple lamp?",
+      "image": "media/stills/12.webp"
+    },
+    {
+      "project": "Guthi",
+      "ne": "नेवार समुदायको एउटा पुरानो परम्परा…",
+      "en": "an old tradition of the Newar community…",
+      "image": "media/stills/13.webp"
+    },
+    {
+      "project": "Guthi",
+      "ne": "गुठी केवल एउटा संस्था होइन",
+      "en": "Guthi is not only an institution",
+      "image": "media/stills/14.webp"
+    },
+    {
+      "project": "Guthi",
+      "ne": "जग्गा वा त्यसबाट प्राप्त आम्दानी…",
+      "en": "the land, or the income from it…",
+      "image": "media/stills/15.webp"
+    },
+    {
+      "project": "Okhaldhunga",
+      "ne": "यो कथा ३०० वर्ष",
+      "en": "this story, 300 years",
+      "image": "media/stills/16.webp"
+    },
+    {
+      "project": "Okhaldhunga",
+      "ne": "राज्यका सेनापति भीम मल्ल",
+      "en": "the kingdom's general, Bhim Malla",
+      "image": "media/stills/17.webp"
+    },
+    {
+      "project": "Okhaldhunga",
+      "ne": "पूर्वको यात्रामा निस्किएका थिए।",
+      "en": "had set out on a journey east.",
+      "image": "media/stills/18.webp"
+    },
+    {
+      "project": "Okhaldhunga",
+      "ne": "खाद्य सामाग्री कसरी कुट्ने",
+      "en": "how to pound the grain",
+      "image": "media/stills/19.webp"
+    },
+    {
+      "project": "Okhaldhunga",
+      "ne": "धान राखे र अर्को",
+      "en": "they put in the rice, and another",
+      "image": "media/stills/20.webp"
+    },
+    {
+      "project": "Okhaldhunga",
+      "ne": "आज पनि त्यो ढुंगा",
+      "en": "even today, that stone",
+      "image": "media/stills/21.webp"
+    },
+    {
+      "project": "Sati le Sarapeko Desh",
+      "ne": "अन्यायको कथा। १६औं शताब्दीतिर",
+      "en": "a story of injustice. Around the 16th century",
+      "image": "media/stills/22.webp"
+    },
+    {
+      "project": "Sati le Sarapeko Desh",
+      "ne": "त्यो सुन्न साथ प्रताप",
+      "en": "hearing that, Pratap",
+      "image": "media/stills/23.webp"
+    },
+    {
+      "project": "Sati le Sarapeko Desh",
+      "ne": "खुसी हुदैं फर्किन्छन र",
+      "en": "he returns, rejoicing, and",
+      "image": "media/stills/24.webp"
+    },
+    {
+      "project": "Sati le Sarapeko Desh",
+      "ne": "कान्तिपुर आउँनसाथ उनी आफ्नो",
+      "en": "the moment he reaches Kantipur",
+      "image": "media/stills/25.webp"
+    },
+    {
+      "project": "Sati le Sarapeko Desh",
+      "ne": "राजा प्रताप मल्ल केहि",
+      "en": "King Pratap Malla, without a word",
+      "image": "media/stills/26.webp"
+    }
+  ],
+  "walkthrough": {
+    "project": "Okhaldhunga",
+    "frames": [
+      {
+        "id": "c01-1",
+        "words": "यो कथा ३०० वर्ष",
+        "image": "media/walk/c01-1.webp"
+      },
+      {
+        "id": "c01-2",
+        "words": "पुरानो हो। तत्कालिन कान्तिपुर",
+        "image": "media/walk/c01-2.webp"
+      },
+      {
+        "id": "c01-3",
+        "words": "राज्यका सेनापति भीम मल्ल",
+        "image": "media/walk/c01-3.webp"
+      },
+      {
+        "id": "c01-4",
+        "words": "आफ्ना सैनिकहरु सहित काठमाडौं",
+        "image": "media/walk/c01-4.webp"
+      },
+      {
+        "id": "c01-5",
+        "words": "पूर्वको यात्रामा निस्किएका थिए।",
+        "image": "media/walk/c01-5.webp"
+      }
+    ]
+  }
+}

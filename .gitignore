@@ -33,3 +33,4 @@ campaign-poster-tool/public/assets/*.png
 .vercel/
 
 .vercel
+.gstack/

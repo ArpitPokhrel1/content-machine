@@ -4,108 +4,171 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Content Machine</title>
-<meta name="description" content="Turn a script into a consistent image pack and video clips, generated with your own Google account and saved on your own computer.">
+<meta name="description" content="Give your AI agent a script. Get back images and video clips that look like one film, made with your own Google account and saved on your own computer.">
+<meta property="og:title" content="Content Machine">
+<meta property="og:description" content="Script in. Film out. Story-true images and video from any script, in any language.">
+<meta property="og:image" content="https://content.tarjun.com/media/stills/17.webp">
+<meta name="theme-color" content="#120e0b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23120e0b'/><rect x='7' y='6' width='18' height='20' rx='3' fill='none' stroke='%23e3a857' stroke-width='2.2'/><circle cx='16' cy='16' r='3.4' fill='%23e3a857'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #faf7f2; --surface: #ffffff; --ink: #1d1a16; --muted: #6b645a; --line: #e7e0d5;
-    --accent: #8a3b26; --accent-soft: #f3e6df; --code-bg: #1f1b17; --code-ink: #f4ede3; --ok: #2f6f4e;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #151210; --surface: #1d1916; --ink: #f1ebe2; --muted: #a79e92; --line: #332d27;
-      --accent: #e0896b; --accent-soft: #2d201a; --code-bg: #0e0c0a; --code-ink: #f4ede3; --ok: #7cc39c;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #151210; --surface: #1d1916; --ink: #f1ebe2; --muted: #a79e92; --line: #332d27;
-    --accent: #e0896b; --accent-soft: #2d201a; --code-bg: #0e0c0a; --code-ink: #f4ede3; --ok: #7cc39c;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 Inter, system-ui, sans-serif; }
-  main { max-width: 760px; margin: 0 auto; padding: 56px 16px 80px; }
-  h1 { font: 600 clamp(2.2rem, 6vw, 3.2rem)/1.1 Fraunces, Georgia, serif; margin: 0 0 16px; letter-spacing: -0.01em; }
-  h2 { font: 600 1.5rem/1.25 Fraunces, Georgia, serif; margin: 56px 0 12px; }
-  h3 { font-size: 1rem; margin: 0 0 4px; }
-  p { margin: 0 0 14px; }
-  .lede { font-size: 1.15rem; color: var(--muted); max-width: 36em; }
-  .eyebrow { font: 500 .8rem/1 "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
-  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin-top: 20px; }
-  .grid .card p { color: var(--muted); font-size: .95rem; margin: 0; }
-  .tabs { display: flex; gap: 6px; margin: 18px 0 0; }
-  .tab { font: inherit; font-size: .9rem; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
-  .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .cmd { position: relative; margin-top: 10px; background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 16px 92px 16px 16px; font: 14px/1.5 "JetBrains Mono", monospace; overflow-x: auto; white-space: pre; }
-  .copy { position: absolute; top: 10px; right: 10px; font: 500 .8rem Inter, sans-serif; padding: 6px 12px; border-radius: 8px; border: 1px solid #4a4038; background: #2c2520; color: var(--code-ink); cursor: pointer; }
-  ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 16px 0 0; }
-  ol.steps li { counter-increment: s; position: relative; padding: 0 0 18px 44px; }
-  ol.steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font: 600 .85rem/28px Inter, sans-serif; text-align: center; }
-  ol.steps li p { color: var(--muted); margin: 0; }
-  code { font: .9em "JetBrains Mono", monospace; background: var(--accent-soft); padding: 1px 6px; border-radius: 6px; }
-  .prompt { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; margin: 10px 0; color: var(--ink); font-style: italic; }
-  .note { color: var(--muted); font-size: .92rem; }
-  .ok { color: var(--ok); font-weight: 600; }
-  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
-  a { color: var(--accent); }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="preload" as="image" href="media/clips/krishna-named.webp">
 </head>
 <body>
-<main>
-  <div class="eyebrow">content.tarjun.com</div>
-  <h1>Content Machine</h1>
-  <p class="lede">Give your AI agent a script. Get back a folder of images and video clips that look like they came from the same film, made with your own Google account and saved on your own computer.</p>
+<a class="skip" href="#main">Skip to content</a>
 
-  <div class="grid">
-    <div class="card"><h3>Reads the whole story first</h3><p>It works out every character, place and period before it draws anything.</p></div>
-    <div class="card"><h3>Consistent by design</h3><p>One locked "look book" is pasted word for word into every prompt, so faces don't drift.</p></div>
-    <div class="card"><h3>Yours, locally</h3><p>It runs on your machine, bills your Cloud project, and saves files to your disk. Nothing is stored here.</p></div>
-  </div>
+<header class="nav" id="top">
+  <a class="brand" href="#top" aria-label="Content Machine home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="7" y="6" width="18" height="20" rx="3"/><circle cx="16" cy="16" r="3.4"/></svg>
+    Content Machine
+  </a>
+  <nav aria-label="Sections">
+    <a href="#how">How it works</a>
+    <a href="#reel">The reel</a>
+    <a href="#install" class="nav-cta">Get started</a>
+  </nav>
+</header>
 
-  <h2>Before you start</h2>
-  <ol class="steps">
-    <li><h3>An access code</h3><p>Ask the studio. It unlocks the download.</p></li>
-    <li><h3>A Google Cloud project with billing on</h3><p>Create one at <a href="https://console.cloud.google.com/projectcreate">console.cloud.google.com</a> and link a billing account. The installer turns on Vertex AI for you. Images cost a few cents each; you're charged by Google, directly.</p></li>
-    <li><h3>An AI agent</h3><p><a href="https://claude.com/claude-code">Claude Code</a> (recommended) or Codex. The installer connects it automatically.</p></li>
-  </ol>
+<main id="main">
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-drift" aria-hidden="true">
+      <div class="drift-col" data-drift="0"></div>
+      <div class="drift-col" data-drift="1"></div>
+      <div class="drift-col" data-drift="2"></div>
+      <div class="drift-col" data-drift="3"></div>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Script in. Film out.</p>
+        <h1 id="hero-title">Content <em>Machine</em></h1>
+        <p class="lede">Hand your AI agent a script, in Nepali, English or any language. It reads the whole story, fixes every face and place, and returns images and video clips that look like they came from <strong>one film</strong>.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#install">Get started</a>
+          <a class="btn btn-ghost" href="#how">See how it works</a>
+        </div>
+        <ul class="hero-facts" aria-label="Key facts">
+          <li><b>Your</b> Google account</li>
+          <li><b>Your</b> computer</li>
+          <li><b>Your</b> approval before any video</li>
+        </ul>
+      </div>
+      <figure class="phone" aria-label="A generated clip playing with its script line">
+        <div class="phone-screen">
+          <video id="hero-video" muted playsinline loop preload="auto" poster="media/clips/krishna-named.webp" aria-hidden="true"></video>
+          <figcaption class="subtitle">
+            <span class="ne" id="hero-ne" lang="ne"></span>
+            <span class="en" id="hero-en"></span>
+          </figcaption>
+        </div>
+        <div class="phone-tag"><span class="rec" aria-hidden="true"></span> generated from the line above</div>
+      </figure>
+    </div>
+  </section>
 
-  <h2>Install</h2>
-  <p>Open a terminal, paste one line, and follow the prompts. It asks for your access code, signs you in with Google in your browser, and asks which Cloud project to use.</p>
-  <div class="tabs" role="tablist">
-    <button class="tab" role="tab" aria-selected="true" data-os="win">Windows</button>
-    <button class="tab" role="tab" aria-selected="false" data-os="mac">macOS / Linux</button>
-  </div>
-  <div class="cmd" data-os="win"><span>irm https://content.tarjun.com/install.ps1 | iex</span><button class="copy">Copy</button></div>
-  <div class="cmd" data-os="mac" hidden><span>curl -fsSL https://content.tarjun.com/install.sh | bash</span><button class="copy">Copy</button></div>
-  <p class="note">Windows: use PowerShell. It installs Node.js, Google Cloud CLI and ffmpeg if they're missing (you may need to open a new window and run it again once). Mac: install <a href="https://nodejs.org">Node.js</a> and the <a href="https://cloud.google.com/sdk/docs/install">Google Cloud CLI</a> first.</p>
+  <!-- SCRIPT TICKER -->
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
 
-  <h2>Use it</h2>
-  <p>Open Claude Code and just ask. The agent reads the method, asks its questions in one batch, then gets to work.</p>
-  <div class="prompt">"Use content-machine to make a 9:16 image pack from this script: …"</div>
-  <div class="prompt">"Turn frames c03 and c07 of that pack into 6-second silent clips."</div>
-  <p>Images are generated without extra questions. <span class="ok">Video always stops first</span> and shows you the exact clips and estimated cost, and nothing is generated until you say yes. Everything lands in <code>ContentMachine/Outputs</code> in your home folder.</p>
+  <!-- WALKTHROUGH -->
+  <section class="walk" id="how" aria-labelledby="walk-title">
+    <div class="walk-sticky">
+      <div class="walk-text">
+        <p class="eyebrow">How it works</p>
+        <h2 id="walk-title">Every four words become a frame.</h2>
+        <p class="walk-sub">This is the real opening of the Okhaldhunga story. Scroll, and watch each four-word window turn into its image.</p>
+        <p class="script" id="walk-script" lang="ne" aria-live="polite"></p>
+        <ol class="walk-steps" aria-label="Pipeline">
+          <li data-step="0">Reads the whole script</li>
+          <li data-step="1">Locks every face and place</li>
+          <li data-step="2">Draws each four-word window</li>
+          <li data-step="3">Checks every frame by eye</li>
+        </ol>
+      </div>
+      <div class="walk-stage">
+        <div class="walk-frames" id="walk-frames"></div>
+        <div class="walk-meta"><span id="walk-id" class="mono">c01-1</span><span id="walk-words" lang="ne"></span></div>
+        <div class="walk-dots" id="walk-dots" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
 
-  <h2>Updating</h2>
-  <p>Run the same install line again. Your settings and your Outputs folder are kept.</p>
+  <!-- STILLS MARQUEE -->
+  <section class="stills" aria-labelledby="stills-title">
+    <div class="section-head">
+      <p class="eyebrow">Stills</p>
+      <h2 id="stills-title">Each image carries the words it came from.</h2>
+      <p>Sherpa migrations, Guthi, Teej, the Malla court. Every frame was generated from the line printed under it.</p>
+    </div>
+    <div class="marquee" data-dir="left"><div class="marquee-track" id="row-a"></div></div>
+    <div class="marquee" data-dir="right"><div class="marquee-track" id="row-b"></div></div>
+    <button class="pause" id="pause" aria-pressed="false">Pause motion</button>
+  </section>
 
-  <h2>If something's off</h2>
-  <p>In a terminal: <code>cd ~/ContentMachine/Tool</code> then <code>npm run doctor -- --online</code>. Each ✘ line says exactly what to fix. Paste the output to Claude Code if you're stuck.</p>
+  <!-- REEL -->
+  <section class="reel" id="reel" aria-labelledby="reel-title">
+    <div class="section-head">
+      <p class="eyebrow">The reel</p>
+      <h2 id="reel-title">Then the frames start to move.</h2>
+      <p>Clips from real projects, each one directed from a single line of script. Video always waits for your yes.</p>
+    </div>
+    <div class="reel-grid" id="reel-grid"></div>
+  </section>
 
-  <footer>Content Machine · Your Google login, files and billing stay on your side. This site only hands out the installer.</footer>
+  <!-- PROMISES -->
+  <section class="promises" aria-labelledby="promise-title">
+    <h2 id="promise-title" class="sr-only">What makes it different</h2>
+    <article><span class="num">01</span><h3>Reads first, draws second</h3><p>It translates line by line and works out who is in the story, where and when, then asks every question in one go. Nothing is invented: no extra people, no made-up dates.</p></article>
+    <article><span class="num">02</span><h3>One look, locked</h3><p>Each character gets fixed features and colours. Each place gets a "this, and not that" description. Those words are pasted identically into every prompt, so faces don't drift.</p></article>
+    <article><span class="num">03</span><h3>Many hands, one film</h3><p>Helper agents write frames in parallel and images generate side by side. Because the look is locked first, speed never costs consistency.</p></article>
+    <article><span class="num">04</span><h3>Nothing leaves your side</h3><p>It runs on your computer, bills your own Google Cloud project and saves to your disk. Video never runs until you approve the exact clips and cost.</p></article>
+  </section>
+
+  <!-- INSTALL -->
+  <section class="install" id="install" aria-labelledby="install-title">
+    <div class="section-head">
+      <p class="eyebrow">Get started</p>
+      <h2 id="install-title">Three things, then one line.</h2>
+    </div>
+    <ol class="needs">
+      <li><h3>An access code</h3><p>Ask the studio. It unlocks the download.</p></li>
+      <li><h3>A Google Cloud project with billing on</h3><p>Create one at <a href="https://console.cloud.google.com/projectcreate">console.cloud.google.com</a>. The installer switches on Vertex AI for you. Google bills you directly; images cost a few cents each.</p></li>
+      <li><h3>An AI agent</h3><p><a href="https://claude.com/claude-code">Claude Code</a> (recommended) or Codex. The installer connects it for you.</p></li>
+    </ol>
+
+    <div class="terminal">
+      <div class="term-bar">
+        <div class="tabs" role="tablist" aria-label="Operating system">
+          <button class="tab" role="tab" id="tab-win" aria-selected="true" aria-controls="cmd-win" data-os="win">Windows</button>
+          <button class="tab" role="tab" id="tab-mac" aria-selected="false" aria-controls="cmd-mac" data-os="mac" tabindex="-1">macOS / Linux</button>
+        </div>
+      </div>
+      <div class="cmd" id="cmd-win" role="tabpanel" aria-labelledby="tab-win"><code>irm https://content.tarjun.com/install.ps1 | iex</code><button class="copy" type="button">Copy</button></div>
+      <div class="cmd" id="cmd-mac" role="tabpanel" aria-labelledby="tab-mac" hidden><code>curl -fsSL https://content.tarjun.com/install.sh | bash</code><button class="copy" type="button">Copy</button></div>
+    </div>
+    <p class="note">Paste it into PowerShell (Windows) or Terminal (Mac). It asks for your access code, opens your browser to sign in with Google, asks which Cloud project to use, and connects your agent. On Windows it installs Node.js, the Google Cloud CLI and ffmpeg if they're missing; you may need to open a new window and run it once more. On a Mac, install <a href="https://nodejs.org">Node.js</a> and the <a href="https://cloud.google.com/sdk/docs/install">Google Cloud CLI</a> first.</p>
+
+    <div class="use">
+      <h3>Then just ask</h3>
+      <p class="ask">"Use content-machine to make a 9:16 image pack from this script: …"</p>
+      <p class="ask">"Turn frames c03 and c07 of that pack into 6-second silent clips."</p>
+      <p>Images start straight away. Video always stops first, shows you the clips and the estimated cost, and waits. Everything lands in <code>ContentMachine/Outputs</code> in your home folder.</p>
+    </div>
+
+    <details class="faq">
+      <summary>Updating, and when something's off</summary>
+      <p><b>Update:</b> run the same install line again. Your settings and your Outputs folder are kept.</p>
+      <p><b>Check:</b> in a terminal, <code>cd ~/ContentMachine/Tool</code> then <code>npm run doctor -- --online</code>. Every ✘ line says what to fix. Paste the output to Claude Code if you're stuck.</p>
+    </details>
+  </section>
 </main>
-<script>
-  document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t === tab)));
-    document.querySelectorAll(".cmd").forEach(c => { c.hidden = c.dataset.os !== tab.dataset.os; });
-  }));
-  if (/Mac|Linux/.test(navigator.platform)) document.querySelector('.tab[data-os="mac"]').click();
-  document.querySelectorAll(".copy").forEach(btn => btn.addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText(btn.previousElementSibling.textContent); btn.textContent = "Copied"; }
-    catch { btn.textContent = "Select & copy"; }
-    setTimeout(() => { btn.textContent = "Copy"; }, 1800);
-  }));
-</script>
+
+<footer class="foot">
+  <p><b>Content Machine</b>. Every image and clip on this page was generated by it, from the script line shown beside it.</p>
+  <p>Your Google login, your files and your billing stay on your side. This site only hands out the installer.</p>
+</footer>
+
+<script src="app.js" defer></script>
 </body>
 </html>
