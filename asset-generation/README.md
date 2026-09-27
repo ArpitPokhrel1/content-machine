@@ -157,7 +157,7 @@ content-machine -- node <repo>/asset-generation/mcp/server.mjs`) and Codex (`~/.
 `public/index.html` (landing), `public/install.ps1` / `install.sh` (one-line installers), and
 `api/download.mjs`, which serves `bundle/content-machine.tar.gz` (built from this repo by
 `scripts/build-bundle.mjs`, never including `.env`, Outputs, Other, knowledge or the poster tool)
-only for an `x-access-code` listed in the `ACCESS_CODES` env var. `npm run new-code -- <name>`
+to anyone, or only for an `x-access-code` listed in `ACCESS_CODES` when the env var `REQUIRE_ACCESS_CODE` is `true` (off by default). `npm run new-code -- <name>`
 mints a code.
 
 ---

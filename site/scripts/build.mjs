@@ -1,5 +1,5 @@
 // Vercel build for content.tarjun.com:
-//  1. the access-code-gated install bundle (build-bundle.mjs)
+//  1. the install bundle served by api/download.mjs (build-bundle.mjs)
 //  2. the subtitle engine + font catalogue copied from ../subtitles into public/sub/, so the
 //     browser editor runs exactly the same code as the CLI and the MCP tool.
 import { cpSync, mkdirSync, rmSync } from "node:fs";

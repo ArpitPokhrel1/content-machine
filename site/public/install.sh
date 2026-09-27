@@ -19,11 +19,17 @@ for tool in node gcloud; do
 done
 command -v ffmpeg >/dev/null 2>&1 || echo "Note: ffmpeg is missing (brew install ffmpeg). Needed for contact sheets."
 
-CODE="${CONTENT_MACHINE_CODE:-}"
-if [ -z "$CODE" ]; then read -r -p "Your access code: " CODE < /dev/tty; fi
+# Download. An access code is only asked for if the site currently requires one.
 TMP="$(mktemp -t content-machine.XXXXXX).tar.gz"
-if ! curl -fsSL -H "x-access-code: $CODE" "$SITE/api/download" -o "$TMP"; then
-  echo "Download refused. Check your access code (it is case-sensitive)."; exit 1
+fetch() { curl -sSL -w '%{http_code}' -H "x-access-code: $1" "$SITE/api/download" -o "$TMP"; }
+STATUS="$(fetch "${CONTENT_MACHINE_CODE:-}")"
+if [ "$STATUS" = "401" ]; then
+  read -r -p "This download needs an access code. Your access code: " CODE < /dev/tty
+  STATUS="$(fetch "$CODE")"
+fi
+if [ "$STATUS" != "200" ]; then
+  [ "$STATUS" = "401" ] && echo "Download refused. Check your access code (it is case-sensitive)." || echo "Download failed (HTTP $STATUS)."
+  exit 1
 fi
 mkdir -p "$DIR"
 # Extracting over an existing install updates the tool; asset-generation/.env and Outputs are kept.

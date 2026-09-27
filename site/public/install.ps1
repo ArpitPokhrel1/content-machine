@@ -30,12 +30,17 @@ Ensure "node" "OpenJS.NodeJS.LTS" "required" -Required
 Ensure "gcloud" "Google.CloudSDK" "Google sign-in" -Required
 Ensure "ffmpeg" "Gyan.FFmpeg" "contact sheets"
 
-$code = if ($env:CONTENT_MACHINE_CODE) { $env:CONTENT_MACHINE_CODE } else { Read-Host "`nYour access code" }
+# Download. An access code is only asked for if the site currently requires one.
 $tmp = Join-Path ([IO.Path]::GetTempPath()) "content-machine.tar.gz"
-try {
-  Invoke-WebRequest "$Site/api/download" -Headers @{ "x-access-code" = $code.Trim() } -OutFile $tmp -UseBasicParsing
-} catch {
-  throw "Download refused. Check your access code (it is case-sensitive)."
+function Get-Bundle($code) {
+  $headers = @{}
+  if ($code) { $headers["x-access-code"] = $code.Trim() }
+  try { Invoke-WebRequest "$Site/api/download" -Headers $headers -OutFile $tmp -UseBasicParsing; return $true }
+  catch { if ($_.Exception.Response.StatusCode.value__ -eq 401) { return $false } else { throw "Download failed: $($_.Exception.Message)" } }
+}
+if (-not (Get-Bundle $env:CONTENT_MACHINE_CODE)) {
+  $code = Read-Host "`nThis download needs an access code. Your access code"
+  if (-not (Get-Bundle $code)) { throw "Download refused. Check your access code (it is case-sensitive)." }
 }
 
 New-Item -ItemType Directory -Force -Path $Dir | Out-Null

@@ -14,7 +14,7 @@ The only machine-specific file is `asset-generation/.env` (credentials, Cloud pr
 
 # MCP and content.tarjun.com
 
-`asset-generation/mcp/server.mjs` exposes all three parts as the `content-machine` MCP server (registered by setup): asset tools, `map_*` tools and `make_subtitles`. When its tools are available, prefer them; they enforce the same gates (`generate_videos` needs `confirm_paid_generation: true`, `map_render` needs `confirm_render: true`, each set only after explicit approval). `site/` is the Vercel site at content.tarjun.com that hands out the installer to holders of an access code (`ACCESS_CODES` env var); outsiders run everything locally with their own Google account and Cloud project.
+`asset-generation/mcp/server.mjs` exposes all three parts as the `content-machine` MCP server (registered by setup): asset tools, `map_*` tools and `make_subtitles`. When its tools are available, prefer them; they enforce the same gates (`generate_videos` needs `confirm_paid_generation: true`, `map_render` needs `confirm_render: true`, each set only after explicit approval). `site/` is the Vercel site at content.tarjun.com that hands out the installer (open to everyone for now; set the Vercel env var `REQUIRE_ACCESS_CODE=true` to require a code from `ACCESS_CODES`); outsiders run everything locally with their own Google account and Cloud project.
 
 # Parallel Processing
 

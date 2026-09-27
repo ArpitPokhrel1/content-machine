@@ -1,5 +1,5 @@
 // Vercel build step: pack the installable part of the repo into bundle/content-machine.tar.gz.
-// The bundle is served only by api/download.mjs to a valid access code; the GitHub repo stays
+// The bundle is served by api/download.mjs (open, or code-gated when REQUIRE_ACCESS_CODE=true); the GitHub repo stays
 // private. Studio-only folders (Outputs, Other, knowledge, the poster tool) are never included,
 // and neither is any .env.
 import { execFileSync } from "node:child_process";

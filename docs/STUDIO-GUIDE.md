@@ -77,20 +77,29 @@ That's it. Open Claude Code anywhere and ask for an image pack.
 
 ---
 
-## Giving someone access to content.tarjun.com
+## Access to content.tarjun.com (codes are OFF right now)
 
-```powershell
-cd site
-npm run new-code -- ram          # prints a code and a "ram:<code>" entry
-```
+Anyone can install from <https://content.tarjun.com/assets>. Just send people the link. Each
+person's generation is billed to their own Google Cloud project, never yours.
+
+**To require access codes again later:**
 
 1. In Vercel, open the project **content-machine**, then **Settings → Environment Variables**.
-2. Add the entry to `ACCESS_CODES`, comma-separated: `arpit:xxxx,ram:yyyy`.
-3. Redeploy (or just push any commit).
-4. Send them the code and the link <https://content.tarjun.com>.
+2. Add `REQUIRE_ACCESS_CODE` = `true` (Production and Preview).
+3. Make a code for each person, and add it to `ACCESS_CODES` (comma-separated, keep the
+   existing entries), e.g. `arpit:xxxx,ram:yyyy`:
 
-To remove someone, delete their entry and redeploy. Their installed copy keeps working, but they
-can't download updates.
+   ```powershell
+   cd site
+   npm run new-code -- ram          # prints a code and a "ram:<code>" entry
+   ```
+
+4. Redeploy (Deployments → ⋯ → Redeploy, or push any commit).
+
+The installers adapt on their own: they only ask for a code when the site requires one. To remove
+someone, delete their entry and redeploy. Their installed copy keeps working, but they can't
+download updates. To open access again, delete `REQUIRE_ACCESS_CODE` (or set it to `false`)
+and redeploy.
 
 ---
 

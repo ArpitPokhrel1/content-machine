@@ -1,6 +1,8 @@
-// GET /api/download with header `x-access-code: <code>` → the Content Machine bundle (tar.gz).
-// Codes live in the Vercel env var ACCESS_CODES as comma-separated name:code pairs,
-// e.g. "arpit:9f2c…,ram:41aa…". Revoke someone by removing their pair and redeploying.
+// GET /api/download → the Content Machine bundle (tar.gz).
+// Access codes are OFF unless the Vercel env var REQUIRE_ACCESS_CODE is "true". When on, the
+// request needs header `x-access-code: <code>`, checked against ACCESS_CODES (comma-separated
+// name:code pairs, e.g. "arpit:9f2c…,ram:41aa…"). Revoke someone by removing their pair and
+// redeploying. A valid code is still logged by name when codes are off.
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -29,7 +31,8 @@ function match(given) {
 
 export default function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "GET only." });
-  const user = match(req.headers["x-access-code"]);
+  const required = process.env.REQUIRE_ACCESS_CODE === "true";
+  const user = match(req.headers["x-access-code"]) ?? (required ? null : { name: "anonymous" });
   if (!user) {
     console.warn("download refused");
     return res.status(401).json({ error: "Invalid access code. Ask the studio for yours." });

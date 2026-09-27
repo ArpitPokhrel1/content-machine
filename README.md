@@ -33,11 +33,10 @@ Your script and video never leave your computer.
 
 ## Assets and maps: what you need
 
-1. **An access code.** Ask the studio for one.
-2. **A Google account with a Google Cloud project that has billing turned on.** Google does the
+1. **A Google account with a Google Cloud project that has billing turned on.** Google does the
    actual drawing, and bills you directly for it. Create a project at
    <https://console.cloud.google.com/projectcreate>.
-3. **An AI assistant on your computer:** [Claude Code](https://claude.com/claude-code) is
+2. **An AI assistant on your computer:** [Claude Code](https://claude.com/claude-code) is
    recommended, or Codex. This is what you'll talk to.
 
 A Windows PC or a Mac is fine. You don't need to know how to code.
@@ -50,7 +49,6 @@ A Windows PC or a Mac is fine. You don't need to know how to code.
 2. **Windows:** open **PowerShell** (press the Start button, type *PowerShell*, press Enter).
    **Mac:** open **Terminal**.
 3. Paste the line and press Enter. Then follow along:
-   - Type your **access code** when it asks.
    - Your browser opens. **Sign in with Google** and click *Allow*.
    - Pick your **Cloud project** from the list it shows.
    - It asks whether to also install the **map** part. Say **y** if you want maps.
@@ -111,7 +109,6 @@ and your settings and your Outputs folder stay exactly as they were.
 
 | What you see | What to do |
 | --- | --- |
-| "Invalid access code" | Check the code. Capital letters matter. |
 | It says you're not signed in to Google | Run the install line again and sign in when the browser opens. |
 | "429" or "resource exhausted" | Google is asking you to slow down. Nothing was charged. Wait a minute and ask again. |
 | Your assistant doesn't know "content-machine" | Close and reopen Claude Code. If that doesn't help, run the install line again. |
@@ -130,6 +127,6 @@ and your settings and your Outputs folder stay exactly as they were.
 
 ---
 
-*Running the studio, setting up from GitHub, or giving people access codes? See the
+*Running the studio or setting up from GitHub? See the
 [Studio guide](docs/STUDIO-GUIDE.md). Every command and file format is in
 [asset-generation/README.md](asset-generation/README.md).*

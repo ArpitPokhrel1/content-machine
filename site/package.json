@@ -2,7 +2,7 @@
   "name": "content-machine-site",
   "private": true,
   "type": "module",
-  "description": "content.tarjun.com: setup page, installers and the access-code-gated download for Content Machine.",
+  "description": "content.tarjun.com: setup page, installers and the install download for Content Machine.",
   "engines": { "node": ">=20" },
   "scripts": {
     "build": "node scripts/build-bundle.mjs",
