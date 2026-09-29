@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { splitScript, timeCues, makeCues, buildFile, parseFile, parseTime, srtTime, visibleLength, shift } from "../lib/subtitles.mjs";
+import { splitScript, timeCues, makeCues, buildFile, parseFile, parseTime, srtTime, visibleLength, shift, alignPauses } from "../lib/subtitles.mjs";
 
 const NE = "नेपालको इतिहासमा धेरै राजाहरूले शासन गरे। पृथ्वीनारायण शाहले एकीकरणको अभियान सुरु गर्नुभयो। जात्रा सकिएपछि मन्दिरको दियो कसले बाल्छ?";
 
@@ -58,6 +58,48 @@ test("VTT output and SRT parse round-trip", () => {
   const back = parseFile(buildFile(cues));
   assert.deepEqual(back.map(c => c.text), cues.map(c => c.text));
   assert.equal(back.at(-1).end, 9);
+});
+
+test("alignPauses snaps a boundary onto a real pause near the proportional estimate", () => {
+  const cues = timeCues(["aaaa", "bbbb"], 10);
+  assert.equal(cues[1].start, 5); // the proportional estimate, before alignment
+  const { cues: aligned, snapped } = alignPauses(cues, [{ start: 4.7, end: 5.3 }]);
+  assert.equal(snapped, 1);
+  assert.equal(aligned[0].end, 4.98);
+  assert.equal(aligned[1].start, 5.02);
+});
+
+test("alignPauses ignores a pause too far from any boundary", () => {
+  const cues = timeCues(["aaaa", "bbbb"], 10);
+  const { cues: aligned, snapped } = alignPauses(cues, [{ start: 1, end: 1.5 }]);
+  assert.equal(snapped, 0);
+  assert.deepEqual(aligned, cues);
+});
+
+test("alignPauses ignores gaps shorter than minPause", () => {
+  const cues = timeCues(["aaaa", "bbbb"], 10);
+  const { cues: aligned, snapped } = alignPauses(cues, [{ start: 4.9, end: 5.1 }]); // 0.2s, default minPause is 0.3
+  assert.equal(snapped, 0);
+  assert.deepEqual(aligned, cues);
+});
+
+test("alignPauses snaps multiple boundaries independently, in order, without overlap", () => {
+  const cues = timeCues(["aaaa", "bbbb", "cccc"], 12);
+  const { cues: aligned, snapped } = alignPauses(cues, [{ start: 3.8, end: 4.2 }, { start: 7.85, end: 8.15 }]);
+  assert.equal(snapped, 2);
+  assert.deepEqual(aligned, [
+    { start: 0, end: 3.98, text: "aaaa" },
+    { start: 4.02, end: 7.98, text: "bbbb" },
+    { start: 8.02, end: 12, text: "cccc" }
+  ]);
+  for (let i = 1; i < aligned.length; i++) assert.ok(aligned[i].start >= aligned[i - 1].end, "overlap");
+});
+
+test("alignPauses is a no-op with no pauses or a single cue", () => {
+  const cues = timeCues(["aaaa", "bbbb"], 10);
+  assert.deepEqual(alignPauses(cues, []), { cues, snapped: 0 });
+  const one = timeCues(["aaaa"], 10);
+  assert.deepEqual(alignPauses(one, [{ start: 1, end: 2 }]), { cues: one, snapped: 0 });
 });
 
 test("time parsing and shifting", () => {

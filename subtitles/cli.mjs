@@ -12,10 +12,17 @@
 //   --format F         srt (default) or vtt
 //   --max-chars N      characters per line (default 42)   --lines N  lines per subtitle, 1 or 2 (default 2)
 //   --start T          first subtitle starts here (default 0)
+//   --no-pauses        skip pause detection (--media only): time purely by reading length, like before
+//   --min-pause N      shortest silence that counts as a real pause, in seconds (default 0.3)
 //   -o FILE            write here (default: stdout). Files are UTF-8 with BOM, which Premiere and Resolve both read.
+//
+// With --media, actual pauses in the audio are detected (ffmpeg silencedetect) and cue breaks are
+// snapped onto the ones that land close to where reading-length timing already put them, so
+// subtitles change exactly when the speaker pauses instead of at a length estimate alone.
 import { readFileSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
-import { makeCues, parseFile, retime, buildFile, parseTime, preetiToUnicode } from "./lib/subtitles.mjs";
+import { makeCues, parseFile, retime, buildFile, parseTime, preetiToUnicode, alignPauses } from "./lib/subtitles.mjs";
+import { detectPauses } from "./silence.mjs";
 
 const args = process.argv.slice(2);
 const opt = (name, fallback) => { const i = args.indexOf(`--${name}`); return i >= 0 ? args[i + 1] : fallback; };
@@ -26,10 +33,15 @@ const input = args.find((a, i) => !a.startsWith("-") && !valueFlags.has(args[i -
 function fail(message) { console.error(message); process.exit(1); }
 
 let total;
+let pauses = [];
 if (opt("media")) {
   try {
     total = Number(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", opt("media")]).toString().trim());
   } catch { fail(`Could not read the length of ${opt("media")} (is ffmpeg/ffprobe installed?).`); }
+  if (!args.includes("--no-pauses")) {
+    try { pauses = await detectPauses(opt("media"), { totalSeconds: total, minDuration: Number(opt("min-pause", 0.3)) }); }
+    catch { /* pause detection is a bonus; fall back to reading-length timing if ffmpeg can't do it */ }
+  }
 } else total = parseTime(opt("duration", ""));
 if (!Number.isFinite(total) || total <= 0) fail("Give the total length: --duration 1:35.2 or --media file.mp4");
 
@@ -43,9 +55,12 @@ if (opt("from")) {
   if (opt("input-encoding") === "preeti") script = preetiToUnicode(script);
   cues = makeCues(script, total, o);
 }
+let snapped = 0;
+if (pauses.length && cues.length > 1) ({ cues, snapped } = alignPauses(cues, pauses, { minPause: Number(opt("min-pause", 0.3)) }));
 
 const text = buildFile(cues, { format: opt("format", "srt"), encoding: opt("encoding", "unicode") });
+const pauseNote = pauses.length ? `, ${snapped}/${cues.length - 1} breaks matched to real pauses in the audio` : "";
 if (out) {
   writeFileSync(out, "﻿" + text, "utf8");
-  console.error(`${cues.length} subtitles, ${total.toFixed(2)} s → ${out}`);
+  console.error(`${cues.length} subtitles, ${total.toFixed(2)} s${pauseNote} → ${out}`);
 } else process.stdout.write(text);

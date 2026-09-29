@@ -60,12 +60,15 @@ input[type="color"] { width: 48px; height: 40px; padding: 2px; border: 1px solid
 .stage-wrap { display: grid; gap: 10px; }
 .stage { position: relative; background: radial-gradient(ellipse at 50% 40%, #2a211b, #0a0807 75%); border-radius: 12px; overflow: hidden; margin: 0 auto; width: 100%; aspect-ratio: 16 / 9; container-type: inline-size; }
 .stage[data-aspect="9:16"] { aspect-ratio: 9 / 16; width: min(100%, 340px); }
+.stage[data-aspect="1:1"] { aspect-ratio: 1 / 1; width: min(100%, 420px); }
+.stage[data-aspect="4:5"] { aspect-ratio: 4 / 5; width: min(100%, 380px); }
 .stage video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
 .stage video:not([src]) { display: none; }
 .stage-empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--dim); font-size: .9rem; padding: 20px; text-align: center; }
 .caption { position: absolute; left: 6%; right: 6%; bottom: 7%; margin: 0; text-align: center; white-space: pre-line; line-height: 1.35;
   font-size: calc(var(--cap-size, 46) / 1080 * 56.25cqw); color: var(--cap-color, #fff); font-family: var(--cap-font, "Mukta"), "Noto Sans Devanagari", sans-serif; }
-.stage[data-aspect="9:16"] .caption { font-size: calc(var(--cap-size, 46) / 1080 * 100cqw); bottom: 16%; }
+/* 9:16, 1:1 and 4:5 are all sized off a 1080-wide canvas (vertical/square, not 1920-wide landscape). */
+.stage[data-aspect="9:16"] .caption, .stage[data-aspect="1:1"] .caption, .stage[data-aspect="4:5"] .caption { font-size: calc(var(--cap-size, 46) / 1080 * 100cqw); bottom: 16%; }
 .caption.look-outline { text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 2px 8px #000; }
 .caption.look-box span { background: #000c; padding: .08em .35em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .caption:empty { display: none; }

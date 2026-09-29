@@ -31,6 +31,11 @@ All paths are relative to the repo root. The engine is in `subtitles/`; the guid
 - Never change the script's words. Only split and time them.
 - Preeti output can't show English letters. If the script mixes English into Nepali, say so and
   suggest Unicode.
-- Timing is proportional to reading length, not speech recognition. For exact sync, the user
+- Timing is proportional to reading length by default. When a real audio/video file is given
+  (`media_path` / `--media`), the tool also detects its actual pauses (ffmpeg `silencedetect`,
+  local, free, no speech recognition) and snaps nearby subtitle breaks onto them — this happens
+  automatically, no approval needed, same as the rest of subtitle generation. Report how many
+  breaks matched a real pause (the tool returns `pause_alignment`) so the user can see how much of
+  the timing came from the audio itself vs. an estimate. For exact sync beyond that, the user
   nudges timings in the web editor.
 - Save into `Outputs/<pack>/subtitles/` or `Outputs/subtitles/`, and return the full path.

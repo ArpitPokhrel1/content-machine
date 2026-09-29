@@ -68,7 +68,7 @@
       <div class="field">
         <label for="maxChars">Characters per line <output id="maxCharsOut">42</output></label>
         <input type="range" id="maxChars" min="20" max="60" value="42">
-        <p class="hint">About 42 for 16:9 video, 30–32 for vertical 9:16.</p>
+        <p class="hint">About 42 for 16:9 video, 30–32 for narrower shapes like 9:16, 1:1 or 4:5.</p>
       </div>
       <div class="seg" role="radiogroup" aria-label="Lines per subtitle">
         <span class="seg-label">Lines</span>
@@ -103,6 +103,8 @@
         <div class="seg seg-sm" role="radiogroup" aria-label="Preview shape">
           <label><input type="radio" name="aspect" value="16:9" checked> 16:9</label>
           <label><input type="radio" name="aspect" value="9:16"> 9:16</label>
+          <label><input type="radio" name="aspect" value="1:1"> 1:1</label>
+          <label><input type="radio" name="aspect" value="4:5"> 4:5</label>
         </div>
       </div>
       <div class="timeline" id="timeline" role="group" aria-label="Timeline: click a subtitle to jump to it">

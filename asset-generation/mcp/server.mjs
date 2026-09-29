@@ -268,18 +268,19 @@ server.registerTool("list_outputs", {
 // ---------------------------------------------------------------------------------------------
 // Part 3: subtitles (script -> SRT/VTT for Premiere Pro and DaVinci Resolve)
 const subtitlesLib = import(pathToFileURL(path.join(repoRoot, "subtitles", "lib", "subtitles.mjs")).href);
+const silenceLib = import(pathToFileURL(path.join(repoRoot, "subtitles", "silence.mjs")).href);
 
 server.registerTool("make_subtitles", {
-  description: "Turn a script into a subtitle file (.srt or .vtt) timed across the total audio/video length, saved on the user's disk. encoding 'unicode' works with Unicode fonts (Mukta, Kalimati, Noto...); 'preeti' converts the text to Preeti keys for Preeti and the Preeti-encoded fonts on anepali.com (Ganess, Aakriti, Kanchan...). Give the script text, or a pack name to use its script.txt. Give duration_seconds, or media_path to read the length with ffprobe. Premiere Pro: File > Import, drag onto the timeline, then set the font. DaVinci Resolve: File > Import > Subtitle, then set the font in the subtitle track style.",
+  description: "Turn a script into a subtitle file (.srt or .vtt) timed across the total audio/video length, saved on the user's disk. encoding 'unicode' works with Unicode fonts (Mukta, Kalimati, Noto...); 'preeti' converts the text to Preeti keys for Preeti and the Preeti-encoded fonts on anepali.com (Ganess, Aakriti, Kanchan...). A subtitle file cannot carry a font; Preeti output looks like scrambled Latin letters until a Preeti-type font is applied in the editor \u2014 that is normal, not a bug. Give the script text, or a pack name to use its script.txt. Give duration_seconds, or media_path to read the length with ffprobe. When media_path is a real audio/video file, its actual pauses are detected (ffmpeg silencedetect, local and free) and cue breaks are snapped onto the ones near where reading-length timing already put them, so subtitles change when the speaker actually pauses; set align_pauses: false to skip this and time purely by reading length. Premiere Pro: File > Import, drag onto the timeline, then set the font. DaVinci Resolve: File > Import > Subtitle, then set the font in the subtitle track style.",
   inputSchema: {
     script: z.string().optional(), pack: z.string().optional(),
     duration_seconds: z.number().positive().optional(), media_path: z.string().optional(),
     encoding: z.enum(["unicode", "preeti"]).optional(), format: z.enum(["srt", "vtt"]).optional(),
     max_chars: z.number().int().min(12).max(80).optional(), lines: z.number().int().min(1).max(2).optional(),
-    name: z.string().optional()
+    align_pauses: z.boolean().optional(), name: z.string().optional()
   }
-}, async ({ script: body, pack, duration_seconds, media_path, encoding = "unicode", format = "srt", max_chars = 42, lines = 2, name }) => {
-  const { makeCues, buildFile } = await subtitlesLib;
+}, async ({ script: body, pack, duration_seconds, media_path, encoding = "unicode", format = "srt", max_chars = 42, lines = 2, align_pauses = true, name }) => {
+  const { makeCues, buildFile, alignPauses } = await subtitlesLib;
   let dir = path.join(outputsRoot, "subtitles");
   if (pack) { dir = path.join(packDir(pack), "subtitles"); body ??= readFileSync(path.join(packDir(pack), "script.txt"), "utf8"); }
   if (!body) return fail("Give script text or a pack name.");
@@ -289,11 +290,24 @@ server.registerTool("make_subtitles", {
     catch { return fail(`Could not read the length of ${media_path}. Is ffmpeg installed?`); }
   }
   if (!total) return fail("Give duration_seconds (total audio/video length) or media_path.");
-  const cues = makeCues(body, total, { maxChars: max_chars, maxLines: lines });
+  let cues = makeCues(body, total, { maxChars: max_chars, maxLines: lines });
+  let pausesFound = 0, snapped = 0;
+  if (media_path && align_pauses && cues.length > 1) {
+    try {
+      const { detectPauses } = await silenceLib;
+      const pauses = await detectPauses(media_path, { totalSeconds: total });
+      pausesFound = pauses.length;
+      ({ cues, snapped } = alignPauses(cues, pauses));
+    } catch { /* pause detection is a bonus; keep the reading-length timing if ffmpeg can't do it */ }
+  }
   mkdirSync(dir, { recursive: true });
   const file = path.join(dir, `${slug(name || pack || "subtitles")}-${encoding}.${format}`);
   writeFileSync(file, "\uFEFF" + buildFile(cues, { format, encoding }), "utf8");
-  return text({ file, cues: cues.length, seconds: total, encoding, preview: cues.slice(0, 3), editor: "Open https://content.tarjun.com/subtitles to fine-tune timings and preview fonts." });
+  return text({
+    file, cues: cues.length, seconds: total, encoding, preview: cues.slice(0, 3),
+    pause_alignment: media_path && align_pauses ? { pauses_detected: pausesFound, breaks_matched_to_a_pause: snapped, breaks_total: Math.max(0, cues.length - 1) } : undefined,
+    editor: "Open https://content.tarjun.com/subtitles to fine-tune timings and preview fonts."
+  });
 });
 
 // ---------------------------------------------------------------------------------------------

@@ -12,7 +12,9 @@ your browser, and nothing is uploaded.
    evenly across subtitles, and each line stays under your line width (42 characters by default).
 2. **Times them to your audio/video length.** Longer lines stay on screen longer, and there's a
    small pause after each sentence. You can load the audio or video file itself so the length is
-   exact, or type the length.
+   exact, or type the length. Load the file (CLI/MCP: `--media` / `media_path`) and the actual
+   pauses in it are detected and used to snap subtitle breaks onto them, so subtitles change when
+   the speaker really pauses instead of only by a reading-length estimate.
 3. **Lets you fix anything:** edit the text, drag timings, split and merge subtitles, and preview
    everything on your own video with the chosen font.
 4. **Exports** `.srt` (Premiere Pro, DaVinci Resolve, YouTube) or `.vtt` (web).
@@ -58,13 +60,22 @@ node subtitles/cli.mjs --from old.srt --duration 95 -o retimed.srt
 Options: `--encoding unicode|preeti`, `--input-encoding preeti` (the script itself is typed in
 Preeti), `--format srt|vtt`, `--max-chars 42`, `--lines 1|2`, `--start 0`.
 
-Agents use the `make_subtitles` tool of the `content-machine` MCP, which does the same and saves
-into `Outputs/`.
+With `--media`, the real pauses in the audio track are detected (ffmpeg's `silencedetect`, local
+and free — no speech recognition, no upload) and subtitle breaks near a detected pause are snapped
+onto it; `--no-pauses` turns this off and times purely by reading length, like before, and
+`--min-pause` (default 0.3s) sets how long a silence has to be to count. The tool reports how many
+breaks matched a real pause, e.g. `4/7 breaks matched to real pauses in the audio`.
+
+Agents use the `make_subtitles` tool of the `content-machine` MCP, which does the same (pass
+`media_path` for pause alignment, `align_pauses: false` to turn it off) and saves into `Outputs/`.
 
 ## Files
 
-- `lib/subtitles.mjs`: splitting, timing, SRT/VTT read and write (runs in Node and the browser)
+- `lib/subtitles.mjs`: splitting, timing, pause-alignment math, SRT/VTT read and write (runs in
+  Node and the browser)
 - `lib/preeti.mjs`: Unicode ⇄ Preeti conversion
+- `silence.mjs`: detects real pauses in a media file with ffmpeg (Node-only; not shipped to the
+  browser editor)
 - `fonts.json`: the font catalogue shown by the editor
 - `cli.mjs`: the command-line tool
 - `test/`: `node --test` (includes a round trip of every Nepali word in the studio's scripts)

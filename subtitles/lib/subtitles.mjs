@@ -122,6 +122,45 @@ const round = n => Math.round(n * 1000) / 1000;
 /** Re-time existing cues (keeping their text) to a new total length. */
 export const retime = (cues, totalSeconds, opts) => timeCues(cues.map(c => c.text), totalSeconds, opts);
 
+/**
+ * Snap cue boundaries onto real pauses detected in the audio (see silence.mjs), where one lines
+ * up close enough to the proportional estimate from timeCues; every boundary with no matching
+ * pause nearby keeps its proportional timing. Pure — takes already-detected silence intervals, so
+ * it needs no ffmpeg and runs in the browser too.
+ * @param {{start:number,end:number,text:string}[]} cues  from timeCues, in order
+ * @param {{start:number,end:number}[]} pauses  silence intervals detected in the audio
+ * @param {{minPause?: number, gap?: number}} opts
+ *   minPause: shortest silence that counts as a real pause, in seconds (default 0.3; shorter gaps
+ *   are just breath/consonant noise and are ignored)
+ * @returns {{cues:{start:number,end:number,text:string}[], snapped:number}} snapped = how many
+ *   internal boundaries were moved onto a detected pause
+ */
+export function alignPauses(cues, pauses, { minPause = 0.3, gap = 0.04 } = {}) {
+  if (cues.length < 2 || !pauses?.length) return { cues, snapped: 0 };
+  const mids = pauses.filter(p => p.end - p.start >= minPause).map(p => round((p.start + p.end) / 2)).sort((a, b) => a - b);
+  if (!mids.length) return { cues, snapped: 0 };
+  const out = cues.map(c => ({ ...c }));
+  let snapped = 0, usedUpto = -Infinity;
+  for (let i = 1; i < out.length; i++) {
+    const prior = out[i].start;
+    const durA = out[i - 1].end - out[i - 1].start, durB = out[i].end - out[i].start;
+    const tolerance = Math.min(2, 0.5 * Math.min(durA, durB));
+    let best = null;
+    for (const m of mids) {
+      if (m <= usedUpto) continue;
+      const d = Math.abs(m - prior);
+      if (d <= tolerance && (!best || d < Math.abs(best - prior))) best = m;
+    }
+    if (best !== null) {
+      out[i - 1].end = round(Math.max(out[i - 1].start + 0.1, best - gap / 2));
+      out[i].start = round(best + gap / 2);
+      usedUpto = best;
+      snapped++;
+    }
+  }
+  return { cues: out, snapped };
+}
+
 /** Shift every cue by `seconds` (negative = earlier), never below zero. */
 export const shift = (cues, seconds) => cues.map(c => ({ ...c, start: round(Math.max(0, c.start + seconds)), end: round(Math.max(0.1, c.end + seconds)) }));
 
