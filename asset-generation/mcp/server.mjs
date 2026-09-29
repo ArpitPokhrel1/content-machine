@@ -311,6 +311,30 @@ server.registerTool("make_subtitles", {
 });
 
 // ---------------------------------------------------------------------------------------------
+// Optional audio recognition is separate from the existing free make_subtitles tool.
+server.registerTool("recognize_subtitles", {
+  description: "Match a supplied Nepali script to audio with Cloudflare Whisper Large v3 Turbo. By default only estimates cost, with no upload. Set submit_to_cloudflare only when the user has authorized sending this recording to Cloudflare and its model usage. Requires uv, Python 3.11+ and Cloudflare credentials in asset-generation/.env or environment. Returns SRT/ASS and a .review.json for the subtitle editor; portrait Unicode is the recommended default. Never removes script words. Failures are not automatically retried.",
+  inputSchema: {
+    script: z.string().min(1), media_path: z.string().min(1), name: z.string().optional(),
+    submit_to_cloudflare: z.boolean().optional(), preeti: z.boolean().optional(),
+    preset: z.enum(["all", "portrait", "narrative", "shorts", "calm", "word"]).optional()
+  }
+}, async ({ script, media_path, name, submit_to_cloudflare = false, preeti = false, preset = "all" }) => {
+  const dir = path.join(outputsRoot, "subtitles", slug(name || "audio"));
+  mkdirSync(dir, { recursive: true });
+  const scriptFile = path.join(dir, "script.txt");
+  writeFileSync(scriptFile, script, "utf8");
+  const args = [path.join(repoRoot, "subtitles", "audio-cli.mjs"), "recognize", "--audio", path.resolve(repoRoot, media_path),
+    "--script", scriptFile, "--out", dir, "--preset", preset];
+  if (submit_to_cloudflare) args.push("--submit");
+  if (preeti) args.push("--preeti");
+  try {
+    const result = await run(process.execPath, args, { cwd: repoRoot, maxBuffer: 4 * 1024 * 1024 });
+    return text(JSON.parse(result.stdout));
+  } catch (error) { return fail(error.stderr?.trim() || error.message); }
+});
+
+// ---------------------------------------------------------------------------------------------
 // Part 2: maps (deterministic, real boundary data; wraps map-animation/agent-map.mjs)
 async function agentMap(args) {
   if (!existsSync(path.join(mapsRoot, "node_modules"))) throw new Error("Map Animation Studio isn't installed on this machine. Run setup again with --maps (Windows: setup.ps1 -Maps).");

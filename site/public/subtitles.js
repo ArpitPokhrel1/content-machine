@@ -3,6 +3,8 @@
 // the CLI and the content-machine MCP tool use.
 import { splitScript, timeCues, retime, shift, buildFile, parseFile, parseTime, visibleLength, unicodeToPreeti, preetiToUnicode } from "./sub/subtitles.mjs";
 
+import { parseAudioReview, STRATEGY_LABELS, buildAss } from "./sub/audio-review.mjs";
+
 const $ = s => document.querySelector(s);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const radio = name => document.querySelector(`input[name="${name}"]:checked`)?.value;
@@ -15,6 +17,7 @@ let cues = [];
 let total = 0;            // seconds: from the media file, else the typed length
 let mediaName = "";
 let active = -1;
+let audioReview = null, audioStrategy = null;
 let fonts = { unicode: [], preeti: [], english: [] };
 const DEFAULT_ON = {
   unicode: ["Mukta", "Noto Sans Devanagari", "Hind", "Kalimati", "Mangal", "Nirmala UI", "Yatra One", "Rozha One", "Tiro Devanagari Hindi", "Kalam", "Baloo 2"],
@@ -28,7 +31,7 @@ function save() {
     localStorage.setItem(KEY, JSON.stringify({
       script: $("#script").value, inEnc: radio("inEnc"), duration: $("#duration").value, maxChars: $("#maxChars").value,
       lines: radio("lines"), startAt: $("#startAt").value, cues, outEnc: radio("outEnc"), font: $("#font").value,
-      size: $("#size").value, color: $("#color").value, look: radio("look"), aspect: radio("aspect"), enabled
+      size: $("#size").value, color: $("#color").value, look: radio("look"), aspect: radio("aspect"), captionPosition: $("#captionPosition").value, enabled
     }));
   } catch { /* private mode or storage blocked: the editor still works, it just won't remember */ }
 }
@@ -43,6 +46,7 @@ function restore() {
   setRadio("inEnc", s.inEnc); setRadio("lines", s.lines); setRadio("outEnc", s.outEnc); setRadio("look", s.look); setRadio("aspect", s.aspect);
   $("#duration").value = s.duration || ""; $("#maxChars").value = s.maxChars || 42; $("#startAt").value = s.startAt || "0:00";
   $("#size").value = s.size || 46; $("#color").value = s.color || "#ffffff";
+  $("#captionPosition").value = ["bottom", "center", "top"].includes(s.captionPosition) ? s.captionPosition : "bottom";
   cues = Array.isArray(s.cues) ? s.cues : [];
   if (s.enabled) enabled = { ...DEFAULT_ON, ...s.enabled };
   restore.font = s.font;
@@ -138,6 +142,7 @@ function applyStyle() {
   stage.style.setProperty("--cap-color", $("#color").value);
   cap.className = `caption look-${radio("look")}`;
   stage.dataset.aspect = radio("aspect");
+  stage.dataset.position = $("#captionPosition").value;
   fontNote();
   renderCaption(true);
   saveSoon();
@@ -210,6 +215,7 @@ function renderCues() {
         <button type="button" data-act="split" title="Split at the cursor">Split</button>
         <button type="button" data-act="merge" ${i === cues.length - 1 ? "disabled" : ""}>Merge with next</button>
         <button type="button" data-act="delete">Delete</button>
+        ${c.needs_review ? `<span class="warn">Check voice alignment</span>` : ""}
         ${preeti && /[A-Za-z]/.test(c.text) ? `<span class="warn">English letters won't show in Preeti</span>` : ""}
         <span class="w${w > maxChars ? " over" : ""}" title="Longest line, in characters">${w}/${maxChars}</span>
       </div>
@@ -219,8 +225,9 @@ function renderCues() {
   $("#stage-empty").hidden = cues.length > 0 || Boolean(player.src);
   $("#addCue").hidden = cues.length === 0;
   $("#cue-count").textContent = cues.length ? `${cues.length} subtitles` : "";
-  ["#exPremiere", "#exResolve", "#exVtt"].forEach(s => { $(s).disabled = cues.length === 0; });
+  ["#exPremiere", "#exResolve", "#exVtt", "#exAss"].forEach(s => { $(s).disabled = cues.length === 0; });
   renderTimeline();
+  active = -1; tick();
   fontNote();
   saveSoon();
 }
@@ -308,6 +315,7 @@ $("#make").addEventListener("click", () => {
   if (!(t > 0)) { $("#duration").focus(); return msg("#make-msg", "Load your audio/video, or type its length (for example 1:35)."); }
   if (start >= t) return msg("#make-msg", "The first subtitle starts after the end of the video.");
   const texts = splitScript(script, { maxChars: Number($("#maxChars").value), maxLines: Number(radio("lines")) });
+  clearAudioReview();
   cues = timeCues(texts, t, { start });
   active = -1;
   renderCues();
@@ -317,7 +325,8 @@ $("#make").addEventListener("click", () => {
 $("#retime").addEventListener("click", () => {
   const t = currentTotal();
   if (!cues.length || !(t > 0)) return;
-  cues = retime(cues, t, { start: parseTime($("#startAt").value) || 0 });
+  cues = retime(cues, t, { start: parseTime($("#startAt").value) || 0 }).map(c => ({start:c.start, end:c.end, text:c.text}));
+  msg("#make-msg", "Timings replaced with reading-length estimates. Import the audio review again to recover the original voice timing.");
   renderCues();
 });
 $("#shiftGo").addEventListener("click", () => {
@@ -332,11 +341,65 @@ $("#importSrt").addEventListener("change", async e => {
   const parsed = parseFile(await file.text(), { encoding: radio("inEnc") });
   e.target.value = "";
   if (!parsed.length) return msg("#make-msg", "That file has no subtitles I can read.");
+  clearAudioReview();
   cues = parsed;
   if (!$("#duration").value && !$("#player").src) $("#duration").value = fmt(cues.at(-1).end);
   renderCues();
   msg("#make-msg", `Opened ${file.name}: ${cues.length} subtitles.`);
 });
+
+// ---------- optional voice alignment review ----------
+function clearAudioReview() {
+  audioReview = null; audioStrategy = null;
+  $("#audio-strategies").hidden = true;
+  $("#audio-evidence").hidden = true;
+  $("#audio-waveform").hidden = true;
+}
+function applyAudioStrategy(name) {
+  if (audioStrategy) audioReview.strategies[audioStrategy].cues = structuredClone(cues);
+  audioStrategy = name;
+  cues = structuredClone(audioReview.strategies[name].cues);
+  setRadio("outEnc", "unicode"); setRadio("aspect", "9:16"); setRadio("lines", "2");
+  $("#size").value = "60"; $("#maxChars").value = "32"; $("#maxCharsOut").textContent = "32";
+  $("#captionPosition").value = "bottom";
+  if (!enabled.unicode.includes("Noto Sans Devanagari")) enabled.unicode.push("Noto Sans Devanagari");
+  $("#font").value = ""; restore.font = "Noto Sans Devanagari"; fillFontSelect();
+  const flagged = cues.filter(c => c.needs_review).length;
+  msg("#audio-summary", `${audioReview.model} · ${flagged} cues to review` + (audioReview.cost !== null ? ` · recognition estimate $${audioReview.cost.toFixed(6)} before allowances` : ""));
+  renderCues(); seek(cues[0].start);
+}
+$("#importAudioReview").addEventListener("change", async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    if (file.size > 20 * 1024 * 1024) throw new Error("The review file is too large (20 MB maximum).");
+    const parsed = parseAudioReview(await file.text());
+    // Validate fully before replacing the user's working captions.
+    audioReview = parsed; audioStrategy = null;
+    $("#script").value = parsed.script; setRadio("inEnc", "unicode");
+    if (!player.src) $("#duration").value = fmt(parsed.audio.duration);
+    mediaName = parsed.audio.name.replace(/\.[^.]+$/, "");
+    $("#audioStrategy").replaceChildren(...Object.keys(parsed.strategies).map(name => new Option(STRATEGY_LABELS[name] || name, name)));
+    $("#audioStrategy").value = parsed.defaultStrategy;
+    $("#audio-strategies").hidden = false;
+    const wave = $("#audio-waveform"); wave.replaceChildren(); wave.hidden = !parsed.waveform.length;
+    if (parsed.waveform.length) {
+      // Bound drawing work for long recordings while retaining the loudest sample per bin.
+      const step = Math.max(1, Math.ceil(parsed.waveform.length / 900));
+      const values = [];
+      for (let i=0; i<parsed.waveform.length; i+=step) values.push(Math.max(...parsed.waveform.slice(i, i+step)));
+      const max = Math.max(...values) || 1;
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", values.map((v,i)=>`M${i*900/values.length},${20-18*v/max}V${20+18*v/max}`).join(" "));
+      wave.append(path);
+    }
+    applyAudioStrategy(parsed.defaultStrategy); updateStats();
+    const mismatch = player.src && Math.abs(player.duration - parsed.audio.duration) > .25;
+    msg("#audio-import-msg", mismatch ? "Loaded timing, but the selected media length differs. Load the original recording before judging sync." : `Loaded ${file.name}. Load ${parsed.audio.name} to check the voice; script wording is preserved.`);
+  } catch (error) { msg("#audio-import-msg", error.message); }
+  finally { e.target.value = ""; }
+});
+$("#audioStrategy").addEventListener("change", e => applyAudioStrategy(e.target.value));
 
 // ---------- media + playback ----------
 const player = $("#player");
@@ -395,7 +458,13 @@ function tick() {
     if (i >= 0) {
       $(`.cue[data-i="${i}"]`)?.classList.add("on");
       $(`.tl-cues button[data-i="${i}"]`)?.classList.add("on");
-      if (playing && !document.activeElement?.closest(".cues")) $(`.cue[data-i="${i}"]`)?.scrollIntoView({ block: "nearest" });
+      if (playing && !document.activeElement?.closest(".cues")) {
+        const row = $(`.cue[data-i="${i}"]`), list = $("#cues");
+        if (row) {
+          const delta = row.getBoundingClientRect().top - list.getBoundingClientRect().top;
+          if (delta < 0 || delta + row.clientHeight > list.clientHeight) list.scrollTop += delta;
+        }
+      }
     }
     renderCaption();
   }
@@ -403,6 +472,9 @@ function tick() {
 function renderCaption() {
   const cap = $("#caption");
   const c = cues[active];
+  const evidence = $("#audio-evidence");
+  evidence.hidden = !c?.reason?.length;
+  evidence.textContent = c?.reason?.length ? `Timing evidence: ${c.reason.join(", ")}.${c.onset_adjustment_ms ? ` Start refined +${c.onset_adjustment_ms} ms.` : ""}${c.median_pitch_hz ? ` Pitch ${c.median_pitch_hz} Hz.` : ""}${c.graphemes_per_second ? ` ${c.graphemes_per_second} visual characters/s.` : ""}${c.needs_review ? " Listen and check this cue." : ""} Acoustic estimates; edits may change their relevance.` : "";
   if (!c) { cap.innerHTML = ""; return; }
   const name = $("#font").value;
   const preeti = radio("outEnc") === "preeti" && isInstalled(name);
@@ -414,10 +486,10 @@ function renderCaption() {
 // ---------- export ----------
 function download(format, editor) {
   const enc = radio("outEnc");
-  const body = buildFile(cues, { format, encoding: enc });
+  const body = format === "ass" ? buildAss(cues, {aspect:radio("aspect"), font:radio("outEnc") === "preeti" ? "Noto Sans Devanagari" : $("#font").value, size:Number($("#size").value), color:$("#color").value, position:$("#captionPosition").value, look:radio("look")}) : buildFile(cues, { format, encoding: enc });
   const base = (mediaName || "subtitles").replace(/[\\/:*?"<>|]+/g, "-").slice(0, 60);
-  const name = `${base}-${enc}.${format}`;
-  const url = URL.createObjectURL(new Blob(["﻿" + body], { type: format === "vtt" ? "text/vtt" : "application/x-subrip" }));
+  const name = `${base}-${format === "ass" ? "unicode" : enc}.${format}`;
+  const url = URL.createObjectURL(new Blob(["﻿" + body], { type: format === "vtt" ? "text/vtt" : format === "ass" ? "text/plain" : "application/x-subrip" }));
   const a = Object.assign(document.createElement("a"), { href: url, download: name });
   document.body.append(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 4000);
@@ -431,6 +503,7 @@ function download(format, editor) {
 $("#exPremiere").addEventListener("click", () => download("srt", "premiere"));
 $("#exResolve").addEventListener("click", () => download("srt", "resolve"));
 $("#exVtt").addEventListener("click", () => download("vtt", "web"));
+$("#exAss").addEventListener("click", () => download("ass", "web"));
 
 function toast(text) {
   document.querySelector(".toast")?.remove();
@@ -445,7 +518,7 @@ $("#script").addEventListener("input", () => { updateStats(); saveSoon(); });
 $("#duration").addEventListener("change", () => { renderTimeline(); tick(); save(); });
 document.querySelectorAll('input[name="outEnc"]').forEach(r => r.addEventListener("change", () => { fillFontSelect(); renderCues(); }));
 document.querySelectorAll('input[name="inEnc"], input[name="lines"]').forEach(r => r.addEventListener("change", () => { updateStats(); save(); }));
-["#font", "#size", "#color"].forEach(s => $(s).addEventListener("input", applyStyle));
+["#font", "#size", "#color", "#captionPosition"].forEach(s => $(s).addEventListener("input", applyStyle));
 document.querySelectorAll('input[name="look"], input[name="aspect"]').forEach(r => r.addEventListener("change", applyStyle));
 function updateStats() {
   const s = scriptUnicode().trim();

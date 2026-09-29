@@ -19,6 +19,18 @@ your browser, and nothing is uploaded.
    everything on your own video with the chosen font.
 4. **Exports** `.srt` (Premiere Pro, DaVinci Resolve, YouTube) or `.vtt` (web).
 
+## Optional: match the voice with Whisper
+
+For Nepali speech recognition, use `npm run srt:audio -- recognize --audio voice.mp3 --script script.txt`.
+The first run estimates cost without uploading; add `--submit` to send the recording to Cloudflare
+Workers AI. Open the resulting `.review.json` in the existing editor for **Portrait (9:16),
+Narrative, Short phrases, Calm, or One word** timings, using your script's exact words.
+
+The new workflow is optional: the script/length editor, local pause detection, original CLI and
+`make_subtitles` MCP tool continue to work as before. It requires uv and Cloudflare credentials.
+See [the complete audio guide](docs/audio-recognition.md) for setup, costs, local preview, cache
+behaviour, review flags, font/position controls and SRT/ASS export.
+
 ## Unicode or Preeti?
 
 A subtitle file can't carry a font. You choose the font inside Premiere or Resolve after

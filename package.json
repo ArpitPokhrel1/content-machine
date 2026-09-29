@@ -10,6 +10,8 @@
     "mcp": "node asset-generation/mcp/server.mjs",
     "maps": "node map-animation/agent-map.mjs",
     "srt": "node subtitles/cli.mjs",
-    "test": "cd asset-generation && npm test && cd ../subtitles && node --test"
+    "test": "cd asset-generation && npm test && cd ../subtitles && node --test",
+    "srt:audio": "node subtitles/audio-cli.mjs",
+    "test:audio": "uv run --project subtitles/audio --extra dev pytest subtitles/audio/tests"
   }
 }
