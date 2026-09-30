@@ -36,7 +36,7 @@
       <p class="eyebrow">03 · Subtitles</p>
       <h1>Script to subtitles</h1>
     </div>
-    <p class="privacy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.5 8 11 4.6-1.5 8-6 8-11V5l-8-3Z"/></svg> Free. Runs in your browser; your script and video never leave your computer.</p>
+    <p class="privacy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.5 8 11 4.6-1.5 8-6 8-11V5l-8-3Z"/></svg> This editor runs locally in your browser. Optional Whisper recognition uses Cloudflare.</p>
   </div>
 
   <!-- 1. SCRIPT + LENGTH -->
@@ -83,6 +83,19 @@
 
     <button class="btn btn-primary btn-block" id="make">Make subtitles</button>
     <p class="hint" id="make-msg" role="status"></p>
+    <details class="more" id="audio-workflow">
+      <summary>Match subtitles to the voice · Whisper</summary>
+      <p class="hint">Use the optional local audio command to match your script to Nepali speech, then open its review file here. Recognition sends audio to Cloudflare; importing and editing stay on your computer.</p>
+      <pre class="audio-command">npm run srt:audio -- recognize
+  --audio voice.mp3 --script script.txt
+  --out Outputs/subtitles/voice</pre>
+      <p class="hint">Run as one line. This estimates the cost without uploading. Add <code>--submit</code> to recognize with Whisper Large v3 Turbo ($0.000513/audio minute, rate checked September 2026). Requires uv and Cloudflare credentials; see the subtitle guide in the downloaded repo.</p>
+      <label class="btn btn-ghost btn-sm file-btn">
+        <input type="file" id="importAudioReview" accept=".json,application/json">
+        Open audio timing (.review.json)
+      </label>
+      <p class="hint" id="audio-import-msg" role="status"></p>
+    </details>
   </section>
 
   <!-- PREVIEW + CUES -->
@@ -107,12 +120,19 @@
           <label><input type="radio" name="aspect" value="4:5"> 4:5</label>
         </div>
       </div>
+      <svg id="audio-waveform" class="audio-waveform" viewBox="0 0 900 40" role="img" aria-label="Vocal loudness across the recording" hidden></svg>
       <div class="timeline" id="timeline" role="group" aria-label="Timeline: click a subtitle to jump to it">
         <div class="tl-cues" id="tl-cues"></div>
         <div class="tl-head" id="tl-head"></div>
       </div>
     </div>
 
+    <div id="audio-strategies" hidden>
+      <div class="field"><label for="audioStrategy">Voice-aligned strategy</label><select id="audioStrategy"></select></div>
+      <p class="hint" id="audio-summary"></p>
+      <p class="hint">Edits are kept per strategy while this page is open. Export before closing. “Re-time all” replaces voice timing with a duration estimate.</p>
+    </div>
+    <p class="hint" id="audio-evidence" role="status" hidden></p>
     <div class="cue-tools">
       <h2><span class="step">3</span> Check and edit <span class="count" id="cue-count"></span></h2>
       <div class="cue-tools-actions">
@@ -161,12 +181,15 @@
       <label><input type="radio" name="look" value="box"> Box</label>
       <label><input type="radio" name="look" value="plain"> Plain</label>
     </div>
+    <div class="field"><label for="captionPosition">Screen position</label><select id="captionPosition"><option value="bottom">Lower safe area</option><option value="center">Center</option><option value="top">Top</option></select></div>
     <p class="hint">Style is for the preview. Set the same font, size and colour in your editor after importing.</p>
 
     <div class="export">
       <button class="btn btn-primary btn-block" id="exPremiere" disabled>Export for Premiere Pro <small>.srt</small></button>
       <button class="btn btn-primary btn-block" id="exResolve" disabled>Export for DaVinci Resolve <small>.srt</small></button>
       <button class="btn btn-ghost btn-block btn-sm" id="exVtt" disabled>WebVTT (.vtt) for web players</button>
+      <button class="btn btn-ghost btn-block btn-sm" id="exAss" disabled>Styled Unicode ASS</button>
+      <p class="hint">ASS carries style for compatible players. Use SRT for Resolve or Premiere and apply the font and position there.</p>
       <p class="hint" id="export-msg" role="status"></p>
     </div>
   </section>

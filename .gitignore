@@ -34,3 +34,11 @@ campaign-poster-tool/public/assets/*.png
 
 .vercel
 .gstack/
+
+# Optional speech-recognition runtime and local build artifacts
+.venv/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+site/public/sub/
+site/bundle/

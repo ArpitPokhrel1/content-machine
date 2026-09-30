@@ -11,7 +11,7 @@ const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const repoRoot = path.resolve(siteRoot, "..");
 const include = ["README.md", "docs", "CLAUDE.md", "AGENTS.md", "setup.ps1", "setup.sh", ".gitignore", ".gitattributes", ".claude/skills", ".claude/agents", "codex-skills", "examples", "asset-generation", "map-animation", "subtitles", "package.json"];
 const exclude = [
-  "node_modules", ".env", ".env.bak", "*.log", "asset-generation/output", "map-animation/output",
+  "node_modules", ".venv", "__pycache__", ".pytest_cache", "*.egg-info", ".env", ".env.bak", ".env.local", ".env.production", ".env.development", "*.log", "asset-generation/output", "map-animation/output",
   "map-animation/data/cache", "map-animation/dist",
   // Studio session log: names the studio Cloud project and bucket; not needed by anyone else.
   "asset-generation/archive/MASTER_PROMPT_VIDEO_PIPELINE.md"

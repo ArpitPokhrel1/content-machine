@@ -130,3 +130,11 @@ and your settings and your Outputs folder stay exactly as they were.
 *Running the studio or setting up from GitHub? See the
 [Studio guide](docs/STUDIO-GUIDE.md). Every command and file format is in
 [asset-generation/README.md](asset-generation/README.md).*
+
+### Optional voice-aligned Nepali subtitles
+
+`npm run srt:audio -- recognize --audio voice.mp3 --script script.txt` estimates Cloudflare
+Whisper Large v3 Turbo usage. Add `--submit` to recognize, then open the generated `.review.json`
+in the subtitle editor. It defaults to portrait Unicode (9:16) and includes five editable pacing
+strategies. The existing subtitle tools stay local and free. See the
+[audio recognition guide](subtitles/docs/audio-recognition.md) for prerequisites and cost details.

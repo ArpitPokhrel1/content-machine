@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nepali-subtitles"
+version = "0.1.0"
+description = "Cloudflare ASR benchmarking and script-led Nepali subtitle alignment"
+requires-python = ">=3.11"
+dependencies = ["httpx>=0.28,<1", "numpy>=2,<3", "scipy>=1.14,<2", "soundfile>=0.13,<1", "regex>=2024", "python-dotenv>=1,<2", "jiwer>=4,<5", "rapidfuzz>=3,<4", "websockets>=15,<18", "npttf2utf==0.3.7", "certifi>=2024"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+nepali-subtitles = "nepali_subtitles.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
