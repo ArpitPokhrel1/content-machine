@@ -22,10 +22,10 @@ command -v ffmpeg >/dev/null 2>&1 || echo "Note: ffmpeg is missing (brew install
 # Download. An access code is only asked for if the site currently requires one.
 TMP="$(mktemp -t content-machine.XXXXXX).tar.gz"
 fetch() { curl -sSL -w '%{http_code}' -H "x-access-code: $1" "$SITE/api/download" -o "$TMP"; }
-STATUS="$(fetch "${CONTENT_MACHINE_CODE:-}")"
+STATUS="$(fetch "${CONTENT_MACHINE_CODE:-}")" || { echo "Could not reach $SITE. Check your internet connection and try again."; exit 1; }
 if [ "$STATUS" = "401" ]; then
   read -r -p "This download needs an access code. Your access code: " CODE < /dev/tty
-  STATUS="$(fetch "$CODE")"
+  STATUS="$(fetch "$CODE")" || { echo "Could not reach $SITE. Check your internet connection and try again."; exit 1; }
 fi
 if [ "$STATUS" != "200" ]; then
   [ "$STATUS" = "401" ] && echo "Download refused. Check your access code (it is case-sensitive)." || echo "Download failed (HTTP $STATUS)."

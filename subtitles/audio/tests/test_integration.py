@@ -29,8 +29,8 @@ def test_build_all_strategies_preserves_script_and_billing(tmp_path):
     for name,strategy in bundle['strategies'].items():
         assert ' '.join(c['text'] for c in strategy['cues']).split()==script.split()
         assert (output.parent/f'test.{name}.preeti.srt').exists()
-    assert 'PlayResY: 1920' in (output.parent/'test.portrait.ass').read_text()
-    assert str(tmp_path) not in output.read_text()  # no local paths in portable bundle
+    assert 'PlayResY: 1920' in (output.parent/'test.portrait.ass').read_text(encoding='utf-8-sig')
+    assert str(tmp_path) not in output.read_text(encoding='utf-8')  # no local paths in portable bundle
 
 
 def test_reject_missing_chunks_and_failed_results(tmp_path):
@@ -72,7 +72,7 @@ def test_request_cache_prevents_rebilling_and_timeout_is_not_retried(tmp_path,mo
     report=cost_report([r,cached])
     assert report['failed']==2 and report['new_requests']==1
     assert 'unknown' in report['note']
-    assert 'not-a-real-secret' not in next(tmp_path.glob('*.json')).read_text()
+    assert 'not-a-real-secret' not in next(tmp_path.glob('*.json')).read_text(encoding='utf-8')
 
 
 def test_recognition_stops_at_first_failed_chunk(tmp_path,monkeypatch):

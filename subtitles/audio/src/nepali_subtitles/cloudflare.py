@@ -47,7 +47,7 @@ def transcribe(name,audio,start,duration,cache_dir,prompt='',language='ne',refre
     elif name=='nova-3':params={'language':language,'punctuate':'true','smart_format':'true'}
     key=hashlib.sha256(audio+json.dumps([model,params,start],sort_keys=True).encode()).hexdigest()[:20]
     path=Path(cache_dir)/f'{name}-{key}.json';path.parent.mkdir(parents=True,exist_ok=True)
-    if path.exists() and not refresh:return {**json.loads(path.read_text()),'cache_hit':True}
+    if path.exists() and not refresh:return {**json.loads(path.read_text(encoding='utf-8')),'cache_hit':True}
     account,token=credentials();h=headers(token);url=f'https://api.cloudflare.com/client/v4/accounts/{account}/ai/run/{model}'
     if name=='whisper-large-v3-turbo':kwargs={'json':{'audio':base64.b64encode(audio).decode(),**params}}
     else:h['Content-Type']='audio/wav';kwargs={'content':audio,'params':params}
@@ -73,7 +73,7 @@ def transcribe(name,audio,start,duration,cache_dir,prompt='',language='ne',refre
 async def stream_flux(y,sr,cache_dir,refresh=False):
     raw=(np.clip(y,-1,1)*32767).astype('<i2').tobytes()
     key=hashlib.sha256(raw).hexdigest()[:20];path=Path(cache_dir)/f'flux-{key}.json';path.parent.mkdir(parents=True,exist_ok=True)
-    if path.exists() and not refresh:return {**json.loads(path.read_text()),'cache_hit':True}
+    if path.exists() and not refresh:return {**json.loads(path.read_text(encoding='utf-8')),'cache_hit':True}
     account,token=credentials();events=[];sent=0;began=time.monotonic();error=None;status=None
     uri=f'wss://api.cloudflare.com/client/v4/accounts/{account}/ai/run/@cf/deepgram/flux?encoding=linear16&sample_rate={sr}'
     try:

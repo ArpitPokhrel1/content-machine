@@ -27,7 +27,7 @@ import { detectPauses } from "./silence.mjs";
 const args = process.argv.slice(2);
 const opt = (name, fallback) => { const i = args.indexOf(`--${name}`); return i >= 0 ? args[i + 1] : fallback; };
 const out = args.includes("-o") ? args[args.indexOf("-o") + 1] : null;
-const valueFlags = new Set(["--duration", "--media", "--encoding", "--input-encoding", "--format", "--max-chars", "--lines", "--start", "--from", "-o"]);
+const valueFlags = new Set(["--duration", "--media", "--encoding", "--input-encoding", "--format", "--max-chars", "--lines", "--start", "--from", "--min-pause", "-o"]);
 const input = args.find((a, i) => !a.startsWith("-") && !valueFlags.has(args[i - 1]));
 
 function fail(message) { console.error(message); process.exit(1); }

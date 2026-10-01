@@ -14,7 +14,7 @@ The only machine-specific file is `asset-generation/.env` (credentials, Cloud pr
 
 # MCP and content.tarjun.com
 
-`asset-generation/mcp/server.mjs` exposes all three parts as the `content-machine` MCP server (registered by setup): asset tools, `map_*` tools and `make_subtitles`. When its tools are available, prefer them; they enforce the same gates (`generate_videos` needs `confirm_paid_generation: true`, `map_render` needs `confirm_render: true`, each set only after explicit approval). `site/` is the Vercel site at content.tarjun.com that hands out the installer (open to everyone for now; set the Vercel env var `REQUIRE_ACCESS_CODE=true` to require a code from `ACCESS_CODES`); outsiders run everything locally with their own Google account and Cloud project.
+`asset-generation/mcp/server.mjs` exposes all three parts as the `content-machine` MCP server (registered by setup): asset tools, `map_*` tools, `make_subtitles` and the optional `recognize_subtitles`. When its tools are available, prefer them; they enforce the same gates (`generate_videos` needs `confirm_paid_generation: true`, `map_render` needs `confirm_render: true`, `recognize_subtitles` needs `submit_to_cloudflare: true`, each set only after explicit approval). `site/` is the Vercel site at content.tarjun.com that hands out the installer (open to everyone for now; set the Vercel env var `REQUIRE_ACCESS_CODE=true` to require a code from `ACCESS_CODES`); outsiders run everything locally with their own Google account and Cloud project.
 
 # Parallel Processing
 
@@ -77,6 +77,7 @@ Mandatory rules:
 When the user asks for subtitles, captions or an SRT from a script, follow the `create-subtitles` skill (`.claude/skills/create-subtitles/SKILL.md`). Use the `make_subtitles` MCP tool or `node subtitles/cli.mjs`.
 
 - Never change the script's words; only split and time them.
-- Timing is proportional to reading length across the given audio/video length, not speech recognition. Point the user to content.tarjun.com/subtitles for fine-tuning.
+- By default, timing is proportional to reading length across the given audio/video length, not speech recognition. Point the user to content.tarjun.com/subtitles for fine-tuning.
+- An optional ASR-aligned workflow exists for Nepali: `recognize_subtitles` (MCP) or `npm run srt:audio -- recognize` sends the audio to Cloudflare Whisper Large v3 Turbo, aligns the supplied script to the recognized speech, and refines pause onsets — only after the user has explicitly authorized sending the recording to Cloudflare (`submit_to_cloudflare` / `--submit`). It still never changes script words. See `subtitles/docs/audio-recognition.md`.
 - `unicode` output is for Unicode fonts (Mukta, Kalimati, Noto…); `preeti` output converts the text for the 77 Preeti-encoded fonts on anepali.com (Preeti, Ganess, Aakriti, Kanchan…); Kantipur, Sagarmatha and Fontasy Himali use their own slightly different encodings and are not guaranteed. Preeti can't show English letters.
 - An .srt can't carry a font: tell the user to set it in Premiere Pro or DaVinci Resolve after importing.

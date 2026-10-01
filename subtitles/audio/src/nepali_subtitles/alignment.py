@@ -2,17 +2,21 @@
 import re
 import unicodedata
 import numpy as np
-import regex
 from rapidfuzz.distance import Levenshtein
 
 
 def normalized(s):
-    s=unicodedata.normalize('NFC',s).replace('१६','सोह्र').replace('16','सोह्र')
+    s=unicodedata.normalize('NFC',s)
     return ''.join(c for c in s if unicodedata.category(c)[0] in 'LMN' and c not in '\u200c\u200d')
 
 
+# On-screen width in character cells, matching subtitles.mjs's visibleLength: combining marks
+# that sit above/below a letter and joiners don't count, so a conjunct isn't undercounted as 1.
+_NON_SPACING = re.compile('[\u0900-\u0902\u093c\u0941-\u0948\u094d\u0951-\u0957\u0962\u0963\u200b-\u200d\ufeff]')
+
+
 def graphemes(s):
-    return len(regex.findall(r'\X',s))
+    return len(_NON_SPACING.sub('', s))
 
 
 def extract_words(records):
@@ -91,4 +95,4 @@ def metrics(reference,hypothesis):
     r,h=wordnorm(reference),wordnorm(hypothesis)
     return {'wer':jiwer.wer(r,h),'cer':jiwer.cer(r.replace(' ',''),h.replace(' ','')),
             'reference_words':len(r.split()),'hypothesis_words':len(h.split()),
-            'normalization':'NFC; strip punctuation/join controls; expand 16/१६ to सोह्र. WER keeps word spaces; CER omits spaces.'}
+            'normalization':'NFC; strip punctuation/join controls. WER keeps word spaces; CER omits spaces.'}

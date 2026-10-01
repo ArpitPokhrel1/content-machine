@@ -153,7 +153,7 @@ export function alignPauses(cues, pauses, { minPause = 0.3, gap = 0.04 } = {}) {
     }
     if (best !== null) {
       out[i - 1].end = round(Math.max(out[i - 1].start + 0.1, best - gap / 2));
-      out[i].start = round(best + gap / 2);
+      out[i].start = round(Math.max(out[i - 1].end, best + gap / 2));
       usedUpto = best;
       snapped++;
     }

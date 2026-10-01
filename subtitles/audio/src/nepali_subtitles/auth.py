@@ -18,7 +18,7 @@ def credentials():
         for path in [Path.home()/"Library/Preferences/.wrangler/config/default.toml", Path.home()/".config/.wrangler/config/default.toml", Path.home()/".wrangler/config/default.toml"]:
             if not path.exists():
                 continue
-            conf = tomllib.loads(path.read_text())
+            conf = tomllib.loads(path.read_text(encoding="utf-8"))
             expiry = conf.get("expiration_time")
             if expiry and datetime.fromisoformat(expiry.replace("Z", "+00:00")) <= datetime.now(timezone.utc):
                 raise RuntimeError("Wrangler login expired. Run npx wrangler whoami to refresh it, then retry.")

@@ -3,10 +3,11 @@ from nepali_subtitles.alignment import align,extract_words,normalized,graphemes
 from nepali_subtitles.captions import srt,stamp,validate,preeti_cues,make_cues
 
 
-def test_devanagari_combining_marks_and_numeral_match():
-    assert normalized('१६')==normalized('सोह्र')
+def test_normalization_strips_joiners_and_preserves_digits():
+    assert normalized('क‍र')==normalized('कर')=='कर'
     assert graphemes('कर्ण')<len('कर्ण')
     assert normalized('स्वर्गमा')=='स्वर्गमा'
+    assert normalized('१६')=='१६'  # digits are kept as-is, never rewritten to a spelled-out word
 
 
 def test_character_alignment_handles_split_word_without_changing_script():
@@ -78,7 +79,7 @@ def test_media_adapter_sends_content_type_and_reuses_cache(tmp_path,monkeypatch)
     assert calls[0]['headers']['Content-Type']=='audio/wav'
     assert calls[0]['params']['language']=='ne'
     assert result['http_status']==200
-    assert 'secret-test-token' not in next(tmp_path.glob('*.json')).read_text()
+    assert 'secret-test-token' not in next(tmp_path.glob('*.json')).read_text(encoding='utf-8')
 
 
 def test_preview_server_ranges_and_private_files(tmp_path):
