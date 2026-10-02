@@ -4,6 +4,8 @@
 import { splitScript, timeCues, retime, shift, buildFile, parseFile, parseTime, visibleLength, unicodeToPreeti, preetiToUnicode } from "./sub/subtitles.mjs";
 
 import { parseAudioReview, STRATEGY_LABELS, buildAss } from "./sub/audio-review.mjs";
+import { decodeToMono16k } from "./sub/audio-dsp.mjs";
+import { planRun, recognizeAndAlign, DEFAULT_PROMPT } from "./sub/voice-recognize.mjs";
 
 const $ = s => document.querySelector(s);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -18,6 +20,9 @@ let total = 0;            // seconds: from the media file, else the typed length
 let mediaName = "";
 let active = -1;
 let audioReview = null, audioStrategy = null;
+let mediaFile = null;            // the chosen recording, kept so voice matching can read its bytes
+let decoded = null;              // { file, samples }: mono 16 kHz samples, decoded once per file
+let voiceBusy = false;
 let fonts = { unicode: [], preeti: [], english: [] };
 const DEFAULT_ON = {
   unicode: ["Mukta", "Noto Sans Devanagari", "Hind", "Kalimati", "Mangal", "Nirmala UI", "Yatra One", "Rozha One", "Tiro Devanagari Hindi", "Kalam", "Baloo 2"],
@@ -368,37 +373,111 @@ function applyAudioStrategy(name) {
   msg("#audio-summary", `${audioReview.model} · ${flagged} cues to review` + (audioReview.cost !== null ? ` · recognition estimate $${audioReview.cost.toFixed(6)} before allowances` : ""));
   renderCues(); seek(cues[0].start);
 }
+// Put a validated review bundle into the editor. Shared by the two ways of getting one: voice
+// matching on this page, and opening a .review.json from the local command.
+function loadReviewBundle(parsed) {
+  audioReview = parsed; audioStrategy = null;
+  $("#script").value = parsed.script; setRadio("inEnc", "unicode");
+  if (!player.src) $("#duration").value = fmt(parsed.audio.duration);
+  mediaName = parsed.audio.name.replace(/\.[^.]+$/, "");
+  $("#audioStrategy").replaceChildren(...Object.keys(parsed.strategies).map(name => new Option(STRATEGY_LABELS[name] || name, name)));
+  $("#audioStrategy").value = parsed.defaultStrategy;
+  $("#audio-strategies").hidden = false;
+  const wave = $("#audio-waveform"); wave.replaceChildren(); wave.hidden = !parsed.waveform.length;
+  if (parsed.waveform.length) {
+    // Bound drawing work for long recordings while retaining the loudest sample per bin.
+    const step = Math.max(1, Math.ceil(parsed.waveform.length / 900));
+    const values = [];
+    for (let i=0; i<parsed.waveform.length; i+=step) values.push(Math.max(...parsed.waveform.slice(i, i+step)));
+    const max = Math.max(...values) || 1;
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", values.map((v,i)=>`M${i*900/values.length},${20-18*v/max}V${20+18*v/max}`).join(" "));
+    wave.append(path);
+  }
+  applyAudioStrategy(parsed.defaultStrategy); updateStats();
+}
+
 $("#importAudioReview").addEventListener("change", async e => {
   const file = e.target.files[0];
   if (!file) return;
   try {
     if (file.size > 20 * 1024 * 1024) throw new Error("The review file is too large (20 MB maximum).");
-    const parsed = parseAudioReview(await file.text());
     // Validate fully before replacing the user's working captions.
-    audioReview = parsed; audioStrategy = null;
-    $("#script").value = parsed.script; setRadio("inEnc", "unicode");
-    if (!player.src) $("#duration").value = fmt(parsed.audio.duration);
-    mediaName = parsed.audio.name.replace(/\.[^.]+$/, "");
-    $("#audioStrategy").replaceChildren(...Object.keys(parsed.strategies).map(name => new Option(STRATEGY_LABELS[name] || name, name)));
-    $("#audioStrategy").value = parsed.defaultStrategy;
-    $("#audio-strategies").hidden = false;
-    const wave = $("#audio-waveform"); wave.replaceChildren(); wave.hidden = !parsed.waveform.length;
-    if (parsed.waveform.length) {
-      // Bound drawing work for long recordings while retaining the loudest sample per bin.
-      const step = Math.max(1, Math.ceil(parsed.waveform.length / 900));
-      const values = [];
-      for (let i=0; i<parsed.waveform.length; i+=step) values.push(Math.max(...parsed.waveform.slice(i, i+step)));
-      const max = Math.max(...values) || 1;
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path.setAttribute("d", values.map((v,i)=>`M${i*900/values.length},${20-18*v/max}V${20+18*v/max}`).join(" "));
-      wave.append(path);
-    }
-    applyAudioStrategy(parsed.defaultStrategy); updateStats();
+    const parsed = parseAudioReview(await file.text());
+    loadReviewBundle(parsed);
     const mismatch = player.src && Math.abs(player.duration - parsed.audio.duration) > .25;
     msg("#audio-import-msg", mismatch ? "Loaded timing, but the selected media length differs. Load the original recording before judging sync." : `Loaded ${file.name}. Load ${parsed.audio.name} to check the voice; script wording is preserved.`);
   } catch (error) { msg("#audio-import-msg", error.message); }
   finally { e.target.value = ""; }
 });
+
+// ---------- voice matching on this page ----------
+// Decoding, measuring and cutting all happen in this browser. Only short 16 kHz mono pieces reach
+// /api/recognize, which exists solely to keep the Cloudflare token off this page.
+function updateVoiceButton(message) {
+  const hasScript = Boolean(scriptUnicode().trim());
+  $("#voiceAlign").disabled = voiceBusy || !mediaFile || !hasScript;
+  if (voiceBusy) return;
+  if (message !== undefined) return msg("#voice-msg", message);
+  if (!mediaFile && !hasScript) msg("#voice-msg", "Paste your script and load its recording to turn this on.");
+  else if (!mediaFile) msg("#voice-msg", "Load the audio or video file above to turn this on.");
+  else if (!hasScript) msg("#voice-msg", "Paste the script for this recording in step 1 to turn this on.");
+  else msg("#voice-msg", `Ready: ${mediaFile.name}. You'll see the length and the cost before anything is sent.`);
+}
+
+async function sendChunk({ audioBase64, seconds }) {
+  const response = await fetch("api/recognize", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ audio: audioBase64, seconds, language: "ne", prompt: DEFAULT_PROMPT })
+  });
+  const payload = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(payload?.errors?.[0]?.message || `Recognition failed (HTTP ${response.status}).`);
+  return payload;
+}
+
+async function confirmRun(plan) {
+  const dialog = $("#voiceDialog");
+  $("#vd-plan").textContent = `${mediaFile.name} · ${short(plan.seconds)} long · ${plan.requests} recognition request${plan.requests === 1 ? "" : "s"} · about $${plan.cost.toFixed(4)} at list price.`;
+  const choice = await new Promise(resolve => {
+    dialog.addEventListener("close", () => resolve(dialog.returnValue), { once: true });
+    dialog.showModal();
+  });
+  return choice === "go";
+}
+
+$("#voiceAlign").addEventListener("click", async () => {
+  if (voiceBusy || !mediaFile) return;
+  const progress = $("#voice-progress");
+  voiceBusy = true;
+  $("#voiceAlign").disabled = true;
+  msg("#voice-msg", "Reading the recording on this computer…");
+  try {
+    if (decoded?.file !== mediaFile) decoded = { file: mediaFile, samples: await decodeToMono16k(await mediaFile.arrayBuffer()) };
+    const plan = planRun(decoded.samples);
+    voiceBusy = false;
+    if (!await confirmRun(plan)) { updateVoiceButton("Nothing was sent."); return; }
+    voiceBusy = true;
+    progress.hidden = false; progress.value = 0;
+    const bundle = await recognizeAndAlign({
+      samples: decoded.samples, script: scriptUnicode().trim(), audioName: mediaFile.name, send: sendChunk,
+      onProgress: ({ done, total, message }) => { progress.value = total ? done / total : 0; msg("#voice-msg", message); }
+    });
+    progress.value = 1;
+    // Through the same validation an imported file goes through, so a bad result can't reach the editor.
+    loadReviewBundle(parseAudioReview(bundle));
+    const flagged = bundle.strategies[bundle.defaultStrategy].cues.filter(c => c.needs_review).length;
+    voiceBusy = false;
+    updateVoiceButton(`Matched to the voice. ${flagged ? `${flagged} subtitle${flagged === 1 ? "" : "s"} to listen to` : "Nothing flagged"} · about $${bundle.cost.successful_list_estimate_usd.toFixed(4)} at list price. Pick a layout on the right, then export.`);
+  } catch (error) {
+    voiceBusy = false;
+    updateVoiceButton(error.message);
+  } finally {
+    voiceBusy = false;
+    progress.hidden = true;
+    $("#voiceAlign").disabled = !mediaFile || !scriptUnicode().trim();
+  }
+});
+
 $("#audioStrategy").addEventListener("change", e => applyAudioStrategy(e.target.value));
 
 // ---------- media + playback ----------
@@ -408,6 +487,8 @@ $("#media").addEventListener("change", e => {
   const file = e.target.files[0];
   if (!file) return;
   if (player.src) URL.revokeObjectURL(player.src);
+  mediaFile = file;
+  updateVoiceButton();
   mediaName = file.name.replace(/\.[^.]+$/, "");
   player.src = URL.createObjectURL(file);
   $("#stage-empty").hidden = true;
@@ -514,10 +595,10 @@ function toast(text) {
 
 // ---------- settings wiring ----------
 $("#maxChars").addEventListener("input", () => { $("#maxCharsOut").textContent = $("#maxChars").value; renderCues(); });
-$("#script").addEventListener("input", () => { updateStats(); saveSoon(); });
+$("#script").addEventListener("input", () => { updateStats(); updateVoiceButton(); saveSoon(); });
 $("#duration").addEventListener("change", () => { renderTimeline(); tick(); save(); });
 document.querySelectorAll('input[name="outEnc"]').forEach(r => r.addEventListener("change", () => { fillFontSelect(); renderCues(); }));
-document.querySelectorAll('input[name="inEnc"], input[name="lines"]').forEach(r => r.addEventListener("change", () => { updateStats(); save(); }));
+document.querySelectorAll('input[name="inEnc"], input[name="lines"]').forEach(r => r.addEventListener("change", () => { updateStats(); updateVoiceButton(); save(); }));
 ["#font", "#size", "#color", "#captionPosition"].forEach(s => $(s).addEventListener("input", applyStyle));
 document.querySelectorAll('input[name="look"], input[name="aspect"]').forEach(r => r.addEventListener("change", applyStyle));
 function updateStats() {
@@ -530,6 +611,7 @@ function updateStats() {
 restore();
 $("#maxCharsOut").textContent = $("#maxChars").value;
 updateStats();
+updateVoiceButton();
 try {
   const cat = await fetch("sub/fonts.json").then(r => r.json());
   fonts = { unicode: cat.nepali.filter(f => f.encoding === "unicode"), preeti: cat.nepali.filter(f => f.encoding === "preeti"), english: cat.english };

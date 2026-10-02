@@ -3,9 +3,12 @@
   "private": true,
   "type": "module",
   "description": "content.tarjun.com: setup page, installers and the install download for Content Machine.",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "node scripts/build-bundle.mjs",
-    "new-code": "node scripts/new-access-code.mjs"
+    "new-code": "node scripts/new-access-code.mjs",
+    "test": "node --test \"test/*.test.mjs\""
   }
 }

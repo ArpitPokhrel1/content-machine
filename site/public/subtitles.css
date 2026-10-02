@@ -169,3 +169,17 @@ dialog::backdrop { background: #000a; }
 .audio-waveform { width: 100%; height: 40px; display: block; color: var(--amber); }
 .audio-waveform[hidden] { display: none; }
 .audio-waveform path { stroke: currentColor; stroke-width: 1; }
+
+/* Voice matching on the page: progress while it runs, and the confirmation before anything is sent. */
+#voiceAlign { margin-top: 12px; }
+#voice-progress { width: 100%; height: 6px; margin-top: 10px; appearance: none; border: 0; background: #2a221c; border-radius: 99px; overflow: hidden; }
+#voice-progress[hidden] { display: none; }
+#voice-progress::-webkit-progress-bar { background: #2a221c; }
+#voice-progress::-webkit-progress-value { background: var(--amber); transition: width .2s linear; }
+#voice-progress::-moz-progress-bar { background: var(--amber); }
+#audio-workflow details { margin-top: 16px; }
+#voiceDialog { width: min(540px, calc(100vw - 24px)); }
+.vd-list { margin: 0; padding: 14px 22px 14px 40px; overflow-y: auto; color: var(--muted); font-size: .9rem; line-height: 1.65; }
+.vd-list li + li { margin-top: 8px; }
+.vd-list b { color: var(--ink); }
+#vd-plan { font: .84rem/1.6 var(--mono); color: var(--amber); overflow-wrap: anywhere; }

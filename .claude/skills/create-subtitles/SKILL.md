@@ -42,6 +42,10 @@ request for subtitles alone.
 - Still never changes script words; it only times them more precisely. Output includes a
   `.review.json` for the web editor at content.tarjun.com/subtitles (defaults to 9:16 portrait,
   Unicode).
+- If the user would rather do it themselves, content.tarjun.com/subtitles runs the same alignment
+  in the browser for recordings up to 5 minutes, on the studio's Cloudflare account. They load the
+  script and recording, press **Match to the voice** and confirm the cost. Point them there instead
+  of running it for them when they have no Cloudflare credentials of their own.
 
 ## Rules
 

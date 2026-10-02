@@ -29,6 +29,27 @@ All paths are relative to the repo root. The engine is in `subtitles/`; the guid
    Premiere or Resolve, and point to <https://content.tarjun.com/subtitles> for fine-tuning
    timings with a live preview.
 
+## Optional: ASR-aligned Nepali subtitles
+
+For Nepali scripts with a real recording, an alternative workflow anchors the script to actual
+recognized speech instead of proportional timing. Only offer it, and only run it after the user
+explicitly authorizes sending the recording to Cloudflare — never infer that approval from a
+request for subtitles alone.
+
+- Estimate cost first (no upload): `recognize_subtitles` with `submit_to_cloudflare` left unset,
+  or `npm run srt:audio -- recognize --audio <file> --script <file>`.
+- Only after the user approves the estimate, submit: `recognize_subtitles` with
+  `submit_to_cloudflare: true`, or add `--submit`.
+- Needs uv, Python 3.11+ and Cloudflare credentials in `asset-generation/.env` or the environment
+  (`npm run doctor` if missing). See `subtitles/docs/audio-recognition.md`.
+- Still never changes script words; it only times them more precisely. Output includes a
+  `.review.json` for the web editor at content.tarjun.com/subtitles (defaults to 9:16 portrait,
+  Unicode).
+- If the user would rather do it themselves, content.tarjun.com/subtitles runs the same alignment
+  in the browser for recordings up to 5 minutes, on the studio's Cloudflare account. They load the
+  script and recording, press **Match to the voice** and confirm the cost. Point them there instead
+  of running it for them when they have no Cloudflare credentials of their own.
+
 ## Rules
 
 - Never change the script's words. Only split and time them.

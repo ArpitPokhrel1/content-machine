@@ -85,16 +85,23 @@
     <p class="hint" id="make-msg" role="status"></p>
     <details class="more" id="audio-workflow">
       <summary>Match subtitles to the voice · Whisper</summary>
-      <p class="hint">Use the optional local audio command to match your script to Nepali speech, then open its review file here. Recognition sends audio to Cloudflare; importing and editing stay on your computer.</p>
-      <pre class="audio-command">npm run srt:audio -- recognize
+      <p class="hint">Paste the script in step 1, load its recording in step 2, then match every subtitle to where it is actually spoken. Your browser measures the recording and sends only short 16&nbsp;kHz voice clips for recognition — never your original file — and your script's words are never changed.</p>
+      <button class="btn btn-primary btn-block" id="voiceAlign" disabled>Match to the voice…</button>
+      <progress id="voice-progress" max="1" value="0" hidden></progress>
+      <p class="hint" id="voice-msg" role="status">Load an audio or video file above to turn this on.</p>
+      <details class="more">
+        <summary>Or run recognition on your own computer</summary>
+        <p class="hint">The same work from the downloaded repo, on your own Cloudflare account, then open its review file here.</p>
+        <pre class="audio-command">npm run srt:audio -- recognize
   --audio voice.mp3 --script script.txt
   --out Outputs/subtitles/voice</pre>
-      <p class="hint">Run as one line. This estimates the cost without uploading. Add <code>--submit</code> to recognize with Whisper Large v3 Turbo ($0.000513/audio minute, rate checked September 2026). Requires uv and Cloudflare credentials; see the subtitle guide in the downloaded repo.</p>
-      <label class="btn btn-ghost btn-sm file-btn">
-        <input type="file" id="importAudioReview" accept=".json,application/json">
-        Open audio timing (.review.json)
-      </label>
-      <p class="hint" id="audio-import-msg" role="status"></p>
+        <p class="hint">Run as one line. This estimates the cost without uploading. Add <code>--submit</code> to recognize with Whisper Large v3 Turbo ($0.000513/audio minute, rate checked September 2026). Requires uv and Cloudflare credentials; see the subtitle guide in the downloaded repo.</p>
+        <label class="btn btn-ghost btn-sm file-btn">
+          <input type="file" id="importAudioReview" accept=".json,application/json">
+          Open audio timing (.review.json)
+        </label>
+        <p class="hint" id="audio-import-msg" role="status"></p>
+      </details>
     </details>
   </section>
 
@@ -221,6 +228,25 @@
     </div>
   </section>
 </main>
+
+<dialog id="voiceDialog" aria-labelledby="vd-title">
+  <form method="dialog" class="fd fd-narrow">
+    <header class="fd-head">
+      <h2 id="vd-title">Send this recording for recognition?</h2>
+      <p id="vd-plan"></p>
+    </header>
+    <ul class="vd-list">
+      <li>Short 16&nbsp;kHz mono clips of the voice go to Cloudflare Workers AI (Whisper Large v3 Turbo) to find <b>when</b> each word is spoken. Your original file stays on this computer.</li>
+      <li>The subtitles keep <b>your</b> script's words, exactly as you pasted them. Recognition is used only for timing.</li>
+      <li>Recognition is a paid service. Nothing is retried automatically if a request fails.</li>
+      <li>Don't send a recording you aren't allowed to share with a cloud service.</li>
+    </ul>
+    <footer class="fd-foot">
+      <button class="btn btn-ghost btn-sm" value="cancel">Cancel</button>
+      <button class="btn btn-primary btn-sm" value="go">Send and match</button>
+    </footer>
+  </form>
+</dialog>
 
 <dialog id="fontDialog" aria-labelledby="fd-title">
   <form method="dialog" class="fd">

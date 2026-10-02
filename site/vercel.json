@@ -4,14 +4,26 @@
   "outputDirectory": "public",
   "cleanUrls": true,
   "functions": {
-    "api/download.mjs": { "includeFiles": "bundle/**", "maxDuration": 30 }
+    "api/download.mjs": {
+      "includeFiles": "bundle/**",
+      "maxDuration": 30
+    },
+    "api/recognize.mjs": {
+      "maxDuration": 60
+    }
   },
   "headers": [
     {
       "source": "/install.(ps1|sh)",
       "headers": [
-        { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
-        { "key": "Cache-Control", "value": "no-cache" }
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
       ]
     }
   ]

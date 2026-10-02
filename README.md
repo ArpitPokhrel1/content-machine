@@ -133,6 +133,12 @@ and your settings and your Outputs folder stay exactly as they were.
 
 ### Optional voice-aligned Nepali subtitles
 
+At [content.tarjun.com/subtitles](https://content.tarjun.com/subtitles), load the recording with
+the script and press **Match to the voice**. The page shows the cost and sends nothing until you
+confirm; only short 16 kHz voice clips leave the browser, never the original file. Up to 5 minutes
+per run.
+
+For longer recordings, or to use your own Cloudflare account,
 `npm run srt:audio -- recognize --audio voice.mp3 --script script.txt` estimates Cloudflare
 Whisper Large v3 Turbo usage. Add `--submit` to recognize, then open the generated `.review.json`
 in the subtitle editor. It defaults to portrait Unicode (9:16) and includes five editable pacing

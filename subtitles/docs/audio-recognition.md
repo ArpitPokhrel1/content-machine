@@ -6,7 +6,36 @@ the supplied Nepali script and refines cue starts against the audio. Your script
 caption word; recognizer spelling never replaces it. This is ASR-anchored character alignment,
 not phoneme-level forced alignment or an emotion classifier.
 
-## Install and configure
+There are two ways to run it: in the browser at **content.tarjun.com/subtitles**, which uses the
+studio's Cloudflare account, and the local command below, which uses your own.
+
+## On content.tarjun.com/subtitles
+
+Paste the script, load the recording, open **Match subtitles to the voice** and press the button.
+The page shows the length and the list-price cost and sends nothing until you confirm.
+
+Everything except recognition itself happens in your browser: it decodes the recording, resamples
+it to 16 kHz mono, measures loudness, pitch and pauses, cuts it at those pauses, matches the script
+to the recognized words and groups them into cues. Only the short 16 kHz mono pieces are posted to
+`/api/recognize`, a function that exists solely so the Cloudflare token never reaches the page.
+Your original file is never uploaded, and nothing is stored server-side.
+
+Limits: recordings up to **5 minutes** per run (about $0.0026 at list price). Longer recordings
+need the local command below, or splitting.
+
+For the deployment, set these on the Vercel project (never in the repo):
+
+| Variable | Purpose |
+| --- | --- |
+| `CLOUDFLARE_ACCOUNT_ID` | the account the Workers AI calls are billed to |
+| `CLOUDFLARE_API_TOKEN` | a token scoped to Workers AI only |
+| `REQUIRE_SUBTITLE_CODE` | optional; `true` requires `x-access-code` from `ACCESS_CODES` for this route |
+| `CLOUDFLARE_AI_GATEWAY_ID` | optional; routes through an AI Gateway for per-request logs and caps |
+
+Without the first two the button reports that the feature isn't configured and the free
+proportional timing keeps working.
+
+## Install and configure the local command
 
 Install [uv](https://docs.astral.sh/uv/). The optional package requires Python 3.11+; uv manages its
 isolated environment. Regular `npm run srt` and the browser editor do not need Python.
@@ -20,8 +49,9 @@ CLOUDFLARE_API_TOKEN=your_workers_ai_token
 
 Use a token with Workers AI access. Alternatively set `CLOUDFLARE_USE_WRANGLER=1` and leave the
 API token empty to reuse an existing Wrangler login on macOS/Linux. No credential is created or
-stored in the review file. Environment variables take precedence. Credentials stay in the local
-CLI/MCP process; the public editor has no cloud request code or credential form.
+stored in the review file. Environment variables take precedence. Credentials for the local command stay in
+the local CLI/MCP process. The website's own credentials live only in its Vercel environment: the
+page itself holds no token and has no credential form.
 
 ## Recognize and review
 
