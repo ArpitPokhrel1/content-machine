@@ -205,7 +205,8 @@ async function Create() {
   }).catch(() => {});
 
   document.getElementById("composeBtn").addEventListener("click", async () => {
-    const body = { pipeline: pipeline.value, aspect: aspect.value, language: language.value, seconds: Number(document.getElementById("seconds").value || 6), script: document.getElementById("script").value, sensitive: document.getElementById("sensitive").value, styleId: document.getElementById("styleSel").value, motionId: document.getElementById("motionSel").value };
+    const g = (id) => document.getElementById(id);
+    const body = { pipeline: pipeline.value, aspect: g("aspect").value, language: g("language").value, seconds: Number(g("seconds").value || 6), script: g("script").value, sensitive: g("sensitive").value, styleId: g("styleSel").value, motionId: g("motionSel").value };
     try {
       const r = await api("/api/compose", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const gate = r.gated ? `<div class="note warn">Gated: this step costs money or is irreversible. The Studio will not start it — approve it inside Claude Code.</div>` : r.paid ? `<div class="note">Note: generation bills your Google Cloud project.</div>` : "";
