@@ -1,0 +1,19 @@
+# Content Machine Studio — reverse proxy for a web domain.
+# Caddy gives you automatic HTTPS. Copy to `Caddyfile`, set your domain, then:
+#   caddy run
+#
+# Run the Studio bound to localhost on the same machine:
+#   HOST=127.0.0.1 PORT=8080 node studio/server.mjs
+#
+# The Studio reads the local Outputs/ folder and the engine, so host it on the
+# machine that generates (or one with Outputs/ mounted).
+
+studio.example.com {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8080
+
+	# Optional: put the whole cockpit behind a password while it's private.
+	# basic_auth {
+	#   you JDJhJDE0J...   # `caddy hash-password` output
+	# }
+}
