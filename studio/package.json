@@ -1,0 +1,13 @@
+{
+  "name": "content-machine-studio",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Local cockpit for Content Machine: browse packs, launch generations, style library, voice slots, MCP-ready.",
+  "engines": { "node": ">=20" },
+  "bin": { "content-machine-studio-mcp": "mcp/studio-mcp.mjs" },
+  "scripts": {
+    "start": "node server.mjs",
+    "mcp": "node mcp/studio-mcp.mjs"
+  }
+}

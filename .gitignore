@@ -24,6 +24,9 @@ Other/
 # Poster tool: the unused source PNGs are over GitHub's 100 MB limit; the app loads the .webp
 campaign-poster-tool/public/assets/*.png
 
+# Studio cockpit: local config holds API keys — never committed
+studio/studio.config.local.json
+
 # Logs and local tool state
 *.log
 .claude/scheduled_tasks.lock
