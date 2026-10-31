@@ -35,6 +35,25 @@ For the deployment, set these on the Vercel project (never in the repo):
 Without the first two the button reports that the feature isn't configured and the free
 proportional timing keeps working.
 
+### Optional: a self-hosted Nepali model (Naamche Labs' Kriti) instead of Whisper
+
+The same page can recognize through **Kriti**, Naamche Labs' open-weights Nepali ASR, instead of
+Cloudflare Whisper. Kriti is Nepali-specific, so it can transcribe Nepali speech more faithfully,
+but it is **open weights, not a hosted API**: you run it yourself and point the site at it. See
+[`subtitles/kriti-server/`](../kriti-server/README.md) for a ready-to-deploy server and the exact
+steps. In short, deploy that server, then on the Vercel project set:
+
+| Variable | Purpose |
+| --- | --- |
+| `RECOGNIZE_BACKEND` | `naamche` to use Kriti; unset or `cloudflare` to use Whisper |
+| `NAAMCHE_ASR_URL` | the HTTPS URL of your deployed Kriti server |
+| `NAAMCHE_ASR_TOKEN` | optional; sent as `Authorization: Bearer …` to that server |
+
+The page, the chunking and the script-onto-speech alignment are identical either way; only the
+recognizer changes. Kriti does not detect language the way Whisper does — use it only for Nepali
+audio. The cost figure shown on the page is Whisper's list price; on this backend the real cost is
+your own compute, so treat that number as a placeholder.
+
 ## Install and configure the local command
 
 Install [uv](https://docs.astral.sh/uv/). The optional package requires Python 3.11+; uv manages its
