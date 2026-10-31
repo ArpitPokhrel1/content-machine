@@ -23,7 +23,7 @@ function pre(text, label) {
 const head = (eyebrow, title, sub) => `<div class="page-head"><div>${eyebrow ? `<div class="eyebrow">${esc(eyebrow)}</div>` : ""}<h1>${esc(title)}</h1>${sub ? `<p class="sub">${esc(sub)}</p>` : ""}</div></div>`;
 
 let PRESETS = null;
-async function getPresets() { if (!PRESETS) PRESETS = await (await fetch("style-presets.json")).json(); return PRESETS; }
+async function getPresets() { if (!PRESETS) PRESETS = await (await fetch("/studio/style-presets.json")).json(); return PRESETS; }
 
 // ---------- compose (mirrors studio/lib/engine.mjs, pure) ----------
 const ASPECTS = { "9:16": "vertical 9:16 (reel / short)", "4:5": "portrait 4:5 (feed)", "1:1": "square 1:1", "16:9": "wide 16:9 (landscape)" };
