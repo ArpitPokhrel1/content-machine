@@ -17,3 +17,11 @@ mkdirSync(target, { recursive: true });
 cpSync(path.join(subtitles, "lib"), target, { recursive: true });
 cpSync(path.join(subtitles, "fonts.json"), path.join(target, "fonts.json"));
 console.log(`subtitle engine → ${target}`);
+
+// The /studio page's preset library is the Studio's canonical data file, copied
+// in so the web tools and the local cockpit stay in step.
+const presetsSrc = path.resolve(siteRoot, "..", "studio", "data", "style-presets.json");
+const studioDir = path.join(siteRoot, "public", "studio");
+mkdirSync(studioDir, { recursive: true });
+cpSync(presetsSrc, path.join(studioDir, "style-presets.json"));
+console.log(`studio presets → ${path.join(studioDir, "style-presets.json")}`);

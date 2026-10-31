@@ -1,0 +1,42 @@
+{
+  "_source": "studio/research/CONTENT-MACHINE-RESEARCH.md — Appendix. Placeholders in [BRACKETS]. Tune per model.",
+  "visual": [
+    { "id": "mythic-epic", "name": "Mythic Epic", "desc": "Godly, heroic scenes for mythology.", "tags": ["mythology", "nepali", "cinematic"], "template": "Cinematic wide shot of [SUBJECT], epic mythological scale, volumetric god-rays, dramatic rim lighting, atmospheric haze, ornate ancient detail, 35mm anamorphic, photoreal" },
+    { "id": "paubha-thangka", "name": "Paubha / Thangka Mythic", "desc": "Nepali sacred-art look (curate references).", "tags": ["nepali", "sacred", "illustration"], "template": "[DEITY/SUBJECT] in traditional Nepali paubha style, gold leaf, flat symbolic composition, intricate iconographic detail, mineral pigments, ornate halo" },
+    { "id": "himalayan-doc", "name": "Himalayan Documentary", "desc": "Real landscapes and village life.", "tags": ["documentary", "nepali"], "template": "Documentary photo of [SUBJECT], Himalayan setting, golden hour natural light, candid unposed, 35mm, photojournalistic" },
+    { "id": "rana-era-archive", "name": "Rana-Era Archive", "desc": "Historical Nepal, 1900s–50s.", "tags": ["vintage", "history", "nepali"], "template": "Vintage archival photograph of [SUBJECT], 1950s Kodachrome, faded colors, film grain, vignetting, period-accurate clothing" },
+    { "id": "weathered-hero", "name": "Weathered Hero Portrait", "desc": "Warriors, sadhus, elders.", "tags": ["portrait", "hyperreal"], "template": "Hyperreal portrait of [SUBJECT], 85mm, dramatic side light, weathered skin texture detail, shallow depth of field, moody" },
+    { "id": "fresco-myth", "name": "Fresco Myth", "desc": "Painterly epic.", "tags": ["painting", "mythology"], "template": "Oil painting of [SCENE], visible brushstrokes, chiaroscuro, classical fresco composition, warm earth tones" },
+    { "id": "kathmandu-noir", "name": "Kathmandu Noir", "desc": "Moody urban drama.", "tags": ["noir", "nepali", "bw"], "template": "Film noir, [SUBJECT] in rain-soaked Kathmandu alley, high contrast black and white, venetian-blind shadows, dramatic side lighting" },
+    { "id": "festival-vibrance", "name": "Festival Vibrance", "desc": "Dashain / Tihar / Holi energy.", "tags": ["festival", "vibrant", "nepali"], "template": "Vibrant festive scene of [SUBJECT], saturated colors, bokeh lights, celebratory atmosphere, dynamic motion, photoreal" },
+    { "id": "anime-legend", "name": "Anime Legend", "desc": "Mythology for younger audiences.", "tags": ["anime"], "template": "Anime style, [SUBJECT], cel shading, bold outlines, vibrant colors, dramatic lighting, Ghibli-inspired landscape" },
+    { "id": "pixar-folktale", "name": "Pixar Folktale", "desc": "Kid-friendly 3D.", "tags": ["3d", "family"], "template": "3D render, [SUBJECT], Pixar style, expressive eyes, smooth surfaces, soft global illumination, warm storybook lighting" },
+    { "id": "claymation-folk", "name": "Claymation Folk", "desc": "Stop-motion charm.", "tags": ["claymation", "stop-motion"], "template": "Claymation stop-motion, [SUBJECT], visible fingerprints in matte clay, slight asymmetry, miniature handcrafted set" },
+    { "id": "ugc-iphone", "name": "UGC iPhone Candid", "desc": "Authentic brand / UGC.", "tags": ["ugc", "brand"], "template": "Shot on iPhone, candid photo of [SUBJECT/PRODUCT], direct flash, available light, slight motion blur, unposed, amateur snapshot" },
+    { "id": "clean-product", "name": "Clean Product Hero", "desc": "Bamsawali / Biopunki product shots.", "tags": ["product", "brand"], "template": "Product photography of [PRODUCT], white seamless background, three-point softbox lighting, macro lens, crisp studio" },
+    { "id": "editorial-flash", "name": "Editorial Flash", "desc": "Fashion / lifestyle.", "tags": ["fashion", "editorial"], "template": "Editorial flash photography of [SUBJECT], hard direct flash, high fashion, Y2K studio aesthetic, bold" },
+    { "id": "watercolor-story", "name": "Watercolor Story", "desc": "Soft narrative illustration.", "tags": ["illustration", "soft"], "template": "Watercolor painting of [SCENE], loose brushstrokes, gentle color bleeds, wet-on-wet, paper texture" },
+    { "id": "concept-vista", "name": "Concept Vista", "desc": "Epic environment establishing.", "tags": ["concept-art", "environment"], "template": "Concept art matte painting of [LOCATION], epic scale, dramatic lighting, atmospheric depth, ArtStation" },
+    { "id": "vaporwave-retro", "name": "Vaporwave Retro", "desc": "Stylized / youth.", "tags": ["retro", "stylized"], "template": "Vaporwave, [SUBJECT], neon pink and cyan, retro grid, chrome, 80s aesthetic, glitch" }
+  ],
+  "motion": [
+    { "id": "slow-dolly-in", "name": "Slow Dolly-In Reveal", "desc": "Builds tension toward subject.", "template": "Slow dolly-in toward [SUBJECT], steady forward creep, background softening as camera approaches, cinematic" },
+    { "id": "orbital-360", "name": "Orbital 360 Hero", "desc": "Heroic reveal around subject.", "template": "Smooth 360-degree orbital shot around [SUBJECT], hero framing, consistent speed" },
+    { "id": "crane-up-wide", "name": "Crane Up to Wide", "desc": "Grand establishing.", "template": "Crane up from [SUBJECT] to a wide establishing shot of [LOCATION], rising reveal" },
+    { "id": "crash-zoom", "name": "Crash Zoom Impact", "desc": "Punchy hook moment.", "template": "Explosive crash zoom from wide to extreme close-up on [SUBJECT], shockwave impact" },
+    { "id": "fpv-flythrough", "name": "FPV Drone Flythrough", "desc": "Kinetic energy.", "template": "Fast FPV drone dive toward [SUBJECT] through [LOCATION], ending in a banking turn" },
+    { "id": "handheld-follow", "name": "Handheld Follow Walk", "desc": "Documentary intimacy.", "template": "Handheld camera following [SUBJECT] walking, natural sway, documentary feel" },
+    { "id": "bullet-time", "name": "Bullet Time Freeze", "desc": "Dramatic stop.", "template": "Bullet-time orbit around [SUBJECT] frozen mid-action, dramatic" },
+    { "id": "whip-pan", "name": "Whip Pan Transition", "desc": "Scene-to-scene cut.", "template": "Fast whip pan from [SCENE A] to [SCENE B], motion-blur transition" }
+  ],
+  "text": {
+    "hooks": [
+      { "id": "curiosity-gap", "name": "Curiosity-gap", "template": "Most people don't know [SURPRISING FACT about TOPIC]…" },
+      { "id": "bold-claim", "name": "Bold-claim", "template": "This is why [COMMON BELIEF] is completely wrong." },
+      { "id": "pain-point", "name": "Pain-point", "template": "If you've ever [RELATABLE STRUGGLE], watch this." },
+      { "id": "visual-shock", "name": "Visual-shock", "template": "Open on the most dramatic frame; text overlay \"[SHOCKING RESULT]\"." }
+    ],
+    "caption": "Karaoke word-by-word highlight, mid-frame, bold sans-serif/Devanagari, white text + dark outline, 6–10 words/segment.",
+    "cta": "Follow for more [NICHE] / Save this / Comment [WORD]. (last 3–5s)"
+  }
+}
