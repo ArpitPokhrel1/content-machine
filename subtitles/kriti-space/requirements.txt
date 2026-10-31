@@ -1,0 +1,8 @@
+# Hugging Face ZeroGPU Gradio Space for Kriti → SRT.
+# torch + NeMo are pulled in by `kriti`. On ZeroGPU the base image already ships a CUDA torch; if the
+# Kriti install tries to swap torch and the build breaks, pin torch here to the Space's torch version.
+spaces
+gradio==4.44.1
+librosa
+soundfile
+kriti[runtime] @ git+https://github.com/Naamche-Labs/kriti.git
