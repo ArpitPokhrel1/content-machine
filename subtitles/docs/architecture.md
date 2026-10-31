@@ -25,8 +25,8 @@ is refused rather than shipped.
 
 ```
 ┌──────────────────────────────┐        ┌───────────────────────────────┐        ┌──────────────────────────────┐
-│  BROWSER (viewer's machine)  │        │  VERCEL (content.tarjun.com)  │        │  ORACLE CLOUD (Always Free)  │
-│  content.tarjun.com/subtitles│        │  serverless, stateless proxy  │        │  Ampere A1 VM, CPU inference │
+│  BROWSER (viewer's machine)  │        │  VERCEL (content.tarjun.com)  │        │  HUGGING FACE SPACE (free)   │
+│  content.tarjun.com/subtitles│        │  serverless, stateless proxy  │        │  Docker, CPU, 16 GB RAM      │
 │                              │        │                               │        │                              │
 │  subtitles.js                │        │  api/recognize.mjs            │        │  kriti-server/server.py      │
 │   ├─ decode + resample 16kHz │        │   ├─ access check (optional)  │        │   ├─ FastAPI + uvicorn       │
@@ -117,33 +117,34 @@ in [`site/api/recognize.mjs`](../../site/api/recognize.mjs).
 
 ---
 
-## 5. Deployment topology — Oracle Cloud Always Free
+## 5. Deployment — Hugging Face Spaces (free)
 
-Oracle's Always Free tier gives an **Ampere A1 (ARM) VM, up to 4 OCPU / 24 GB RAM, CPU only (no
-GPU)**. That is acceptable here because Kriti is small ("runs on a CPU" per Naamche) and the page caps
-a run at **5 minutes**, sent as **≤20s chunks**, each well inside the proxy's 50s timeout. Expect a
-few seconds of CPU inference per chunk; a 5-minute recording is ~15 chunks processed sequentially.
+The Kriti server runs as a **Docker Space** on Hugging Face's free CPU tier (2 vCPU, **16 GB RAM**) —
+enough for Kriti on CPU, with the model's weights already on HF. The Space gets an automatic HTTPS
+URL, so there is **no DNS, TLS, or firewall** to manage; Vercel points `NAAMCHE_ASR_URL` straight at
+it. The page caps a run at **5 minutes**, sent as **≤20s chunks**, each well inside the proxy's 50s
+timeout; a 5-minute recording is ~15 chunks processed sequentially.
 
 ```
-Internet ──HTTPS──► [ Oracle A1 VM ]
-                      caddy / nginx  (TLS termination, public :443)   ← domain or OCI public IP
-                          │  reverse-proxy to loopback
-                      uvicorn server:app  (127.0.0.1:8000)
+Internet ──HTTPS──► https://<user>-kriti-asr.hf.space   (HF-managed TLS + routing)
                           │
-                      Kriti model (loaded once, kept warm in RAM)
+                      Docker container  (Dockerfile) → uvicorn server:app on :7860
+                          │
+                      Kriti model (NeMo RNN-T), loaded once, kept warm in RAM
 ```
 
-Setup checklist (details in the server README):
-1. Create an **Ampere A1** Always Free instance; open **443** in the VCN security list + host firewall.
-2. Install Python, `pip install -r requirements.txt`, install Kriti per its repo.
-3. Put TLS in front (Caddy with a domain is simplest; an OCI load balancer or a tunnel also works).
-   Vercel must reach it over **HTTPS**.
-4. Set `KRITI_AUTH_TOKEN` on the VM; run `uvicorn` as a service (systemd) so it restarts and stays warm.
-5. On Vercel: `RECOGNIZE_BACKEND=naamche`, `NAAMCHE_ASR_URL=https://…`, `NAAMCHE_ASR_TOKEN=<same token>`.
+Setup (full steps in the server README):
+1. Create a **Docker** Space (CPU basic, free).
+2. Add `Dockerfile`, `server.py`, `requirements.txt`, `README.md` from `subtitles/kriti-server/`.
+3. Set the Space secret `KRITI_AUTH_TOKEN`; wait for the build (first build installs PyTorch + NeMo).
+4. On Vercel: `RECOGNIZE_BACKEND=naamche`, `NAAMCHE_ASR_URL=https://<user>-kriti-asr.hf.space`,
+   `NAAMCHE_ASR_TOKEN=<same token>`.
 
-Keep-warm matters: cold-loading a 119M model per request would blow the timeout, so the model loads
-once at first use and stays resident (`_model` global). Keep the service running rather than
-scale-to-zero.
+**Cold start:** free Spaces sleep after ~48 h idle and take 30–60 s to wake and load the model.
+Because the proxy times out at 50s and never retries, the first chunk after a sleep can fail — warm
+the Space (open its URL or hit `/health`, wait ~1 min) before a run. The model loads once and stays
+resident (`_model` global). A paid always-on Space, Modal, or a small VM removes the cold start; the
+contract is identical on any of them.
 
 ---
 
@@ -152,7 +153,7 @@ scale-to-zero.
 - **Original recording** never leaves the browser. Only derived 16 kHz mono WAV chunks are sent, and
   only after the viewer confirms.
 - **Secrets are tiered and isolated.** Cloudflare / Naamche tokens live only in Vercel env. The model
-  and `KRITI_AUTH_TOKEN` live only on the Oracle VM. The page holds no credential and has no
+  and `KRITI_AUTH_TOKEN` live only on the Hugging Face Space. The page holds no credential and has no
   credential form.
 - **Nothing is stored server-side.** Vercel proxies and forgets; the Kriti server transcribes a temp
   WAV and deletes it. No audio, no transcript, no logs of content.

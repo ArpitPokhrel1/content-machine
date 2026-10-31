@@ -1,85 +1,84 @@
-# Self-hosted Kriti ASR for voice-aligned subtitles
+---
+title: Kriti ASR
+emoji: 🗣️
+colorFrom: indigo
+colorTo: purple
+sdk: docker
+app_port: 7860
+pinned: false
+short_description: Nepali speech to word timestamps for Content Machine subtitles
+---
 
-`content.tarjun.com/subtitles` times your subtitles by matching your script onto recognized speech.
-That matching needs **word-level timestamps**. This small server gives the site a Nepali recognizer
-(Naamche Labs' [Kriti](https://github.com/Naamche-Labs/kriti)) that returns them, so the site can use
-a Nepali-specific model instead of Cloudflare Whisper.
+# Kriti ASR — Nepali speech → word timestamps
 
-## Why a server is needed at all
+A tiny recognition endpoint for Content Machine's voice-aligned subtitles
+(`content.tarjun.com/subtitles`). It runs Naamche Labs' [Kriti](https://github.com/Naamche-Labs/kriti)
+and returns **word-level timestamps**, which is what the subtitle aligner needs. The site never
+shows the recognized text — your pasted script supplies every caption word; recognition supplies only
+the *timing*.
 
-Kriti is **open weights, not a hosted API**, and its `kriti.transcribe()` returns text with no
-timings. Kriti wraps a NeMo RNN-T model, and NeMo *can* emit word timestamps — this server loads
-Kriti, reaches the NeMo model underneath, and asks for them. A Vercel function can't load a 119M
-PyTorch model, which is why recognition runs here and the site only proxies to it.
+The YAML header above configures this as a **Hugging Face Docker Space**. The `Dockerfile`,
+`server.py`, and `requirements.txt` next to it are the whole service.
 
-The site never changes your script's words. Recognition supplies *timing*; every character on screen
-comes from the script you paste.
+## Why a server exists
+
+Kriti is open weights, and its `kriti.transcribe()` returns text with **no timings**. Kriti wraps a
+NeMo RNN-T model, and NeMo *can* emit word timestamps — so `server.py` loads Kriti, reaches the NeMo
+model underneath, and asks for them.
 
 ## The contract
 
 ```
-POST /            Authorization: Bearer <KRITI_AUTH_TOKEN>   (only if that env var is set)
+POST /            Authorization: Bearer <KRITI_AUTH_TOKEN>   (only if that secret is set)
 body:  { "audio": "<base64 16 kHz mono wav>", "seconds": <float>, "language": "ne" }
 200:   { "text": "<transcript>", "words": [ { "word": "...", "start": 0.12, "end": 0.63 }, ... ] }
 ```
-`start`/`end` are seconds within the piece of audio sent; the browser adds each piece's offset. The
-browser already decodes, resamples to 16 kHz mono, and cuts the recording into pieces ≤20 s, so this
-server only handles one short piece per request.
+`start`/`end` are seconds within the piece sent; the browser adds each piece's offset. The browser
+decodes, resamples and cuts the recording into ≤20 s pieces, so one request = one short piece.
+`GET /` and `GET /health` are open liveness checks.
 
-`GET /health → { "status": "ok", "model_loaded": true|false }` for platform probes.
+## Deploy on Hugging Face Spaces (free)
 
-## Run it
+1. [huggingface.co/new-space](https://huggingface.co/new-space) → **SDK: Docker**, blank template,
+   **CPU basic (free)**, visibility **Public**.
+2. Add these four files to the Space (web UI *Files → Add file*, or git push):
+   `Dockerfile`, `server.py`, `requirements.txt`, and this `README.md`.
+3. Space **Settings → Variables and secrets → New secret**: `KRITI_AUTH_TOKEN` = a long random
+   string. (Optional but recommended; without it the endpoint is open to anyone who finds the URL.)
+4. Wait for the build (the first one is slow — it installs PyTorch + NeMo). Watch the **build logs**;
+   if the Kriti install line fails, that's the place to adjust (see the `Dockerfile` comment).
+5. Your endpoint is the Space URL, e.g. `https://<user>-kriti-asr.hf.space`.
 
-```bash
-pip install -r requirements.txt
-# install Kriti per its repo README (pip install -e '.[runtime]' from a Kriti checkout)
-export KRITI_AUTH_TOKEN="choose-a-long-random-string"     # optional but recommended if public
-uvicorn server:app --host 0.0.0.0 --port 8000
-```
+Then on the Vercel project for `content.tarjun.com`:
 
-A GPU box, Hugging Face Inference Endpoint, Replicate, Modal, or Fly.io with a GPU all work — any
-host that gives you one HTTPS URL. CPU works for short clips but is slow.
-
-## Point the site at it
-
-On the Vercel project for `content.tarjun.com`, set:
-
-| Env var | Value |
+| Variable | Value |
 | --- | --- |
 | `RECOGNIZE_BACKEND` | `naamche` |
-| `NAAMCHE_ASR_URL` | the HTTPS URL of this server (the `POST /` route) |
-| `NAAMCHE_ASR_TOKEN` | the same string as `KRITI_AUTH_TOKEN`, if you set one |
+| `NAAMCHE_ASR_URL` | your Space URL (the `POST /` route, i.e. the root) |
+| `NAAMCHE_ASR_TOKEN` | the same string as `KRITI_AUTH_TOKEN` |
 
-Leave `RECOGNIZE_BACKEND` unset (or `cloudflare`) to keep using Whisper. The switch is in
-[`site/api/recognize.mjs`](../../site/api/recognize.mjs); its tests cover both backends
-(`site/test/recognize.test.mjs`).
+Leave `RECOGNIZE_BACKEND` unset to keep the default Cloudflare Whisper backend. The switch is in
+[`site/api/recognize.mjs`](../../site/api/recognize.mjs); `site/test/recognize.test.mjs` covers both.
 
-## Check it before wiring the site
+## Cold start (free-tier caveat)
 
-```bash
-# a tiny silence clip just proves the shape; use a real Nepali clip to see words.
-python - <<'PY'
-import base64, json, urllib.request, wave, io
-buf = io.BytesIO()
-with wave.open(buf, "wb") as w:
-    w.setnchannels(1); w.setsampwidth(2); w.setframerate(16000)
-    w.writeframes(b"\x00\x00" * 16000)   # 1 s of silence
-body = json.dumps({"audio": base64.b64encode(buf.getvalue()).decode(), "seconds": 1.0, "language": "ne"}).encode()
-req = urllib.request.Request("http://localhost:8000/", body, {"Content-Type": "application/json"})
-print(urllib.request.urlopen(req).read().decode())
-PY
-```
+Free Spaces sleep after ~48 h idle and take 30–60 s to wake and load the model. The site's proxy
+times out at 50 s and never retries, so the **first** chunk after a long sleep can fail. Before a
+subtitle run, open the Space URL (or hit `/health`) once and wait ~1 minute to warm it, then
+generate. A paid always-on Space, Modal, or a small VM removes this.
 
-If you get `501 … no word timestamps`, your NeMo build isn't exposing them: check the NeMo version
-(recent releases return seconds directly) or set `KRITI_TIME_STRIDE` to your encoder's seconds/frame
-(Conformer at 10 ms stride, 8x subsampling ≈ `0.08`). The extraction tolerates both seconds and
-frame-offset formats; see `words_from_hypothesis` in [`server.py`](server.py).
+## Running it elsewhere
+
+Nothing here is HF-specific except the README header and `app_port`. Any host that runs the container
+and gives you one HTTPS URL works (a VM with Caddy/TLS, Modal, etc.). The architecture, backends and
+data boundaries are documented in [`../docs/architecture.md`](../docs/architecture.md) and
+[`../docs/audio-recognition.md`](../docs/audio-recognition.md).
 
 ## Honest caveats
 
-- Kriti is **Nepali only** — it does not detect language the way Whisper does. Use it only for Nepali
-  audio; keep the Cloudflare backend for anything else.
-- The per-run cost shown on the page is Whisper's list price. On this backend the real cost is your
-  own compute; treat that number as a placeholder, not a bill.
-- Kriti's exact `transcribe()` signature can vary by release. `server.py` tries the common shapes; if
-  your build differs, the fix is a few lines in `transcribe_with_timestamps`.
+- Kriti is **Nepali only** — it does not detect language. Use it for Nepali audio; keep the Cloudflare
+  backend for anything else.
+- The per-run cost shown on the page is Whisper's list price. On this backend the real cost is the
+  host's compute (free on HF's CPU tier), so treat that number as a placeholder.
+- Kriti's exact `transcribe()` signature varies by release; `server.py` tries the common shapes, and
+  `words_from_hypothesis` handles both seconds and frame-offset timestamp formats.

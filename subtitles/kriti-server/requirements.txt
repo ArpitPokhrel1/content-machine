@@ -1,8 +1,5 @@
-# Content Machine — self-hosted Kriti ASR endpoint.
-# Pin versions to whatever your GPU/CPU box and the Kriti release agree on; these are a working set.
+# Web layer for the Kriti ASR endpoint. PyTorch + NeMo + Kriti itself are installed
+# in the Dockerfile (they're heavy and version-sensitive; see the comment there).
 fastapi>=0.110
 uvicorn[standard]>=0.29
-# Kriti itself. Install from the repo per its README (pip install -e '.[runtime]'), or add it here
-# once a PyPI release exists, e.g.:
-# kriti @ git+https://github.com/Naamche-Labs/kriti.git
-# Kriti pulls in NeMo + torch; a CUDA build of torch is strongly recommended for anything but short clips.
+pydantic>=2.0

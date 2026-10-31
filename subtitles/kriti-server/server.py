@@ -106,6 +106,13 @@ class RecognizeRequest(BaseModel):
     language: str | None = "ne"
 
 
+@app.get("/")
+def index():
+    # A plain GET (the Space's landing page, uptime pings) must not 404/405; recognition is POST /.
+    return {"service": "kriti-asr", "status": "ok", "model_loaded": _model is not None,
+            "usage": "POST / with { audio: <base64 16kHz mono wav>, seconds, language:'ne' }"}
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "model_loaded": _model is not None}
