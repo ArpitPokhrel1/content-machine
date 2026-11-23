@@ -87,7 +87,7 @@ $("#import-json").addEventListener("change",async e=>{const file=e.target.files?
 $("#download-jobs").addEventListener("click",()=>{if(!readyFrames())return;const aspect=(state.answers[9]||"9:16").match(/9:16|16:9|1:1|4:5/)?.[0]||"9:16";const jobs=state.frames.map(f=>({id:f.id,aspect,prompt:framePrompt(f)}));download(`${slug()}-jobs.json`,JSON.stringify(jobs,null,2),"application/json;charset=utf-8");});
 const apiBar=document.createElement("div");
 apiBar.className="api-controls";
-apiBar.innerHTML='<label>Planning model<select id="api-provider"><option value="openai">OpenAI API</option><option value="anthropic">Claude API</option></select></label><label>Studio access code<input id="api-code" type="password" autocomplete="off" placeholder="Required for API calls"></label><button class="button primary" id="api-plan" type="button">Plan open frames</button><span id="api-status" role="status">Uses configured API credits. Existing frame edits stay in place.</span>';
+apiBar.innerHTML='<label>Planning model<select id="api-provider"><option value="cloudflare">Cloudflare draft</option><option value="openai">OpenAI API</option><option value="anthropic">Claude API</option></select></label><label>Image model<select id="api-image-provider"><option value="cloudflare">Cloudflare draft</option><option value="openai">OpenAI API</option></select></label><label>Studio access code<input id="api-code" type="password" autocomplete="off" placeholder="Required for API calls"></label><button class="button primary" id="api-plan" type="button">Plan open frames</button><span id="api-status" role="status">Cloudflare draft uses the shared free allowance. Images are square JPEG previews. Review every frame.</span>';
 $("#frames-list").before(apiBar);
 $("#api-code").value=sessionStorage.getItem(accessKey)||"";
 $("#api-code").addEventListener("input",e=>sessionStorage.setItem(accessKey,e.target.value));
@@ -116,16 +116,18 @@ $("#frames-list").addEventListener("click",async e=>{
   const i=Number(button.dataset.generate),frame=state.frames[i],prompt=framePrompt(frame);
   const result=button.parentElement.querySelector("[data-result]");
   if(prompt.length>4000){result.textContent="Shorten the canon: this frame prompt exceeds 4000 characters.";return;}
+  const provider=$("#api-image-provider").value;
+  if(provider==="cloudflare"&&prompt.length>2048){result.textContent="Cloudflare draft accepts up to 2,048 characters. Shorten the canon or choose OpenAI.";return;}
   button.disabled=true;result.textContent="Generating one image…";
   try{
     const aspect=(state.answers[9]||"9:16").match(/9:16|16:9|1:1|4:5/)?.[0]||"9:16";
-    const response=await fetch("/api/frame-image",{method:"POST",headers:{"Content-Type":"application/json","x-access-code":code},body:JSON.stringify({prompt,aspect})});
+    const response=await fetch("/api/frame-image",{method:"POST",headers:{"Content-Type":"application/json","x-access-code":code},body:JSON.stringify({provider,prompt,aspect})});
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||`API returned HTTP ${response.status}`);
     const url=`data:${data.mime};base64,${data.image}`;
     result.replaceChildren();
     const image=document.createElement("img");image.src=url;image.alt=`Generated ${frame.id}`;
-    const link=document.createElement("a");link.href=url;link.download=`${slug()}-${frame.id}.png`;link.className="text-link";link.textContent="Download image";
+    const link=document.createElement("a");link.href=url;link.download=`${slug()}-${frame.id}.${data.mime==="image/jpeg"?"jpg":"png"}`;link.className="text-link";link.textContent="Download image";
     result.append(image,link);
   }catch(error){result.textContent=`Stopped: ${error.message} Nothing was retried.`;}
   finally{button.disabled=false;}

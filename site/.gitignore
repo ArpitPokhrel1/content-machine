@@ -1,3 +1,4 @@
 bundle/
 .vercel
 public/sub/
+.wrangler/

@@ -29,6 +29,8 @@ studio/studio.config.local.json
 
 # Logs and local tool state
 *.log
+.cloudflare/
+ioe-cloudflare/
 .claude/scheduled_tasks.lock
 .claude/settings.local.json
 

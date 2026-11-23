@@ -1,0 +1,4 @@
+content-machine.bin
+.dev.vars*
+.wrangler/
+.bundle-files.txt
