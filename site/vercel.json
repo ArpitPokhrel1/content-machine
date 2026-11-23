@@ -10,6 +10,12 @@
     },
     "api/recognize.mjs": {
       "maxDuration": 60
+    },
+    "api/plan.mjs": {
+      "maxDuration": 60
+    },
+    "api/frame-image.mjs": {
+      "maxDuration": 120
     }
   },
   "headers": [

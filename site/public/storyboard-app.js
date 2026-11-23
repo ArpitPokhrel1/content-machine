@@ -14,6 +14,7 @@ const questions=[
 ];
 const ids=["title","format","script","characters","environments","style","constraints"];
 const key="tarjun-storyboard-v1";
+const accessKey="tarjun-studio-access";
 const state={title:"",format:"Storyboard",script:"",characters:"",environments:"",style:"",constraints:"",answers:Array(12).fill(""),frames:[]};
 try{const saved=JSON.parse(localStorage.getItem(key)||"null");if(saved&&typeof saved==="object"){for(const k of ids)if(typeof saved[k]==="string")state[k]=saved[k];if(Array.isArray(saved.answers))state.answers=saved.answers.slice(0,12).map(v=>String(v??""));if(Array.isArray(saved.frames))state.frames=saved.frames.filter(f=>f&&typeof f==="object").map(f=>({...f}));}}catch{}
 const $=s=>document.querySelector(s);
@@ -31,7 +32,7 @@ function splitWords(script){return script.trim().split(/\s+/u).filter(Boolean);}
 function draftFrames(){const words=splitWords(state.script);if(!words.length){alert("Add a story before building frames.");tab("story");return;}state.frames=[];for(let i=0;i<words.length;i+=4){const chunk=Math.floor(i/20)+1;const frame=Math.floor((i%20)/4)+1;const excerpt=words.slice(i,i+4).join(" ");const context=words.slice(Math.floor(i/20)*20,Math.floor(i/20)*20+20).join(" ");state.frames.push({id:`c${String(chunk).padStart(2,"0")}-${frame}`,excerpt,context,shot:"Medium",function:"Reveal",direction:""});}save();renderFrames();tab("frames");}
 $("#make-frames").addEventListener("click",draftFrames);
 $("#rebuild-frames").addEventListener("click",()=>{if(state.frames.some(f=>f.direction?.trim())&&!confirm("Rebuilding replaces your frame edits. Continue?"))return;draftFrames();});
-function renderFrames(){const list=$("#frames-list");$("#frame-count").textContent=`${state.frames.length} frame${state.frames.length===1?"":"s"}`;if(!state.frames.length){list.innerHTML='<p class="empty-state">Build frames from the Canon tab to begin.</p>';return;}list.innerHTML=state.frames.map((f,i)=>`<article class="frame-card" data-frame="${i}"><header><span>FRAME ${esc(f.id)}</span><span>CHUNK ${String(Math.floor(i/5)+1).padStart(2,"0")}</span></header><blockquote lang="auto">“${esc(f.excerpt)}”</blockquote><p class="context">Context: ${esc(f.context)}</p><div class="frame-controls"><label class="field"><span>Shot</span><select data-field="shot">${["Wide","Medium","Close","Detail","Overhead","Point of view"].map(v=>`<option ${f.shot===v?"selected":""}>${v}</option>`).join("")}</select></label><label class="field"><span>Beat</span><select data-field="function">${["Establish","Reveal","Power","Pressure","Detail","Reaction","Shift","Impact","Aftermath","Exit"].map(v=>`<option ${f.function===v?"selected":""}>${v}</option>`).join("")}</select></label></div><label class="field"><span>Direct this frame</span><textarea data-field="direction" placeholder="Subject, action, foreground / middle / background, camera, light. Leave open if this beat needs a human decision.">${esc(f.direction||"")}</textarea></label></article>`).join("");list.querySelectorAll("[data-frame]").forEach(card=>card.querySelectorAll("[data-field]").forEach(el=>el.addEventListener("input",()=>{state.frames[Number(card.dataset.frame)][el.dataset.field]=el.value;save();preview();})));}
+function renderFrames(){const list=$("#frames-list");$("#frame-count").textContent=`${state.frames.length} frame${state.frames.length===1?"":"s"}`;if(!state.frames.length){list.innerHTML='<p class="empty-state">Build frames from the Canon tab to begin.</p>';return;}list.innerHTML=state.frames.map((f,i)=>`<article class="frame-card" data-frame="${i}"><header><span>FRAME ${esc(f.id)}</span><span>CHUNK ${String(Math.floor(i/5)+1).padStart(2,"0")}</span></header><blockquote lang="auto">“${esc(f.excerpt)}”</blockquote><p class="context">Context: ${esc(f.context)}</p><div class="frame-controls"><label class="field"><span>Shot</span><select data-field="shot">${["Wide","Medium","Close","Detail","Overhead","Point of view"].map(v=>`<option ${f.shot===v?"selected":""}>${v}</option>`).join("")}</select></label><label class="field"><span>Beat</span><select data-field="function">${["Establish","Reveal","Power","Pressure","Detail","Reaction","Shift","Impact","Aftermath","Exit"].map(v=>`<option ${f.function===v?"selected":""}>${v}</option>`).join("")}</select></label></div><label class="field"><span>Direct this frame</span><textarea data-field="direction" placeholder="Subject, action, foreground / middle / background, camera, light. Leave open if this beat needs a human decision.">${esc(f.direction||"")}</textarea></label><button class="button quiet frame-generate" type="button" data-generate="${i}">Generate image</button><div class="frame-result" data-result="${i}"></div></article>`).join("");list.querySelectorAll("[data-frame]").forEach(card=>card.querySelectorAll("[data-field]").forEach(el=>el.addEventListener("input",()=>{state.frames[Number(card.dataset.frame)][el.dataset.field]=el.value;save();preview();})));}
 function master(){const brief=questions.map(([q],i)=>state.answers[i]?.trim()?`${q} ${state.answers[i].trim()}`:"").filter(Boolean).join("\n");return `TARJUN — MASTER IMAGE GENERATION PROMPT
 Read the complete script before planning the images. Preserve asserted facts; list uncertain or implied visual details before accepting them. Never invent historical claims, named people, or cultural markers. Build one coherent visual sequence for a ${state.format.toLowerCase()}.
 
@@ -84,4 +85,49 @@ $("#download-md").addEventListener("click",()=>{if(!readyFrames())return;downloa
 $("#download-json").addEventListener("click",()=>download(`${slug()}-project.json`,JSON.stringify({version:1,...state},null,2),"application/json;charset=utf-8"));
 $("#import-json").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{const incoming=JSON.parse(await file.text());if(incoming.version!==1||typeof incoming.script!=="string"||!Array.isArray(incoming.frames))throw new Error("This is not a Tarjun project file.");if(state.script.trim()&&!confirm("Replace the current storyboard with this project?"))return;for(const id of ids){state[id]=typeof incoming[id]==="string"?incoming[id]:"";$("#"+id).value=state[id];}state.answers=Array.from({length:12},(_,i)=>String(incoming.answers?.[i]??""));document.querySelectorAll("[data-answer]").forEach(el=>el.value=state.answers[Number(el.dataset.answer)]);state.frames=incoming.frames.filter(f=>f&&typeof f.id==="string"&&typeof f.excerpt==="string").map(f=>({id:f.id,excerpt:f.excerpt,context:String(f.context??""),shot:String(f.shot??"Medium"),function:String(f.function??"Reveal"),direction:String(f.direction??"")}));save();countWords();renderFrames();preview();tab("frames");}catch(err){alert(err.message)}finally{e.target.value="";}});
 $("#download-jobs").addEventListener("click",()=>{if(!readyFrames())return;const aspect=(state.answers[9]||"9:16").match(/9:16|16:9|1:1|4:5/)?.[0]||"9:16";const jobs=state.frames.map(f=>({id:f.id,aspect,prompt:framePrompt(f)}));download(`${slug()}-jobs.json`,JSON.stringify(jobs,null,2),"application/json;charset=utf-8");});
+const apiBar=document.createElement("div");
+apiBar.className="api-controls";
+apiBar.innerHTML='<label>Planning model<select id="api-provider"><option value="openai">OpenAI API</option><option value="anthropic">Claude API</option></select></label><label>Studio access code<input id="api-code" type="password" autocomplete="off" placeholder="Required for API calls"></label><button class="button primary" id="api-plan" type="button">Plan open frames</button><span id="api-status" role="status">Uses configured API credits. Existing frame edits stay in place.</span>';
+$("#frames-list").before(apiBar);
+$("#api-code").value=sessionStorage.getItem(accessKey)||"";
+$("#api-code").addEventListener("input",e=>sessionStorage.setItem(accessKey,e.target.value));
+function apiCode(){const code=$("#api-code").value.trim();if(!code){alert("Enter your studio access code before using an API.");$("#api-code").focus();return null;}return code;}
+$("#api-plan").addEventListener("click",async()=>{
+  const code=apiCode();if(!code)return;
+  const todo=state.frames.filter(f=>!f.direction?.trim());
+  if(!todo.length){$("#api-status").textContent="Every frame already has a direction.";return;}
+  const button=$("#api-plan");button.disabled=true;
+  try{
+    for(let i=0;i<todo.length;i+=5){
+      $("#api-status").textContent=`Planning ${Math.min(i+5,todo.length)} of ${todo.length} open frames…`;
+      const response=await fetch("/api/plan",{method:"POST",headers:{"Content-Type":"application/json","x-access-code":code},body:JSON.stringify({provider:$("#api-provider").value,format:state.format,context:master(),frames:todo.slice(i,i+5)})});
+      const data=await response.json();
+      if(!response.ok)throw new Error(data.error||`API returned HTTP ${response.status}`);
+      for(const item of data.frames){const frame=state.frames.find(f=>f.id===item.id);if(frame&&!frame.direction?.trim())frame.direction=item.direction;}
+      save();renderFrames();
+    }
+    $("#api-status").textContent="Open frames planned. Review and edit each direction before generating.";
+  }catch(error){$("#api-status").textContent=`Stopped: ${error.message} Nothing was retried.`;}
+  finally{button.disabled=false;}
+});
+$("#frames-list").addEventListener("click",async e=>{
+  const button=e.target.closest("[data-generate]");if(!button)return;
+  const code=apiCode();if(!code)return;
+  const i=Number(button.dataset.generate),frame=state.frames[i],prompt=framePrompt(frame);
+  const result=button.parentElement.querySelector("[data-result]");
+  if(prompt.length>4000){result.textContent="Shorten the canon: this frame prompt exceeds 4000 characters.";return;}
+  button.disabled=true;result.textContent="Generating one image…";
+  try{
+    const aspect=(state.answers[9]||"9:16").match(/9:16|16:9|1:1|4:5/)?.[0]||"9:16";
+    const response=await fetch("/api/frame-image",{method:"POST",headers:{"Content-Type":"application/json","x-access-code":code},body:JSON.stringify({prompt,aspect})});
+    const data=await response.json();
+    if(!response.ok)throw new Error(data.error||`API returned HTTP ${response.status}`);
+    const url=`data:${data.mime};base64,${data.image}`;
+    result.replaceChildren();
+    const image=document.createElement("img");image.src=url;image.alt=`Generated ${frame.id}`;
+    const link=document.createElement("a");link.href=url;link.download=`${slug()}-${frame.id}.png`;link.className="text-link";link.textContent="Download image";
+    result.append(image,link);
+  }catch(error){result.textContent=`Stopped: ${error.message} Nothing was retried.`;}
+  finally{button.disabled=false;}
+});
 renderFrames();preview();
