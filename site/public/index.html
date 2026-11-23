@@ -1,124 +1,37 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Content Machine</title>
-<meta name="description" content="Three tools for telling stories on screen: images and video from a script, maps drawn from real data, and subtitles ready for Premiere Pro and DaVinci Resolve.">
-<meta property="og:title" content="Content Machine">
-<meta property="og:description" content="Script in. Film out. Images, video, maps and subtitles for Nepali and English stories.">
-<meta property="og:image" content="https://content.tarjun.com/media/stills/17.webp">
-<meta name="theme-color" content="#120e0b">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23120e0b'/><rect x='7' y='6' width='18' height='20' rx='3' fill='none' stroke='%23e3a857' stroke-width='2.2'/><circle cx='16' cy='16' r='3.4' fill='%23e3a857'/></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f7f4">
+  <meta name="description" content="Turn a story into a consistent visual sequence. Plan storyboards, comics and cartoons with locked subjects, places and style.">
+  <meta property="og:title" content="Tarjun — See the story before you make it">
+  <meta property="og:image" content="https://tarjun.com/media/stills/17.webp">
+  <title>Tarjun — See the story before you make it</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/storyboard.css">
 </head>
-<body class="hub">
-<a class="skip" href="#main">Skip to content</a>
-
-<header class="nav" id="top">
-  <a class="brand" href="/" aria-label="Content Machine home">
-    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="7" y="6" width="18" height="20" rx="3"/><circle cx="16" cy="16" r="3.4"/></svg>
-    Content Machine
-  </a>
-  <nav aria-label="Content Machine">
-    <a href="/assets">Assets</a>
-    <a href="/maps">Maps</a>
-    <a href="/subtitles">Subtitles</a>
-    <a href="/studio">Studio</a>
-    <a href="/assets#install" class="nav-cta">Get started</a>
-  </nav>
-</header>
-
-<main id="main">
-  <section class="hub-hero" aria-labelledby="hub-title">
-    <p class="eyebrow">Script in. Film out.</p>
-    <h1 id="hub-title">Content <em>Machine</em></h1>
-    <p class="lede">Three tools for telling stories on screen, in Nepali, English or any language. Give it a script, and get <strong>pictures and video</strong> that look like one film, <strong>maps</strong> drawn from real data, and <strong>subtitles</strong> ready for Premiere Pro and DaVinci Resolve.</p>
-  </section>
-
-  <section class="doors" aria-label="The three parts">
-    <a class="door" href="/assets">
-      <div class="door-media">
-        <video muted playsinline loop preload="none" poster="media/clips/krishna-named.webp" data-autoplay="media/clips/krishna-named.mp4" aria-hidden="true"></video>
-        <p class="door-sub" lang="ne">त्यसैले उहाँलाई कृष्ण भनेर चिनिनेछ।</p>
-      </div>
-      <div class="door-body">
-        <span class="door-num">01 · Assets</span>
-        <h2>Pictures and video from a script</h2>
-        <p>It reads the whole story, fixes every face and place, then makes the images and clips. Every four words become a frame.</p>
-        <span class="door-foot"><span class="badge">Free install · your Google account</span><span class="go">Explore <span aria-hidden="true">→</span></span></span>
-      </div>
-    </a>
-
-    <a class="door" href="/maps">
-      <div class="door-media">
-        <video muted playsinline loop preload="none" poster="media/maps/nepal-zoom.webp" data-autoplay="media/maps/nepal-zoom.mp4" aria-hidden="true"></video>
-      </div>
-      <div class="door-body">
-        <span class="door-num">02 · Maps</span>
-        <h2>Maps that are true</h2>
-        <p>Borders, districts and zooms drawn from real open map data, never guessed by AI. Explainer-style map shots for your edit.</p>
-        <span class="door-foot"><span class="badge">Free install · your Google account</span><span class="go">Explore <span aria-hidden="true">→</span></span></span>
-      </div>
-    </a>
-
-    <a class="door" href="/subtitles">
-      <div class="door-media door-srt">
-        <img src="media/walk/c01-3.webp" alt="" loading="lazy" width="432" height="768">
-        <div class="srt-demo" aria-hidden="true">
-          <p class="srt-line" lang="ne" id="demo-uni">राज्यका सेनापति भीम मल्ल</p>
-          <p class="srt-code"><span>Preeti</span><code id="demo-preeti">/fHosf ;]gfklt eLd dNn</code></p>
-          <p class="srt-time mono">00:00:04,210 → 00:00:06,050</p>
-        </div>
-      </div>
-      <div class="door-body">
-        <span class="door-num">03 · Subtitles</span>
-        <h2>Script to subtitles, in seconds</h2>
-        <p>Paste a script, give the audio or video length, fix anything, and export an .srt for Premiere Pro or DaVinci. Unicode or Preeti.</p>
-        <span class="door-foot"><span class="badge badge-free">Free · in your browser</span><span class="go">Open editor <span aria-hidden="true">→</span></span></span>
-      </div>
-    </a>
-  </section>
-
-  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
-
-  <section class="flow" aria-labelledby="flow-title">
-    <div class="section-head">
-      <p class="eyebrow">How it fits together</p>
-      <h2 id="flow-title">One script. Everything your edit needs.</h2>
-    </div>
-    <ol class="flow-steps">
-      <li><span class="mono">script.txt</span><h3>Your script</h3><p>Nepali, English, anything. Pasted once.</p></li>
-      <li><span class="mono">Outputs/…/frames</span><h3>Assets</h3><p>Story frames and approved video clips.</p></li>
-      <li><span class="mono">Outputs/…/maps</span><h3>Maps</h3><p>Real-data map shots for places in the story.</p></li>
-      <li><span class="mono">episode.srt</span><h3>Subtitles</h3><p>Timed to your voice-over, ready to import.</p></li>
-      <li><span class="mono">Premiere · Resolve</span><h3>Your edit</h3><p>Drop everything in, choose your font, publish.</p></li>
-    </ol>
-    <div class="flow-cta">
-      <a class="btn btn-primary" href="/subtitles">Try the subtitle editor, free</a>
-      <a class="btn btn-ghost" href="/assets#install">Get Content Machine</a>
-    </div>
-  </section>
-</main>
-
-<footer class="foot">
-  <p><b>Content Machine</b>. Every image, clip and map on this site was made by it.</p>
-  <p>Assets and maps run on your own computer with your own Google account. Subtitles run in your browser.</p>
-</footer>
-
-<script src="app.js" defer></script>
-<script type="module">
-  // Live proof on the Subtitles door: the same line in Unicode and in Preeti keys.
-  import { unicodeToPreeti } from "./sub/preeti.mjs";
-  const lines = ["राज्यका सेनापति भीम मल्ल", "पूर्वको यात्रामा निस्किएका थिए।", "आज पनि त्यो ढुंगा", "यो कथा ३०० वर्ष पुरानो हो।"];
-  const uni = document.getElementById("demo-uni"), pre = document.getElementById("demo-preeti");
-  let i = 0;
-  const show = () => { uni.textContent = lines[i]; pre.textContent = unicodeToPreeti(lines[i]); i = (i + 1) % lines.length; };
-  show();
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(show, 2600);
-</script>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-nav"><a class="wordmark" href="/" aria-label="Tarjun home"><span class="brand-mark">T</span> tar<span>jun</span><small>FRAME STUDIO</small></a><nav aria-label="Main navigation"><a href="#method">Method</a><a href="#formats">Formats</a><a href="#tools">Tools</a><a class="nav-action" href="/storyboard">Open studio</a></nav></header>
+  <main id="main">
+    <section class="hero">
+      <div class="hero-copy"><p class="overline"><span class="signal"></span> A VISUAL WORKSPACE FOR STORIES</p><h1>See the story <em>before</em> you make it.</h1><p class="hero-intro">A script is words. A storyboard is a set of decisions. Turn yours into frames with a consistent subject, place, and visual language.</p><div class="hero-actions"><a class="button primary" href="/storyboard">Start a storyboard</a><a class="button quiet" href="#method">Explore the method</a></div><p class="hero-note">Storyboards · Comics · Cartoons · Video keyframes</p></div>
+      <div class="hero-art" aria-label="Five frame storyboard sequence"><div class="art-top"><span>PROJECT / A STORY IN FRAMES</span><span>SEQUENCE 01—05</span></div><div class="art-feature"><img src="/media/walk/c01-3.webp" alt="Cinematic story frame"><span class="art-chip">03 / REVEAL</span></div><div class="art-strip"><img src="/media/walk/c01-1.webp" alt="First frame"><img src="/media/walk/c01-2.webp" alt="Second frame"><img src="/media/walk/c01-3.webp" alt="Third frame"><img src="/media/walk/c01-4.webp" alt="Fourth frame"><img src="/media/walk/c01-5.webp" alt="Fifth frame"></div><div class="art-bottom"><span>ONE STORY. ONE VISUAL CANON.</span><span>9:16 / 05 FRAMES</span></div></div>
+    </section>
+    <div class="ribbon"><span>FROM AN IDEA</span><span class="ribbon-line"></span><span>TO A WORLD YOU CAN SEE</span><span class="ribbon-line"></span><span>TO FRAMES YOU CAN USE</span></div>
+    <section class="method section" id="method"><div class="section-head"><p class="overline">THE METHOD</p><h2>Good frames begin <em>before</em> the prompt.</h2><p>First understand what is true in the story. Then lock the details that should never drift.</p></div><div class="method-grid">
+      <article><span class="step-icon">✳</span><p class="step-kicker">01 / UNDERSTAND</p><h3>Find the story</h3><p>Paste the whole script. Answer a focused brief about audience, mood, culture, aspect, and the ending.</p></article>
+      <article><span class="step-icon">▦</span><p class="step-kicker">02 / HOLD</p><h3>Lock the canon</h3><p>Define subjects, environments, palette, costume, period, and constraints once. Every frame inherits them.</p></article>
+      <article><span class="step-icon">◩</span><p class="step-kicker">03 / DIRECT</p><h3>Shape each frame</h3><p>Break the script into beats. Choose the shot, action, light, and composition. Rewrite any uncertain frame.</p></article>
+      <article><span class="step-icon">◉</span><p class="step-kicker">04 / MAKE</p><h3>Generate and review</h3><p>Use the prompt pack with the local image operator. Inspect each image and repair one defect at a time.</p></article>
+    </div></section>
+    <section class="feature section" id="formats"><div class="feature-image"><img src="/media/stills/17.webp" alt="Story frame with a cinematic setting" loading="lazy"><div class="feature-stamp">A WORLD THAT HOLDS TOGETHER</div></div><div class="feature-copy"><p class="overline">ONE ENGINE, MANY FORMS</p><h2>The frame is the <em>unit of thought.</em></h2><p>A storyboard shows the next decision. A comic adds panels and page rhythm. A cartoon defines a world that can repeat. The same canon keeps each one coherent.</p><div class="format-list"><div><b>Storyboard</b><span>Plan a film, reel or scene shot by shot.</span></div><div><b>Comic</b><span>Build a sequence of panels with visual continuity.</span></div><div><b>Cartoon</b><span>Give recurring characters and places a durable look.</span></div></div><a class="text-link" href="/storyboard">Build your first sequence ↗</a></div></section>
+    <section class="quote-block"><p>“The difficult part is rarely drawing a frame. It is knowing what belongs inside it.”</p><span>TARJUN / FRAME STUDIO</span></section>
+    <section class="tools section" id="tools"><div class="section-head"><p class="overline">IN THE EDIT</p><h2>Useful tools, <em>when the story needs them.</em></h2></div><div class="tool-grid"><a href="/maps"><span class="tool-glyph">⌖</span><span><b>Map animation</b><small>Show a real place with real boundary data.</small></span><span aria-hidden="true">↗</span></a><a href="/subtitles"><span class="tool-glyph">▤</span><span><b>Subtitle editor</b><small>Make and refine an SRT for the finished cut.</small></span><span aria-hidden="true">↗</span></a><a href="/assets"><span class="tool-glyph">▧</span><span><b>Local operator</b><small>Run image generation on your own machine.</small></span><span aria-hidden="true">↗</span></a></div></section>
+    <section class="final-cta"><p class="overline">YOUR NEXT STORY STARTS HERE</p><h2>Make the story <em>visible.</em></h2><p>Bring a script. Leave with a visual plan you can edit, generate, and use.</p><a class="button primary" href="/storyboard">Open the studio</a></section>
+  </main>
+  <footer><a class="wordmark" href="/">tar<span>jun</span></a><p>Make the next frame matter.</p><div><a href="/storyboard">Studio</a><a href="/maps">Maps</a><a href="/subtitles">Subtitles</a></div><small>© <span id="year"></span> Tarjun</small></footer>
+  <script>document.getElementById('year').textContent=new Date().getFullYear()</script>
 </body>
 </html>

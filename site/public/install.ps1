@@ -1,11 +1,11 @@
 # Content Machine installer for Windows.
-#   irm https://content.tarjun.com/install.ps1 | iex
+#   irm https://tarjun.com/install.ps1 | iex
 # Installs (or updates) Content Machine in %USERPROFILE%\ContentMachine, signs you in with your
 # Google account, and connects it to Claude Code / Codex as the "content-machine" MCP server.
 # Everything runs on your computer. Images and videos are saved in ContentMachine\Outputs.
 
 $ErrorActionPreference = "Stop"
-$Site = "https://content.tarjun.com"
+$Site = "https://tarjun.com"
 $Dir = if ($env:CONTENT_MACHINE_HOME) { $env:CONTENT_MACHINE_HOME } else { Join-Path $HOME "ContentMachine" }
 
 Write-Host "`nContent Machine installer" -ForegroundColor Cyan

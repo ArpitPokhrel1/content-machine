@@ -32,4 +32,7 @@ campaign-poster-tool/public/assets/*.png
 # Vercel: never upload studio-only folders
 knowledge/
 campaign-poster-tool/
+Arpit Video/
+extra works with content outside scripts/
+a*.png
 site/bundle/

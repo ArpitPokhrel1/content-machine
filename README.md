@@ -9,16 +9,16 @@ in Nepali, English or any other language. Content Machine has three parts:
 | --- | --- | --- |
 | **1. Assets** | Pictures and short videos for the story. Every character keeps the same face and clothes from the first picture to the last. | The install (below) |
 | **2. Maps** | Animated map shots (a district lighting up, a zoom from the globe to a village), drawn from real map data. | The install (below) |
-| **3. Subtitles** | A subtitle file for **Premiere Pro** or **DaVinci Resolve**, timed to your audio or video, in Unicode or Preeti. | **Nothing.** Free, in your browser: <https://content.tarjun.com/subtitles> |
+| **3. Subtitles** | A subtitle file for **Premiere Pro** or **DaVinci Resolve**, timed to your audio or video, in Unicode or Preeti. | **Nothing.** Free, in your browser: <https://tarjun.com/subtitles> |
 
-See it all at **<https://content.tarjun.com>**. Every picture, video and map there was made by
+See it all at **<https://tarjun.com>**. Every picture, video and map there was made by
 Content Machine.
 
 ---
 
 ## Subtitles: no install needed
 
-1. Open **<https://content.tarjun.com/subtitles>**.
+1. Open **<https://tarjun.com/subtitles>**.
 2. Paste your script, and load your voice-over or video (so it knows the length), or just type
    the length, like `1:35`.
 3. Press **Make subtitles**. Check them over the video, and fix any text or timing.
@@ -45,7 +45,7 @@ A Windows PC or a Mac is fine. You don't need to know how to code.
 
 ## Getting started (about 10 minutes, once)
 
-1. Go to **<https://content.tarjun.com/assets>** and copy the install line for your computer (it's at the bottom).
+1. Go to **<https://tarjun.com/assets>** and copy the install line for your computer (it's at the bottom).
 2. **Windows:** open **PowerShell** (press the Start button, type *PowerShell*, press Enter).
    **Mac:** open **Terminal**.
 3. Paste the line and press Enter. Then follow along:
@@ -100,7 +100,7 @@ home folder. One folder per project.
 
 ## Updating
 
-Run the same install line from <https://content.tarjun.com> again. You get the newest version,
+Run the same install line from <https://tarjun.com> again. You get the newest version,
 and your settings and your Outputs folder stay exactly as they were.
 
 ---
@@ -133,7 +133,7 @@ and your settings and your Outputs folder stay exactly as they were.
 
 ### Optional voice-aligned Nepali subtitles
 
-At [content.tarjun.com/subtitles](https://content.tarjun.com/subtitles), load the recording with
+At [tarjun.com/subtitles](https://tarjun.com/subtitles), load the recording with
 the script and press **Match to the voice**. The page shows the cost and sends nothing until you
 confirm; only short 16 kHz voice clips leave the browser, never the original file. Up to 5 minutes
 per run.

@@ -55,9 +55,9 @@ export async function mcpHealth() {
     secretsPresent: present, // { CLOUDFLARE_API_TOKEN: bool, ELEVENLABS_API_KEY: bool }
     bundleVersion: version,
     install: {
-      windows: "irm https://content.tarjun.com/install.ps1 | iex",
-      mac: "curl -fsSL https://content.tarjun.com/install.sh | bash",
-      site: "https://content.tarjun.com",
+      windows: "irm https://tarjun.com/install.ps1 | iex",
+      mac: "curl -fsSL https://tarjun.com/install.sh | bash",
+      site: "https://tarjun.com",
       mcpName: "content-machine"
     }
   };

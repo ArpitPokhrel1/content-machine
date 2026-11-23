@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Content Machine installer for macOS / Linux.
-#   curl -fsSL https://content.tarjun.com/install.sh | bash
+#   curl -fsSL https://tarjun.com/install.sh | bash
 # Installs (or updates) Content Machine in ~/ContentMachine, signs you in with your Google account,
 # and connects it to Claude Code / Codex as the "content-machine" MCP server. Everything runs on
 # your computer; images and videos are saved in ~/ContentMachine/Outputs.
 set -euo pipefail
-SITE="https://content.tarjun.com"
+SITE="https://tarjun.com"
 DIR="${CONTENT_MACHINE_HOME:-$HOME/ContentMachine}"
 
 echo; echo "Content Machine installer"; echo "Install folder: $DIR"; echo
